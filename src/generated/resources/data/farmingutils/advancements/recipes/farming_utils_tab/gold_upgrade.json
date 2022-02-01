@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "farmingutils:gold_upgrade"
+    ]
+  },
+  "criteria": {
+    "upgrade": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "farmingutils:iron_upgrade"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "farmingutils:gold_upgrade"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "upgrade",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "iii",
+    "ipi",
+    "srs"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:cocoa_beans"
+    },
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "s": {
+      "item": "minecraft:stone"
+    }
+  },
+  "result": {
+    "item": "farmingutils:cocoa_beans_farmer"
+  }
+}

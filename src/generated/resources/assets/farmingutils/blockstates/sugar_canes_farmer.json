@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "farmingutils:block/sugar_canes_farmer"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "farmingutils:cactus_farmer"
+    ]
+  },
+  "criteria": {
+    "cactus": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:cactus"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "farmingutils:cactus_farmer"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "cactus",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "farmingutils:redstone_upgrade"
+    ]
+  },
+  "criteria": {
+    "farmers": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "farmingutils:crop_farmer"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "farmingutils:redstone_upgrade"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "farmers",
+      "has_the_recipe"
+    ]
+  ]
+}

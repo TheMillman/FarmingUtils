@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "farmingutils:nether_wart_farmer"
+    ]
+  },
+  "criteria": {
+    "nether_wart": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:nether_wart"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "farmingutils:nether_wart_farmer"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "nether_wart",
+      "has_the_recipe"
+    ]
+  ]
+}

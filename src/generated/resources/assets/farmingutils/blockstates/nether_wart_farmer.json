@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "farmingutils:block/nether_wart_farmer"
+    }
+  }
+}

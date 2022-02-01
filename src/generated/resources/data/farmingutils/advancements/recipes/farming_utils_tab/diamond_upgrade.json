@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "farmingutils:diamond_upgrade"
+    ]
+  },
+  "criteria": {
+    "upgrade": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "farmingutils:gold_upgrade"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "farmingutils:diamond_upgrade"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "upgrade",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "iii",
+    "ipi",
+    "srs"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:cactus"
+    },
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "s": {
+      "item": "minecraft:sandstone"
+    }
+  },
+  "result": {
+    "item": "farmingutils:cactus_farmer"
+  }
+}

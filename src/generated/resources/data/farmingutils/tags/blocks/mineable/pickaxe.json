@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "farmingutils:crop_farmer",
+    "farmingutils:melon_farmer",
+    "farmingutils:nether_wart_farmer",
+    "farmingutils:cocoa_beans_farmer",
+    "farmingutils:cactus_farmer",
+    "farmingutils:sugar_canes_farmer"
+  ]
+}

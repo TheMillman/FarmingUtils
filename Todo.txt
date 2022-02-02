@@ -1,2 +1,4 @@
 Remove Test Energy Generator. 
 Improve the Energy Bar. 
+Improve Wiki.
+Add compatbility with more mods.

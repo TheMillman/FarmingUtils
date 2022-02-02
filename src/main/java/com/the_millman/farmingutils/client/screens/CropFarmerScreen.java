@@ -15,9 +15,6 @@ public class CropFarmerScreen extends ItemEnergyScreen<CropFarmerContainer> {
 	private ResourceLocation GUI = new ResourceLocation(FarmingUtils.MODID, "textures/gui/crop_farmer_gui.png");
 	private ResourceLocation OVERLAY = new ResourceLocation(FarmingUtils.MODID, "textures/gui/offset_buttons.png");
 	
-	/**
-	 * TODO Rendere il metodo di rendering della barra d'energia più compatibile con i config.
-	 */
 	public CropFarmerScreen(CropFarmerContainer pMenu, Inventory pPlayerInventory, Component pTitle) {
 		super(pMenu, pPlayerInventory, pTitle);
 	}

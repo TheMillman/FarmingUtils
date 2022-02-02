@@ -16,7 +16,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.BeetrootBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -25,7 +24,6 @@ import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class CropFarmerBE extends ItemEnergyBlockEntity {
@@ -41,10 +39,6 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 	public CropFarmerBE(BlockPos pWorldPosition, BlockState pBlockState) {
 		super(BlockEntityInit.CROP_FARMER.get(), pWorldPosition, pBlockState);
 	}
-
-	/**
-	 * Questo metodo potrebbe andare dentro la library mod
-	 **/
 	
 	@Override
 	protected void init() {
@@ -62,9 +56,6 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 		this.pickupDrops = true;
 	}
 
-	/**
-	 * Questo metodo potrebbe andare dentro la library mod
-	 **/
 	@Override
 	public void tickServer() {
 		if (!initialized) {
@@ -109,26 +100,6 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 		return true;
 	}
 
-	/**
-	 * Ora inutile, però da tenere, per sicurezza.
-	 */
-
-	@SuppressWarnings("unused")
-	private void execute() {
-		int range = 3;
-		for (int pX = 0; pX < range; pX++) {
-			for (int pZ = 0; pZ < range; pZ++) {
-				BlockPos posToBreak = new BlockPos(this.x + pX, this.y, this.z + pZ);
-				destroyBlock(posToBreak, true);
-				placeBlock(posToBreak);
-			}
-		}
-	}
-
-	/**
-	 * Metodo per riconoscere l'upgrade inserito nel suo slot, a seconda
-	 * dell'upgrade il raggio della Block Entity aumenta.
-	 */
 	private void upgradeSlot() {
 		rangeSlot();
 		dropUpgrade();
@@ -173,14 +144,6 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 		}
 	}
 
-	/**
-	 * Metodo per distruggere i blocchi, racoglie i drop e trasforma il blocco in
-	 * aria.
-	 * 
-	 * @param pos
-	 * @param dropBlock
-	 * @return boolean, vero se il blocco è stato distrutto.
-	 */
 	private boolean destroyBlock(BlockPos pos, boolean dropBlock) {
 		BlockState state = level.getBlockState(pos);
 
@@ -206,13 +169,6 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 		return false;
 	}
 
-	/**
-	 * Metodo per piazzare i blocchi, controlla il blocco sotto e l'item negli slot,
-	 * se va bene piazza il blocco
-	 * 
-	 * @param pos
-	 * @return boolean, vero se il blocco è stato piazzato.
-	 */
 	private boolean placeBlock(BlockPos pos) {
 		int slot = 0;
 		for (int i = 0; i < 18; i++) {
@@ -251,14 +207,6 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 		return false;
 	}
 
-	/**
-	 * getDestroiedBlock, metodo per distruggere i blocchi. Prende il BlockState,
-	 * controlla se il blocco va bene e ritorna true se si può distroggere. Nessun
-	 * problema con zucche e meloni perchè non sono dei cropblock
-	 * 
-	 * @param state
-	 * @return boolean, vero se il blocco si può distruggere.
-	 */
 	private boolean getDestBlock(BlockState state) {
 		if (state.getBlock() == Blocks.BEETROOTS
 				&& state.getValue(BlockStateProperties.AGE_3) == BeetrootBlock.MAX_AGE) {
@@ -273,28 +221,6 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 		return false;
 	}
 
-	/**
-	 * Vecchio metodo per controllare se l'item inserito va bene.
-	 * 
-	 * @param stack
-	 * @return
-	 */
-	@SuppressWarnings("unused")
-	private boolean oldIsValid(ItemStack stack) {
-		if (stack.is(Items.PUMPKIN_SEEDS) || stack.is(Items.MELON_SEEDS)) {
-			return false;
-		} else if (stack.is(Tags.Items.SEEDS) || stack.is(Items.POTATO) || stack.is(Items.CARROT)) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Metodo per controllare se l'item dentro ai slot del container vanno bene.
-	 * 
-	 * @param stack
-	 * @return
-	 */
 	private boolean isValid(ItemStack stack) {
 		if (stack.getItem()instanceof ItemNameBlockItem blockItem) {
 			if (blockItem.getBlock() instanceof CropBlock) {
@@ -305,14 +231,6 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 		return false;
 	}
 
-	/**
-	 * Metodo per gli items, gestisce i slot e gli item messi dentro di loro. Gli
-	 * slot vanno da 0 a 8, si possono inserire solo semi, da 9 a 17 sono i drop dei
-	 * blocchi distrutti ma si può mettere qualsiasi cosa, lo slot 18 ivece ci vanno
-	 * solo gli upgrade
-	 * 
-	 * @return
-	 */
 	@Override
 	protected ItemStackHandler itemStorage() {
 		return new ItemStackHandler(21) {
@@ -325,7 +243,6 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 
 			@Override
 			public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-				// return ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0;
 				if(slot < 18) {
 					if(isValidUpgrade(stack)) {
 						return false;
@@ -354,11 +271,6 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 		};
 	}
 
-	/**
-	 * Metodo dell'energia, è coretto e funziona.
-	 * 
-	 * @return
-	 */
 	protected ModEnergyStorage createEnergy() {
 		return new ModEnergyStorage(true, FarmingConfig.CROP_FARMER_CAPACITY.get(), FarmingConfig.CROP_FARMER_USEPERTICK.get() * 2) {
 			@Override

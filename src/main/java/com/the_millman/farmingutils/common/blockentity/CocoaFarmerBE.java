@@ -353,7 +353,6 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 		return false;
 	}
 
-	//TODO Aggiungere is valid al posto di Items.COCOA_BEANS
 	@Override
 	protected ItemStackHandler itemStorage() {
 		return new ItemStackHandler(12) {

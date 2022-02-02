@@ -119,10 +119,6 @@ public class NetherWartFarmerBE extends ItemEnergyBlockEntity {
 		}
 	}
 	
-	/**
-	 * Metodo per riconoscere l'upgrade inserito nel suo slot, a seconda
-	 * dell'upgrade il raggio della Block Entity aumenta.
-	 */
 	private void rangeUpgrade() {
 		ItemStack upgradeSlot = itemStorage.getStackInSlot(9);
 		if (upgradeSlot.is(ItemInit.IRON_UPGRADE.get())) {
@@ -144,14 +140,6 @@ public class NetherWartFarmerBE extends ItemEnergyBlockEntity {
 		}
 	}
 	
-	/**
-	 * Metodo per distruggere i blocchi, racoglie i drop e trasforma il blocco in
-	 * aria.
-	 * 
-	 * @param pos
-	 * @param dropBlock
-	 * @return boolean, vero se il blocco è stato distrutto.
-	 */
 	private boolean destroyBlock(BlockPos pos, boolean dropBlock) {
 		BlockState state = level.getBlockState(pos);
 		if (state.isAir()) {
@@ -175,13 +163,6 @@ public class NetherWartFarmerBE extends ItemEnergyBlockEntity {
 		return false;
 	}
 
-	/**
-	 * Metodo per piazzare i blocchi, controlla il blocco sotto e l'item negli slot,
-	 * se va bene piazza il blocco
-	 * 
-	 * @param pos
-	 * @return boolean, vero se il blocco è stato piazzato.
-	 */
 	private boolean placeBlock(BlockPos pos) {
 		int slot = 0;
 		for (int i = 0; i < 9; i++) {
@@ -216,14 +197,6 @@ public class NetherWartFarmerBE extends ItemEnergyBlockEntity {
 		return false;
 	}
 	
-	/**
-	 * getDestroiedBlock, metodo per distruggere i blocchi. Prende il BlockState,
-	 * controlla se il blocco va bene e ritorna true se si può distroggere. Nessun
-	 * problema con zucche e meloni perchè non sono dei cropblock
-	 * 
-	 * @param state
-	 * @return boolean, vero se il blocco si può distruggere.
-	 */
 	private boolean getDestBlock(BlockState state) {
 		if (state.getBlock() == Blocks.NETHER_WART && state.getValue(BlockStateProperties.AGE_3) == NetherWartBlock.MAX_AGE) {
 			return true;

@@ -46,28 +46,7 @@ public class CropFarmerContainer extends ItemEnergyContainer {
     public boolean stillValid(Player playerIn) {
         return stillValid(ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos()), playerEntity, BlockInit.CROP_FARMER.get());
     }
-    
-//    private void outputInventorySlots(IItemHandler handler, int x, int y) {
-//    	//Questo è un 3x3 input slots
-//    	for(int row = 0; row < /*6*/ 3; ++row)
-//		{
-//			for(int column = 0; column < 3; ++column)
-//			{
-//				this.addSlot(new SlotItemHandler(handler, (row * 3) + column, x + row * 18, y + column * 18));
-//			}
-//		}
-//    }
 	
-//	protected void layoutPlayerInventorySlots(int leftCol, int topRow) {
-//		// Player inventory
-//		addSlotBox(playerInventory, 9, leftCol, topRow, 9, 18, 3, 18);
-//
-//		// Hotbar
-//		topRow += 58;
-//		addSlotRange(playerInventory, 0, leftCol, topRow, 9, 18);
-//	}
-	
-	//TODO Sistemare slots, sistemare ordine    x + row * 18
 	@Override
 	protected void layoutInventorySlots(IItemHandler handler, int x, int y, int slotRow, int slotColumn) {
 		for (int row = 0; row < slotRow; ++row) {

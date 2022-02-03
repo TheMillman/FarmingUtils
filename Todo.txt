@@ -2,3 +2,5 @@
 Improve Wiki.
 Add compatbility with more mods. 3
 Bamboo Farmer. 2
+Update to the last Forge Version.
+Change the Energy Bar rendering method.

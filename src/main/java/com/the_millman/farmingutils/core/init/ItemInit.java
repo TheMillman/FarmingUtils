@@ -22,7 +22,7 @@ public class ItemInit {
 	public static final RegistryObject<Item> CACTUS_FARMER = ITEMS.register("cactus_farmer", () -> new BlockItem(BlockInit.CACTUS_FARMER.get(), new Item.Properties().tab(TAB)));
 	public static final RegistryObject<Item> SUGAR_CANES_FARMER = ITEMS.register("sugar_canes_farmer", () -> new BlockItem(BlockInit.SUGAR_CANES_FARMER.get(), new Item.Properties().tab(TAB)));
 	
-	public static final RegistryObject<Item> TEST_ENERGY_GENERATOR = ITEMS.register("test_energy_generator", () -> new BlockItem(BlockInit.TEST_ENERGY_GENERATOR.get(), new Item.Properties().tab(TAB)));
+	//public static final RegistryObject<Item> TEST_ENERGY_GENERATOR = ITEMS.register("test_energy_generator", () -> new BlockItem(BlockInit.TEST_ENERGY_GENERATOR.get(), new Item.Properties().tab(TAB)));
 	
 	public static final RegistryObject<Item> IRON_UPGRADE = ITEMS.register("iron_upgrade", () -> new UpgradeItem(new Item.Properties().tab(TAB).stacksTo(1), "tooltip.farmingutils.upgrade.iron"));
 	public static final RegistryObject<Item> GOLD_UPGRADE = ITEMS.register("gold_upgrade", () -> new UpgradeItem(new Item.Properties().tab(TAB).stacksTo(1), "tooltip.farmingutils.upgrade.gold"));

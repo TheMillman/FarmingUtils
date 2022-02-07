@@ -16,7 +16,7 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.18.1-0.0.6'
+version = '1.18.1-0.0.7'
 group = 'com.the_millman.farmingutils' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'farmingutils'
 

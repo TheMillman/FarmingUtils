@@ -35,16 +35,4 @@ public class CropFarmerScreen extends ItemEnergyScreen<CropFarmerContainer> {
         this.blit(pPoseStack, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
         this.renderEnergyBar(pPoseStack, OVERLAY);
 	}
-
-	@Override
-	protected void renderEnergyBar(PoseStack matrixStack, ResourceLocation overlay) {
-		RenderSystem.setShaderTexture(0, overlay);
-		int i = this.getGuiLeft();
-		int j = this.getGuiTop();
-		int l = this.menu.getEnergy();
-		
-		int e = l / 1000;
-
-		this.blit(matrixStack, i + 7, j + 20, 71, (e * 5) + 1, 15, 51);
-	}
 }

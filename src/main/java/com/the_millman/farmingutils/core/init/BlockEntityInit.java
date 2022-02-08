@@ -1,6 +1,7 @@
 package com.the_millman.farmingutils.core.init;
 
 import com.the_millman.farmingutils.FarmingUtils;
+import com.the_millman.farmingutils.common.blockentity.BambooFarmerBE;
 import com.the_millman.farmingutils.common.blockentity.CactusFarmerBE;
 import com.the_millman.farmingutils.common.blockentity.CocoaFarmerBE;
 import com.the_millman.farmingutils.common.blockentity.CropFarmerBE;
@@ -24,5 +25,6 @@ public class BlockEntityInit {
 	public static final RegistryObject<BlockEntityType<CocoaFarmerBE>> COCOA_BEANS_FARMER = BLOCK_ENTITIES.register("cocoa_beans_farmer", () -> BlockEntityType.Builder.of(CocoaFarmerBE::new, BlockInit.COCOA_BEANS_FARMER.get()).build(null));
 	public static final RegistryObject<BlockEntityType<CactusFarmerBE>> CACTUS_FARMER = BLOCK_ENTITIES.register("cactus_farmer", () -> BlockEntityType.Builder.of(CactusFarmerBE::new, BlockInit.CACTUS_FARMER.get()).build(null));
 	public static final RegistryObject<BlockEntityType<SugarCanesFarmerBE>> SUGAR_CANES_FARMER = BLOCK_ENTITIES.register("sugar_canes_farmer", () -> BlockEntityType.Builder.of(SugarCanesFarmerBE::new, BlockInit.SUGAR_CANES_FARMER.get()).build(null));
+	public static final RegistryObject<BlockEntityType<BambooFarmerBE>> BAMBOO_FARMER = BLOCK_ENTITIES.register("bamboo_farmer", () -> BlockEntityType.Builder.of(BambooFarmerBE::new, BlockInit.BAMBOO_FARMER.get()).build(null));
 	
 }

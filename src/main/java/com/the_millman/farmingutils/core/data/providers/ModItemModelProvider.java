@@ -20,6 +20,7 @@ public class ModItemModelProvider extends ItemModelProvider {
 		orientableWithBottom("cocoa_beans_farmer", modLoc("block/test_energy_generator"), modLoc("block/cocoa_beans_farmer"), modLoc("block/crop_farmer_bottom"), modLoc("block/crop_farmer_top"));
 		cubeBottomTop("cactus_farmer", modLoc("block/cactus_farmer_side"), modLoc("block/cactus_farmer_bottom"), modLoc("block/cactus_farmer_top"));
 		cubeBottomTop("sugar_canes_farmer", modLoc("block/sugar_canes_farmer_side"), modLoc("block/cactus_farmer_bottom"), modLoc("block/cactus_farmer_top"));
+		cubeBottomTop("bamboo_farmer", modLoc("block/bamboo_farmer_side"), modLoc("block/crop_farmer_bottom"), modLoc("block/crop_farmer_top"));
 		
 		singleTexture("iron_upgrade", mcLoc("item/generated"), "layer0", modLoc("item/iron_upgrade"));
 		singleTexture("gold_upgrade", mcLoc("item/generated"), "layer0", modLoc("item/gold_upgrade"));

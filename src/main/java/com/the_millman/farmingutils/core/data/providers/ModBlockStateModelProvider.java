@@ -21,6 +21,7 @@ public class ModBlockStateModelProvider extends BlockStateProvider {
 		simpleBlock(BlockInit.NETHER_WART_FARMER.get(), models().cubeBottomTop("nether_wart_farmer", modLoc("block/nether_wart_farmer_side"), modLoc("block/nether_wart_farmer_bottom"), modLoc("block/nether_wart_farmer_top")));
 		simpleBlock(BlockInit.CACTUS_FARMER.get(), models().cubeBottomTop("cactus_farmer", modLoc("block/cactus_farmer_side"), modLoc("block/cactus_farmer_bottom"), modLoc("block/cactus_farmer_top")));
 		simpleBlock(BlockInit.SUGAR_CANES_FARMER.get(), models().cubeBottomTop("sugar_canes_farmer", modLoc("block/sugar_canes_farmer_side"), modLoc("block/cactus_farmer_bottom"), modLoc("block/cactus_farmer_top")));
+		simpleBlock(BlockInit.BAMBOO_FARMER.get(), models().cubeBottomTop("bamboo_farmer", modLoc("block/bamboo_farmer_side"), modLoc("block/crop_farmer_bottom"), modLoc("block/crop_farmer_top")));
 		horizontalBlock(BlockInit.COCOA_BEANS_FARMER.get(), models().orientableWithBottom("cocoa_beans_farmer", modLoc("block/test_energy_generator"), modLoc("block/cocoa_beans_farmer"), modLoc("block/crop_farmer_bottom"), modLoc("block/crop_farmer_top")));
 		
 	}

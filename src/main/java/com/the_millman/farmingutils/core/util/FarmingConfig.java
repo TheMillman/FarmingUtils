@@ -36,6 +36,11 @@ public class FarmingConfig {
     public static ForgeConfigSpec.IntValue SUGAR_CANES_FARMER_USEPERTICK;
     public static ForgeConfigSpec.IntValue SUGAR_CANES_FARMER_TICK;
     
+    public static ForgeConfigSpec.IntValue BAMBOO_FARMER_CAPACITY;
+    public static ForgeConfigSpec.IntValue BAMBOO_FARMER_USEPERTICK;
+    public static ForgeConfigSpec.IntValue BAMBOO_FARMER_TICK;
+    
+    
     public static void init() {
     	initServer();
     	initClient();
@@ -131,7 +136,7 @@ public class FarmingConfig {
                 .defineInRange("cactus_farmer_tick", 40, 20, 200);
         builder.pop();
         
-        builder.comment("Sugar Canes Farmer settings").push("cactus_farmer");
+        builder.comment("Sugar Canes Farmer settings").push("sugar_canes_farmer");
 		SUGAR_CANES_FARMER_CAPACITY = builder
 				.comment("How much FE the sugar canes farmer can store")
 				.defineInRange("sugar_canes_farmer_store", 10000, 1, Integer.MAX_VALUE);
@@ -143,6 +148,20 @@ public class FarmingConfig {
 		SUGAR_CANES_FARMER_TICK = builder
                 .comment("How many ticks must pass before the sugar canes farmer works")
                 .defineInRange("sugar_canes_farmer_tick", 40, 20, 200);
+        builder.pop();
+        
+        builder.comment("Bamboo Farmer settings").push("bamboo_farmer");
+		BAMBOO_FARMER_CAPACITY = builder
+				.comment("How much FE the bamboo farmer can store")
+				.defineInRange("bamboo_farmer_store", 10000, 1, Integer.MAX_VALUE);
+		
+		BAMBOO_FARMER_USEPERTICK = builder
+                .comment("How much FE the bamboo farmer can use per tick")
+                .defineInRange("bamboo_farmer_use_per_tick", 20, 1, Integer.MAX_VALUE);
+        
+		BAMBOO_FARMER_TICK = builder
+                .comment("How many ticks must pass before the bamboo farmer works")
+                .defineInRange("bamboo_farmer_tick", 40, 20, 200);
         builder.pop();
         
     	SERVER_CONFIG = builder.build();

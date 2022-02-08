@@ -88,6 +88,17 @@ public class ModRecipeProvider extends RecipeProvider {
         .unlockedBy("sugar_cane", InventoryChangeTrigger.TriggerInstance.hasItems(Items.SUGAR_CANE))
         .save(pFinishedRecipeConsumer);
 		
+		ShapedRecipeBuilder.shaped(BlockInit.BAMBOO_FARMER.get())
+        .pattern("iii")
+        .pattern("ipi")
+        .pattern("srs")
+        .define('p', Items.BAMBOO)
+        .define('i', Tags.Items.INGOTS_IRON)
+        .define('r', Items.REDSTONE)
+        .define('s', Items.STONE)
+        .unlockedBy("bamboo", InventoryChangeTrigger.TriggerInstance.hasItems(Items.BAMBOO))
+        .save(pFinishedRecipeConsumer);
+		
 		ShapedRecipeBuilder.shaped(ItemInit.IRON_UPGRADE.get())
         .pattern("iii")
         .pattern("iri")

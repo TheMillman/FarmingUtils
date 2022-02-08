@@ -6,6 +6,7 @@
     "farmingutils:nether_wart_farmer",
     "farmingutils:cocoa_beans_farmer",
     "farmingutils:cactus_farmer",
-    "farmingutils:sugar_canes_farmer"
+    "farmingutils:sugar_canes_farmer",
+    "farmingutils:bamboo_farmer"
   ]
 }

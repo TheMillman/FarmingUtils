@@ -6,6 +6,7 @@
 	"block.farmingutils.cocoa_beans_farmer": "Cocoa Beans Farmer",
 	"block.farmingutils.cactus_farmer": "Cactus Farmer",
 	"block.farmingutils.sugar_canes_farmer": "Sugar Cane Farmer",
+	"block.farmingutils.bamboo_farmer": "Bamboo Farmer",
 	"item.farmingutils.iron_upgrade": "Iron Range Upgrade",
 	"item.farmingutils.gold_upgrade": "Gold Range Upgrade",
 	"item.farmingutils.diamond_upgrade": "Diamond Range Upgrade",
@@ -23,5 +24,6 @@
 	"screen.farmingutils.cocoa_beans_farmer": "Cocoa Beans Farmer",
 	"screen.farmingutils.cactus_farmer": "Cactus Farmer",
 	"screen.farmingutils.sugar_canes_farmer": "Sugar Cane Farmer",
+	"screen.farmingutils.bamboo_farmer": "Bamboo Farmer",
 	"itemGroup.farming_utils_tab": "Farming Utils"
 }

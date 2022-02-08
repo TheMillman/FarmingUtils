@@ -23,7 +23,8 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
 			.add(BlockInit.NETHER_WART_FARMER.get())
 			.add(BlockInit.COCOA_BEANS_FARMER.get())
 			.add(BlockInit.CACTUS_FARMER.get())
-			.add(BlockInit.SUGAR_CANES_FARMER.get());
+			.add(BlockInit.SUGAR_CANES_FARMER.get())
+			.add(BlockInit.BAMBOO_FARMER.get());
 		
 		tag(BlockTags.MINEABLE_WITH_PICKAXE)
 			.addTag(ModBlockTags.MINEABLE_PICKAXE);

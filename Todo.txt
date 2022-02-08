@@ -1,6 +1,8 @@
- Improve the Energy Bar. 1, Add method for maxEnergy.
+ Improve the Energy Bar. 1
 Improve Wiki.
-Add compatbility with more mods. 3
+Add compatbility with more mods. 4
 Bamboo Farmer. 2
-Update to the last Forge Version.
 Change the Energy Bar rendering method.
+Add destroyUpperBlock() method. 3, Improve the method in BambooFarmerBE.
+Create a generic class for some block entities. WAIT 1.19
+Increase Y range of Cocoa Farmer.

@@ -5,7 +5,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nonnull;
 
 import com.the_millman.farmingutils.core.init.BlockEntityInit;
-import com.the_millman.farmingutils.core.util.FarmingConfig;
 import com.the_millman.themillmanlib.common.blockentity.ItemEnergyBlockEntity;
 import com.the_millman.themillmanlib.core.energy.ModEnergyStorage;
 
@@ -33,7 +32,7 @@ public class TestEnergyGenerator extends ItemEnergyBlockEntity {
     public void tickServer() {
         if (counter > 0) {
             counter--;
-            energyStorage.addEnergy(FarmingConfig.GENERATOR_PERTICK.get());
+            energyStorage.addEnergy(50);
             setChanged();
         }
 
@@ -41,7 +40,7 @@ public class TestEnergyGenerator extends ItemEnergyBlockEntity {
 			ItemStack stack = itemStorage.getStackInSlot(0);
 			int burnTime = ForgeHooks.getBurnTime(stack, RecipeType.SMELTING);
 			if (burnTime > 0) {
-				if (energyStorage.getEnergyStored() < FarmingConfig.GENERATOR_CAPACITY.get()) {
+				if (energyStorage.getEnergyStored() < 100000) {
 					itemStorage.extractItem(0, 1, false);
 					counter = burnTime/4;
 					setChanged();
@@ -65,7 +64,7 @@ public class TestEnergyGenerator extends ItemEnergyBlockEntity {
                 if (te != null) {
                     boolean doContinue = te.getCapability(CapabilityEnergy.ENERGY, direction).map(handler -> {
                                 if (handler.canReceive()) {
-                                    int received = handler.receiveEnergy(Math.min(capacity.get(), FarmingConfig.GENERATOR_SENDPERTICK.get()), false);
+                                    int received = handler.receiveEnergy(Math.min(capacity.get(), 1000), false);
                                     capacity.addAndGet(-received);
                                     energyStorage.consumeEnergy(received);
                                     setChanged();
@@ -112,7 +111,7 @@ public class TestEnergyGenerator extends ItemEnergyBlockEntity {
 
     @Override
     protected ModEnergyStorage createEnergy() {
-        return new ModEnergyStorage(false, FarmingConfig.GENERATOR_CAPACITY.get(), 0) {
+        return new ModEnergyStorage(false, 100000, 0) {
             @Override
             protected void onEnergyChanged() {
                 setChanged();

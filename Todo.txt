@@ -1,8 +1,7 @@
  Improve the Energy Bar. 1
 Improve Wiki.
-Add compatbility with more mods. 4
-Bamboo Farmer. 2
+Add compatbility with more mods. 2
 Change the Energy Bar rendering method.
-Add destroyUpperBlock() method. 3, Improve the method in BambooFarmerBE.
+Add destroyUpperBlock() method. Improve the method in BambooFarmerBE.	WAIT 1.19
 Create a generic class for some block entities. WAIT 1.19
-Increase Y range of Cocoa Farmer.
+Increase Y range of Cocoa Farmer.	WAIT 1.19

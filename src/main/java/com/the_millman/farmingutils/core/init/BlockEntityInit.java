@@ -16,7 +16,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class BlockEntityInit {
-	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, FarmingUtils.MODID);
+	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, FarmingUtils.MODID);
 	
 	public static final RegistryObject<BlockEntityType<TestEnergyGenerator>> TEST_ENERGY_GENERATOR = BLOCK_ENTITIES.register("test_energy_generator", () -> BlockEntityType.Builder.of(TestEnergyGenerator::new, BlockInit.TEST_ENERGY_GENERATOR.get()).build(null));
 	public static final RegistryObject<BlockEntityType<CropFarmerBE>> CROP_FARMER = BLOCK_ENTITIES.register("crop_farmer", () -> BlockEntityType.Builder.of(CropFarmerBE::new, BlockInit.CROP_FARMER.get()).build(null));

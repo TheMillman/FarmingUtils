@@ -7,6 +7,7 @@ import com.the_millman.farmingutils.core.tags.ModBlockTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class ModBlockTagsProvider extends BlockTagsProvider {
@@ -25,6 +26,9 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
 			.add(BlockInit.CACTUS_FARMER.get())
 			.add(BlockInit.SUGAR_CANES_FARMER.get())
 			.add(BlockInit.BAMBOO_FARMER.get());
+		
+		tag(ModBlockTags.AGE_3_CROPS)
+			.add(Blocks.BEETROOTS);
 		
 		tag(BlockTags.MINEABLE_WITH_PICKAXE)
 			.addTag(ModBlockTags.MINEABLE_PICKAXE);

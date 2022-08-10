@@ -6,7 +6,6 @@ import com.the_millman.themillmanlib.common.blocks.PoweredBlock;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -29,6 +28,9 @@ public class BambooFarmerBlock extends PoweredBlock implements EntityBlock {
 		super(properties);
 	}
 	
+	/**
+	 * TODO controllare open screen
+	 */
 	@Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult trace) {
         if (!level.isClientSide) {
@@ -37,7 +39,7 @@ public class BambooFarmerBlock extends PoweredBlock implements EntityBlock {
                 MenuProvider containerProvider = new MenuProvider() {
                     @Override
                     public Component getDisplayName() {
-                        return new TranslatableComponent("screen.farmingutils.bamboo_farmer");
+                        return Component.translatable("screen.farmingutils.bamboo_farmer");
                     }
 
                     @Override
@@ -45,7 +47,7 @@ public class BambooFarmerBlock extends PoweredBlock implements EntityBlock {
                         return new BambooFarmerContainer(windowId, level, pos, playerInventory, playerEntity);
                     }
                 };
-                NetworkHooks.openGui((ServerPlayer) player, containerProvider, blockEntity.getBlockPos());
+                NetworkHooks.openScreen((ServerPlayer) player, containerProvider, blockEntity.getBlockPos());
             } else {
                 throw new IllegalStateException("Our named container provider is missing!");
             }

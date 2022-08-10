@@ -7,7 +7,6 @@ import com.the_millman.farmingutils.common.containers.TestGeneratorContainer;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -60,7 +59,7 @@ public class TestEnergyGeneratorBlock extends Block implements EntityBlock {
                 MenuProvider containerProvider = new MenuProvider() {
                     @Override
                     public Component getDisplayName() {
-                        return new TranslatableComponent("screen.farmingutils.test_energy_generator");
+                        return Component.translatable("screen.farmingutils.test_energy_generator");
                     }
 
                     @Override
@@ -68,7 +67,7 @@ public class TestEnergyGeneratorBlock extends Block implements EntityBlock {
                         return new TestGeneratorContainer(windowId, level, pos, playerInventory, playerEntity);
                     }
                 };
-                NetworkHooks.openGui((ServerPlayer) player, containerProvider, blockEntity.getBlockPos());
+                NetworkHooks.openScreen((ServerPlayer) player, containerProvider, blockEntity.getBlockPos());
             } else {
                 throw new IllegalStateException("Our named container provider is missing!");
             }

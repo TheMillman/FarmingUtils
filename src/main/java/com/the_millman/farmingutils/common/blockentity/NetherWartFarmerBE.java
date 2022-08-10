@@ -178,8 +178,11 @@ public class NetherWartFarmerBE extends ItemEnergyBlockEntity {
 		BlockPos posY = pos.below();
 		BlockState state = level.getBlockState(pos);
 		BlockState yState = level.getBlockState(posY);
-		if (state.getBlock() == Blocks.NETHER_WART) {
+		
+		if (state.getBlock() == Blocks.NETHER_WART ) {
 			return false;
+		} else if(!state.isAir()) {
+			return true;
 		} else if (yState.is(Blocks.SOUL_SAND)) {
 			if (itemStorage.getStackInSlot(slot).getItem()instanceof BlockItem blockItem) {
 				if (!level.isClientSide) {
@@ -190,11 +193,12 @@ public class NetherWartFarmerBE extends ItemEnergyBlockEntity {
 						ItemStack stack = itemStorage.getStackInSlot(slot);
 						stack.shrink(1);
 						energyStorage.consumeEnergy(FarmingConfig.NETHER_WART_FARMER_USEPERTICK.get());
+						return true;
 					}
 				}
 			}
 		}
-		return false;
+		return true;
 	}
 	
 	private boolean getDestBlock(BlockState state) {

@@ -63,6 +63,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 		this.pX = 0;
 		this.pY = 0;
 		this.pZ = 0;
+		
 		this.range = 1;
 		facingPos = getBlockPos();
 		
@@ -292,7 +293,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 					return true;
 				} else if (!this.pickupDrops) {
 					level.destroyBlock(pos, true);
-					energyStorage.consumeEnergy(FarmingConfig.CROP_FARMER_USEPERTICK.get());
+					energyStorage.consumeEnergy(FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get());
 					return true;
 				}
 			}

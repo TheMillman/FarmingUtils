@@ -61,6 +61,7 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 				if (canWork()) {
 					upgradeSlot();
 					BlockPos posToBreak = new BlockPos(this.x + this.pX, this.y, this.z + this.pZ);
+					destroyUpperBlock(posToBreak);
 					destroyBlock(posToBreak, false);
 					setChanged();
 
@@ -155,6 +156,17 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 			return false;
 		}
 		return false;
+	}
+	
+	private void destroyUpperBlock(BlockPos pos) {
+		for(level.getBlockState(pos.above());;) {
+			if(level.getBlockState(pos.above()).is(Blocks.CACTUS)) {
+				destroyBlock(pos.above(), false);
+				pos = new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ());
+				continue;
+			}
+			break;
+		}
 	}
 	
 	private boolean getDestBlock(BlockState state) {

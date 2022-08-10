@@ -6,7 +6,6 @@ import com.the_millman.themillmanlib.common.blocks.DirectionalPoweredBlock;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -41,7 +40,7 @@ public class CocoaFarmerBlock extends DirectionalPoweredBlock implements EntityB
 				MenuProvider containerProvider = new MenuProvider() {
 					@Override
 					public Component getDisplayName() {
-						return new TranslatableComponent("screen.farmingutils.cocoa_beans_farmer");
+						return Component.translatable("screen.farmingutils.cocoa_beans_farmer");
 					}
 
 					@Override
@@ -49,7 +48,7 @@ public class CocoaFarmerBlock extends DirectionalPoweredBlock implements EntityB
 						return new CocoaFarmerContainer(windowId, level, pos, playerInventory, playerEntity);
 					}
 				};
-				NetworkHooks.openGui((ServerPlayer) player, containerProvider, blockEntity.getBlockPos());
+				NetworkHooks.openScreen((ServerPlayer) player, containerProvider, blockEntity.getBlockPos());
 			} else {
 				throw new IllegalStateException("Our named container provider is missing!");
 			}

@@ -5,6 +5,7 @@ import javax.annotation.Nonnull;
 import com.the_millman.farmingutils.common.blocks.CropFarmerBlock;
 import com.the_millman.farmingutils.core.init.BlockEntityInit;
 import com.the_millman.farmingutils.core.init.ItemInit;
+import com.the_millman.farmingutils.core.tags.ModBlockTags;
 import com.the_millman.farmingutils.core.tags.ModItemTags;
 import com.the_millman.farmingutils.core.util.FarmingConfig;
 import com.the_millman.themillmanlib.common.blockentity.ItemEnergyBlockEntity;
@@ -18,7 +19,6 @@ import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.BeetrootBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -149,6 +149,7 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 
 		if (state.isAir()) {
 			return false;
+			//Sostituito getDestBlock(state)
 		} else if (getDestBlock(state)) {
 			if (!level.isClientSide) {
 				if (this.pickupDrops) {
@@ -206,12 +207,12 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 		}
 		return false;
 	}
-
+	
 	private boolean getDestBlock(BlockState state) {
-		if (state.getBlock() == Blocks.BEETROOTS
+		if (state.is(ModBlockTags.AGE_3_CROPS)
 				&& state.getValue(BlockStateProperties.AGE_3) == BeetrootBlock.MAX_AGE) {
 			return true;
-		} else if (state.getBlock() != Blocks.BEETROOTS && state.getBlock() instanceof IPlantable
+		} else if (!state.is(ModBlockTags.AGE_3_CROPS) && state.getBlock() instanceof IPlantable
 				&& state.getBlock() instanceof CropBlock) {
 			if (state.getValue(CropBlock.AGE) == CropBlock.MAX_AGE) {
 				return true;
@@ -220,7 +221,7 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 		}
 		return false;
 	}
-
+	
 	private boolean isValid(ItemStack stack) {
 		if (stack.getItem()instanceof ItemNameBlockItem blockItem) {
 			if (blockItem.getBlock() instanceof CropBlock) {

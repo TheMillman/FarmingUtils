@@ -6,7 +6,6 @@ import com.the_millman.themillmanlib.common.blocks.PoweredBlock;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -37,7 +36,7 @@ public class NetherWartFarmerBlock extends PoweredBlock implements EntityBlock {
                 MenuProvider containerProvider = new MenuProvider() {
                     @Override
                     public Component getDisplayName() {
-                        return new TranslatableComponent("screen.farmingutils.nether_wart_farmer");
+                        return Component.translatable("screen.farmingutils.nether_wart_farmer");
                     }
 
                     @Override
@@ -45,7 +44,7 @@ public class NetherWartFarmerBlock extends PoweredBlock implements EntityBlock {
                         return new NetherWartFarmerContainer(windowId, level, pos, playerInventory, playerEntity);
                     }
                 };
-                NetworkHooks.openGui((ServerPlayer) player, containerProvider, blockEntity.getBlockPos());
+                NetworkHooks.openScreen((ServerPlayer) player, containerProvider, blockEntity.getBlockPos());
             } else {
                 throw new IllegalStateException("Our named container provider is missing!");
             }

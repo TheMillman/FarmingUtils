@@ -23,7 +23,7 @@ public class FarmingUtils
     
     public FarmingUtils() {
     	IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        
+    	
     	ItemInit.ITEMS.register(bus);
     	BlockInit.BLOCKS.register(bus);
     	BlockEntityInit.BLOCK_ENTITIES.register(bus);

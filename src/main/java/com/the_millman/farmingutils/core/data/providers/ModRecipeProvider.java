@@ -11,6 +11,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
 
@@ -98,6 +99,20 @@ public class ModRecipeProvider extends RecipeProvider {
         .define('s', Items.STONE)
         .unlockedBy("bamboo", InventoryChangeTrigger.TriggerInstance.hasItems(Items.BAMBOO))
         .save(pFinishedRecipeConsumer);
+		
+		ShapedRecipeBuilder.shaped(BlockInit.MUSHROOM_FARMER.get())
+        .pattern("iri")
+        .pattern("ipg")
+        .pattern("sds")
+        .define('p', ItemTags.SMALL_FLOWERS)
+        .define('i', Tags.Items.INGOTS_IRON)
+        .define('r', Items.REDSTONE)
+        .define('s', Items.STONE)
+        .define('g', Items.TINTED_GLASS)
+        .define('d', Items.DIRT)
+        .unlockedBy("small_flower", InventoryChangeTrigger.TriggerInstance.hasItems(Items.DANDELION, Items.POPPY))
+        .save(pFinishedRecipeConsumer);
+		
 		
 		ShapedRecipeBuilder.shaped(ItemInit.IRON_UPGRADE.get())
         .pattern("iii")

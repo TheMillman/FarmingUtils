@@ -7,6 +7,7 @@ import com.the_millman.farmingutils.core.init.BlockEntityInit;
 import com.the_millman.farmingutils.core.init.BlockInit;
 import com.the_millman.farmingutils.core.init.ContainerInit;
 import com.the_millman.farmingutils.core.init.ItemInit;
+import com.the_millman.farmingutils.core.networking.ModMessages;
 import com.the_millman.farmingutils.core.util.FarmingConfig;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -32,6 +33,7 @@ public class FarmingUtils
     	FarmingConfig.init();
     	
     	bus.addListener(this::setup);
+    	bus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -40,4 +42,11 @@ public class FarmingUtils
     {
     	
     }
+    
+    private void commonSetup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            ModMessages.register();
+        });
+    }
+
 }

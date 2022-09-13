@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "d": {
+      "item": "minecraft:dirt"
+    },
+    "g": {
+      "item": "minecraft:tinted_glass"
+    },
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "p": {
+      "tag": "minecraft:small_flowers"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "s": {
+      "item": "minecraft:stone"
+    }
+  },
+  "pattern": [
+    "iri",
+    "ipg",
+    "sds"
+  ],
+  "result": {
+    "item": "farmingutils:internal_farmer"
+  }
+}

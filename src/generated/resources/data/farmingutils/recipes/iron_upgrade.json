@@ -1,11 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
   "group": "farmingutils_upgrade",
-  "pattern": [
-    "iii",
-    "iri",
-    "iii"
-  ],
   "key": {
     "i": {
       "tag": "forge:ingots/iron"
@@ -14,6 +9,11 @@
       "item": "minecraft:redstone"
     }
   },
+  "pattern": [
+    "iii",
+    "iri",
+    "iii"
+  ],
   "result": {
     "item": "farmingutils:iron_upgrade"
   }

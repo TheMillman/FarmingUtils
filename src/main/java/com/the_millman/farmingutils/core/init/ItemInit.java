@@ -22,6 +22,7 @@ public class ItemInit {
 	public static final RegistryObject<Item> CACTUS_FARMER = ITEMS.register("cactus_farmer", () -> new BlockItem(BlockInit.CACTUS_FARMER.get(), new Item.Properties().tab(TAB)));
 	public static final RegistryObject<Item> SUGAR_CANES_FARMER = ITEMS.register("sugar_canes_farmer", () -> new BlockItem(BlockInit.SUGAR_CANES_FARMER.get(), new Item.Properties().tab(TAB)));
 	public static final RegistryObject<Item> BAMBOO_FARMER = ITEMS.register("bamboo_farmer", () -> new BlockItem(BlockInit.BAMBOO_FARMER.get(), new Item.Properties().tab(TAB)));
+	public static final RegistryObject<Item> MUSHROOM_FARMER = ITEMS.register("internal_farmer", () -> new BlockItem(BlockInit.MUSHROOM_FARMER.get(), new Item.Properties().tab(TAB)));
 	
 	//public static final RegistryObject<Item> TEST_ENERGY_GENERATOR = ITEMS.register("test_energy_generator", () -> new BlockItem(BlockInit.TEST_ENERGY_GENERATOR.get(), new Item.Properties().tab(TAB)));
 	

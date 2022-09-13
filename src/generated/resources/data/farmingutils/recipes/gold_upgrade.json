@@ -1,11 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
   "group": "farmingutils_upgrade",
-  "pattern": [
-    "iii",
-    "iri",
-    "iii"
-  ],
   "key": {
     "i": {
       "tag": "forge:ingots/gold"
@@ -14,6 +9,11 @@
       "item": "farmingutils:iron_upgrade"
     }
   },
+  "pattern": [
+    "iii",
+    "iri",
+    "iii"
+  ],
   "result": {
     "item": "farmingutils:gold_upgrade"
   }

@@ -192,7 +192,7 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 			return false;
 		} else if (yState.getBlock() instanceof FarmBlock) {
 			if (isValid(itemStorage.getStackInSlot(slot))) {
-				if (itemStorage.getStackInSlot(slot).getItem()instanceof BlockItem blockItem) {
+				if (itemStorage.getStackInSlot(slot).getItem() instanceof BlockItem blockItem) {
 					if (!level.isClientSide) {
 						Block block = blockItem.getBlock();
 						level.setBlock(pos, block.defaultBlockState(), Block.UPDATE_ALL);

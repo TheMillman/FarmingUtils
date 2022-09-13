@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "farmingutils:block/internal_farmer"
+    },
+    "facing=south": {
+      "model": "farmingutils:block/internal_farmer",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "farmingutils:block/internal_farmer",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "farmingutils:block/internal_farmer",
+      "y": 90
+    }
+  }
+}

@@ -1,8 +1,8 @@
 {
   "parent": "minecraft:block/cube_bottom_top",
   "textures": {
-    "side": "farmingutils:block/bamboo_farmer_side",
     "bottom": "farmingutils:block/crop_farmer_bottom",
+    "side": "farmingutils:block/bamboo_farmer_side",
     "top": "farmingutils:block/crop_farmer_top"
   }
 }

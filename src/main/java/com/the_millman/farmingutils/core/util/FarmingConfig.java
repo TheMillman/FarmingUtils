@@ -36,6 +36,10 @@ public class FarmingConfig {
     public static ForgeConfigSpec.IntValue BAMBOO_FARMER_USEPERTICK;
     public static ForgeConfigSpec.IntValue BAMBOO_FARMER_TICK;
     
+    public static ForgeConfigSpec.IntValue INTERNAL_FARMER_CAPACITY;
+    public static ForgeConfigSpec.IntValue INTERNAL_FARMER_USEPERTICK;
+    public static ForgeConfigSpec.IntValue INTERNAL_FARMER_TICK;
+    
     
     public static void init() {
     	initServer();
@@ -143,6 +147,20 @@ public class FarmingConfig {
         
 		BAMBOO_FARMER_TICK = builder
                 .comment("How many ticks must pass before the bamboo farmer works")
+                .defineInRange("bamboo_farmer_tick", 40, 20, 200);
+        builder.pop();
+        
+        builder.comment("Internal Farmer settings").push("internal_farmer");
+        INTERNAL_FARMER_CAPACITY = builder
+				.comment("How much FE the internal farmer can store")
+				.defineInRange("bamboo_farmer_store", 10000, 0, Integer.MAX_VALUE);
+		
+        INTERNAL_FARMER_USEPERTICK = builder
+                .comment("How much FE the internal farmer can use per tick")
+                .defineInRange("bamboo_farmer_use_per_tick", 20, 0, Integer.MAX_VALUE);
+        
+        INTERNAL_FARMER_TICK = builder
+                .comment("How many ticks must pass before the internal farmer works")
                 .defineInRange("bamboo_farmer_tick", 40, 20, 200);
         builder.pop();
         

@@ -1,9 +1,9 @@
 {
   "parent": "minecraft:block/orientable_with_bottom",
   "textures": {
-    "side": "farmingutils:block/test_energy_generator",
-    "front": "farmingutils:block/cocoa_beans_farmer",
     "bottom": "farmingutils:block/crop_farmer_bottom",
+    "front": "farmingutils:block/cocoa_beans_farmer",
+    "side": "farmingutils:block/test_energy_generator",
     "top": "farmingutils:block/crop_farmer_top"
   }
 }

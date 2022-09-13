@@ -8,6 +8,7 @@ import com.the_millman.farmingutils.common.blocks.CropFarmerBlock;
 import com.the_millman.farmingutils.common.blocks.MelonFarmerBlock;
 import com.the_millman.farmingutils.common.blocks.NetherWartFarmerBlock;
 import com.the_millman.farmingutils.common.blocks.SugarCanesFarmerBlock;
+import com.the_millman.farmingutils.common.blocks.InternalFarmerBlock;
 import com.the_millman.farmingutils.common.blocks.TestEnergyGeneratorBlock;
 
 import net.minecraft.world.level.block.Block;
@@ -28,6 +29,7 @@ public class BlockInit {
 	public static final RegistryObject<Block> CACTUS_FARMER = BLOCKS.register("cactus_farmer", () -> new CactusFarmerBlock(BlockBehaviour.Properties.of(Material.STONE).strength(4.0F).requiresCorrectToolForDrops().sound(SoundType.METAL)));
 	public static final RegistryObject<Block> SUGAR_CANES_FARMER = BLOCKS.register("sugar_canes_farmer", () -> new SugarCanesFarmerBlock(BlockBehaviour.Properties.of(Material.STONE).strength(4.0F).requiresCorrectToolForDrops().sound(SoundType.METAL)));
 	public static final RegistryObject<Block> BAMBOO_FARMER = BLOCKS.register("bamboo_farmer", () -> new BambooFarmerBlock(BlockBehaviour.Properties.of(Material.STONE).strength(4.0F).requiresCorrectToolForDrops().sound(SoundType.METAL)));
+	public static final RegistryObject<Block> MUSHROOM_FARMER = BLOCKS.register("internal_farmer", () -> new InternalFarmerBlock(BlockBehaviour.Properties.of(Material.STONE).strength(4.0F).requiresCorrectToolForDrops().sound(SoundType.METAL)));
 	
 	
 	public static final RegistryObject<Block> TEST_ENERGY_GENERATOR = BLOCKS.register("test_energy_generator", () -> new TestEnergyGeneratorBlock(BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(3.5F).sound(SoundType.METAL)));

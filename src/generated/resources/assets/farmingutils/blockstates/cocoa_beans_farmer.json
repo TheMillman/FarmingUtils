@@ -1,9 +1,24 @@
 {
   "variants": {
+    "facing=east,powered=false": {
+      "model": "farmingutils:block/cocoa_beans_farmer",
+      "y": 90
+    },
+    "facing=east,powered=true": {
+      "model": "farmingutils:block/cocoa_beans_farmer",
+      "y": 90
+    },
     "facing=north,powered=false": {
       "model": "farmingutils:block/cocoa_beans_farmer"
     },
+    "facing=north,powered=true": {
+      "model": "farmingutils:block/cocoa_beans_farmer"
+    },
     "facing=south,powered=false": {
+      "model": "farmingutils:block/cocoa_beans_farmer",
+      "y": 180
+    },
+    "facing=south,powered=true": {
       "model": "farmingutils:block/cocoa_beans_farmer",
       "y": 180
     },
@@ -11,24 +26,9 @@
       "model": "farmingutils:block/cocoa_beans_farmer",
       "y": 270
     },
-    "facing=east,powered=false": {
-      "model": "farmingutils:block/cocoa_beans_farmer",
-      "y": 90
-    },
-    "facing=north,powered=true": {
-      "model": "farmingutils:block/cocoa_beans_farmer"
-    },
-    "facing=south,powered=true": {
-      "model": "farmingutils:block/cocoa_beans_farmer",
-      "y": 180
-    },
     "facing=west,powered=true": {
       "model": "farmingutils:block/cocoa_beans_farmer",
       "y": 270
-    },
-    "facing=east,powered=true": {
-      "model": "farmingutils:block/cocoa_beans_farmer",
-      "y": 90
     }
   }
 }

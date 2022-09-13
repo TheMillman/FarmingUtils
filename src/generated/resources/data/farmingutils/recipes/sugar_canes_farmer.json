@@ -1,16 +1,11 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "iii",
-    "ipi",
-    "srs"
-  ],
   "key": {
-    "p": {
-      "item": "minecraft:sugar_cane"
-    },
     "i": {
       "tag": "forge:ingots/iron"
+    },
+    "p": {
+      "item": "minecraft:sugar_cane"
     },
     "r": {
       "item": "minecraft:redstone"
@@ -19,6 +14,11 @@
       "item": "minecraft:sandstone"
     }
   },
+  "pattern": [
+    "iii",
+    "ipi",
+    "srs"
+  ],
   "result": {
     "item": "farmingutils:sugar_canes_farmer"
   }

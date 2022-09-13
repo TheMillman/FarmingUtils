@@ -1,16 +1,11 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "iii",
-    "ipi",
-    "srs"
-  ],
   "key": {
-    "p": {
-      "item": "minecraft:nether_wart"
-    },
     "i": {
       "tag": "forge:ingots/iron"
+    },
+    "p": {
+      "item": "minecraft:nether_wart"
     },
     "r": {
       "item": "minecraft:redstone"
@@ -19,6 +14,11 @@
       "item": "minecraft:red_nether_bricks"
     }
   },
+  "pattern": [
+    "iii",
+    "ipi",
+    "srs"
+  ],
   "result": {
     "item": "farmingutils:nether_wart_farmer"
   }

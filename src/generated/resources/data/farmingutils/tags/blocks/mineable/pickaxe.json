@@ -1,5 +1,4 @@
 {
-  "replace": false,
   "values": [
     "farmingutils:crop_farmer",
     "farmingutils:melon_farmer",

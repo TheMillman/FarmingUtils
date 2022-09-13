@@ -6,6 +6,7 @@ import com.the_millman.farmingutils.client.screens.CactusFarmerScreen;
 import com.the_millman.farmingutils.client.screens.CocoaFarmerScreen;
 import com.the_millman.farmingutils.client.screens.CropFarmerScreen;
 import com.the_millman.farmingutils.client.screens.GeneratorScreen;
+import com.the_millman.farmingutils.client.screens.InternalFarmerScreen;
 import com.the_millman.farmingutils.client.screens.MelonFarmerScreen;
 import com.the_millman.farmingutils.client.screens.NetherWartFarmerScreen;
 import com.the_millman.farmingutils.client.screens.SugarCanesFarmerScreen;
@@ -31,5 +32,6 @@ public class ClientSetup {
 		MenuScreens.register(ContainerInit.CACTUS_FARMER_CONTAINER.get(), CactusFarmerScreen::new);
 		MenuScreens.register(ContainerInit.SUGAR_CANES_FARMER_CONTAINER.get(), SugarCanesFarmerScreen::new);
 		MenuScreens.register(ContainerInit.BAMBOO_FARMER_CONTAINER.get(), BambooFarmerScreen::new);
+		MenuScreens.register(ContainerInit.INTERNAL_FARMER_CONTAINER.get(), InternalFarmerScreen::new);
 	}
 }

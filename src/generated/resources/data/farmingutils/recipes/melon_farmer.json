@@ -1,16 +1,11 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "iii",
-    "ipi",
-    "srs"
-  ],
   "key": {
-    "p": {
-      "tag": "farmingutils:crop_block_seeds"
-    },
     "i": {
       "tag": "forge:ingots/iron"
+    },
+    "p": {
+      "tag": "farmingutils:crop_block_seeds"
     },
     "r": {
       "item": "minecraft:redstone"
@@ -19,6 +14,11 @@
       "item": "minecraft:stone"
     }
   },
+  "pattern": [
+    "iii",
+    "ipi",
+    "srs"
+  ],
   "result": {
     "item": "farmingutils:melon_farmer"
   }

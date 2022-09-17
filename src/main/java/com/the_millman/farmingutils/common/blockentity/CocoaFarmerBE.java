@@ -26,10 +26,10 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 
-	private int x, y, z, tick;
-	int pX, pY, pZ;
+	private int tick;
+	int pY;
+	
 	boolean initialized = false;
-	int range;
 	BlockPos facingPos = null;
 	boolean needRedstone = false;
 	boolean pickupDrops = true;
@@ -161,7 +161,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 	}
 	
 	private void rangeUpgrade() {
-		ItemStack upgradeSlot = itemStorage.getStackInSlot(9);
+		ItemStack upgradeSlot = getStackInSlot(9);
 		Direction facing = getBlockState().getValue(CocoaFarmerBlock.FACING);
 		if (upgradeSlot.is(ItemInit.IRON_UPGRADE.get())) {
 			if (facing == Direction.NORTH) {
@@ -263,7 +263,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 	}
 	
 	private void redstoneUpgrade() {
-		ItemStack upgradeSlot = itemStorage.getStackInSlot(10);
+		ItemStack upgradeSlot = getStackInSlot(10);
 		if (upgradeSlot.is(ItemInit.REDSTONE_UPGRADE.get())) {
 			this.needRedstone = true;
 		} else if (!upgradeSlot.is(ItemInit.REDSTONE_UPGRADE.get())) {
@@ -272,7 +272,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 	}
 	
 	private void dropUpgrade() {
-		ItemStack upgradeSlot = itemStorage.getStackInSlot(11);
+		ItemStack upgradeSlot = getStackInSlot(11);
 		if (upgradeSlot.is(ItemInit.DROP_UPGRADE.get())) {
 			this.pickupDrops = false;
 		} else if (!upgradeSlot.is(ItemInit.DROP_UPGRADE.get())) {
@@ -289,11 +289,11 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 				if (this.pickupDrops) {
 					collectDrops(pos, 0, 9);
 					level.destroyBlock(pos, dropBlock);
-					energyStorage.consumeEnergy(FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get());
+					consumeEnergy(FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get());
 					return true;
 				} else if (!this.pickupDrops) {
 					level.destroyBlock(pos, true);
-					energyStorage.consumeEnergy(FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get());
+					consumeEnergy(FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get());
 					return true;
 				}
 			}
@@ -305,10 +305,10 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 	private boolean placeBlock(BlockPos pos) { 
 		int slot = 0;
 		for (int i = 0; i < 9; i++) {
-			if (itemStorage.getStackInSlot(i).isEmpty())
+			if (getStackInSlot(i).isEmpty())
 				continue;
 
-			if (!itemStorage.getStackInSlot(i).isEmpty()) {
+			if (!getStackInSlot(i).isEmpty()) {
 				slot = i;
 				break;
 			}
@@ -331,15 +331,14 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 		if (state.getBlock() == Blocks.COCOA) {
 			return false;
 		} else if (facingState.is(Blocks.JUNGLE_LOG)) {
-			if (itemStorage.getStackInSlot(slot).getItem()instanceof BlockItem blockItem) {
+			if (getStackInSlot(slot).getItem()instanceof BlockItem blockItem) {
 				if (!level.isClientSide) {
 					if (blockItem.asItem() == Items.COCOA_BEANS) {
 						Block block = blockItem.getBlock();
 						level.setBlock(pos, block.defaultBlockState().setValue(CocoaBlock.FACING, getBlockState().getValue(CocoaFarmerBlock.FACING)), Block.UPDATE_ALL);
 						level.playSound(null, pos, SoundEvents.CROP_PLANTED, SoundSource.BLOCKS, 1F, 1F);
-						ItemStack stack = itemStorage.getStackInSlot(slot);
-						stack.shrink(1);
-						energyStorage.consumeEnergy(FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get());
+						consumeStack(slot, 1);
+						consumeEnergy(FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get());
 					}
 				}
 			}

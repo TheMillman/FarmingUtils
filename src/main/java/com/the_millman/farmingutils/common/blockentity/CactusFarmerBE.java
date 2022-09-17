@@ -20,11 +20,9 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class CactusFarmerBE extends ItemEnergyBlockEntity {
 	
-	private int x, y, z, tick;
-	int pX;
-	int pZ;
+	private int tick;
+
 	boolean initialized = false;
-	int range;
 	boolean needRedstone = false;
 	boolean pickupDrops = true;
 	
@@ -65,15 +63,7 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 					destroyBlock(posToBreak, false);
 					setChanged();
 
-					pX++;
-					if (pX >= this.range) {
-						this.pX = 0;
-						this.pZ++;
-						if (this.pZ >= this.range) {
-							this.pX = 0;
-							this.pZ = 0;
-						}
-					}
+					posState();
 				}
 			}
 		}
@@ -97,7 +87,7 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 	}
 	
 	private void redstoneUpgrade() {
-		ItemStack upgradeSlot = itemStorage.getStackInSlot(10);
+		ItemStack upgradeSlot = getStackInSlot(10);
 		if (upgradeSlot.is(ItemInit.REDSTONE_UPGRADE.get())) {
 			this.needRedstone = true;
 		} else if (!upgradeSlot.is(ItemInit.REDSTONE_UPGRADE.get())) {
@@ -106,7 +96,7 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 	}
 	
 	private void dropUpgrade() {
-		ItemStack upgradeSlot = itemStorage.getStackInSlot(11);
+		ItemStack upgradeSlot = getStackInSlot(11);
 		if (upgradeSlot.is(ItemInit.DROP_UPGRADE.get())) {
 			this.pickupDrops = false;
 		} else if (!upgradeSlot.is(ItemInit.DROP_UPGRADE.get())) {
@@ -115,7 +105,7 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 	}
 	
 	private void rangeUpgrade() {
-		ItemStack upgradeSlot = itemStorage.getStackInSlot(9);
+		ItemStack upgradeSlot = getStackInSlot(9);
 		if (upgradeSlot.is(ItemInit.IRON_UPGRADE.get())) {
 			this.x = getBlockPos().getX() - 2;
 			this.z = getBlockPos().getZ() - 2;
@@ -144,11 +134,11 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 				if (this.pickupDrops) {
 					collectDrops(pos, 0, 9);
 					level.destroyBlock(pos, dropBlock);
-					energyStorage.consumeEnergy(FarmingConfig.CACTUS_FARMER_USEPERTICK.get());
+					consumeEnergy(FarmingConfig.CACTUS_FARMER_USEPERTICK.get());
 					return true;
 				} else if(!this.pickupDrops) {
 					level.destroyBlock(pos, true);
-					energyStorage.consumeEnergy(FarmingConfig.CACTUS_FARMER_USEPERTICK.get());
+					consumeEnergy(FarmingConfig.CACTUS_FARMER_USEPERTICK.get());
 					return true;
 				}
 				return false;

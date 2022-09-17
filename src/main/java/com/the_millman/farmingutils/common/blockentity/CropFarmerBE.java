@@ -28,11 +28,9 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class CropFarmerBE extends ItemEnergyBlockEntity {
 
-	private int x, y, z, tick;
-	int pX;
-	int pZ;
+	private int tick;
+	
 	boolean initialized = false;
-	int range;
 	boolean needRedstone = false;
 	boolean pickupDrops = true;
 			
@@ -74,15 +72,7 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 					placeBlock(posToBreak);
 					setChanged();
 
-					pX++;
-					if (pX >= this.range) {
-						this.pX = 0;
-						this.pZ++;
-						if (this.pZ >= this.range) {
-							this.pX = 0;
-							this.pZ = 0;
-						}
-					}
+					posState();
 				}
 			}
 		}
@@ -106,7 +96,7 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 	}
 	
 	private void rangeSlot() {
-		ItemStack upgradeSlot = itemStorage.getStackInSlot(18);
+		ItemStack upgradeSlot = getStackInSlot(18);
 		if (upgradeSlot.is(ItemInit.IRON_UPGRADE.get())) {
 			this.x = getBlockPos().getX() - 2;
 			this.z = getBlockPos().getZ() - 2;
@@ -127,7 +117,7 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 	}
 	
 	private void redstoneUpgrade() {
-		ItemStack upgradeSlot = itemStorage.getStackInSlot(19);
+		ItemStack upgradeSlot = getStackInSlot(19);
 		if (upgradeSlot.is(ItemInit.REDSTONE_UPGRADE.get())) {
 			this.needRedstone = true;
 		} else if (!upgradeSlot.is(ItemInit.REDSTONE_UPGRADE.get())) {
@@ -136,7 +126,7 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 	}
 	
 	private void dropUpgrade() {
-		ItemStack upgradeSlot = itemStorage.getStackInSlot(20);
+		ItemStack upgradeSlot = getStackInSlot(20);
 		if (upgradeSlot.is(ItemInit.DROP_UPGRADE.get())) {
 			this.pickupDrops = false;
 		} else if (!upgradeSlot.is(ItemInit.DROP_UPGRADE.get())) {
@@ -155,12 +145,12 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 				if (this.pickupDrops) {
 					collectDrops(pos, 0, 18);
 					level.destroyBlock(pos, dropBlock);
-					energyStorage.consumeEnergy(FarmingConfig.CROP_FARMER_USEPERTICK.get());
+					consumeEnergy(FarmingConfig.CROP_FARMER_USEPERTICK.get());
 					return true;
 				} else if(!this.pickupDrops) {
 					// collectDrops(pos, dropBlock);
 					level.destroyBlock(pos, true);
-					energyStorage.consumeEnergy(FarmingConfig.CROP_FARMER_USEPERTICK.get());
+					consumeEnergy(FarmingConfig.CROP_FARMER_USEPERTICK.get());
 					return true;
 				}
 				return false;
@@ -173,11 +163,11 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 	private boolean placeBlock(BlockPos pos) {
 		int slot = 0;
 		for (int i = 0; i < 18; i++) {
-			if (itemStorage.getStackInSlot(i).isEmpty())
+			if (getStackInSlot(i).isEmpty())
 				continue;
 
-			if (!itemStorage.getStackInSlot(i).isEmpty()) {
-				if(isValid(itemStorage.getStackInSlot(i))) {
+			if (!getStackInSlot(i).isEmpty()) {
+				if(isValid(getStackInSlot(i))) {
 					slot = i;
 					break;
 				}
@@ -191,16 +181,14 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 		if (state.getBlock() instanceof CropBlock) {
 			return false;
 		} else if (yState.getBlock() instanceof FarmBlock) {
-			if (isValid(itemStorage.getStackInSlot(slot))) {
-				if (itemStorage.getStackInSlot(slot).getItem() instanceof BlockItem blockItem) {
+			if (isValid(getStackInSlot(slot))) {
+				if (getStackInSlot(slot).getItem() instanceof BlockItem blockItem) {
 					if (!level.isClientSide) {
 						Block block = blockItem.getBlock();
 						level.setBlock(pos, block.defaultBlockState(), Block.UPDATE_ALL);
 						level.playSound(null, pos, SoundEvents.CROP_PLANTED, SoundSource.BLOCKS, 1F, 1F);
-//					level.updateNeighborsAt(posY, yState.getBlock());
-						ItemStack stack = itemStorage.getStackInSlot(slot);
-						stack.shrink(1);
-						energyStorage.consumeEnergy(FarmingConfig.CROP_FARMER_USEPERTICK.get());
+						consumeStack(slot, 1);
+						consumeEnergy(FarmingConfig.CROP_FARMER_USEPERTICK.get());
 					}
 				}
 			}

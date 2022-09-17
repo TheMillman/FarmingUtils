@@ -19,11 +19,9 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class MelonFarmerBE extends ItemEnergyBlockEntity {
 
-	private int x, y, z, tick;
-	int pX;
-	int pZ;
+	private int tick;
+	
 	boolean initialized = false;
-	int range = 5;
 	boolean needRedstone = false;
 	boolean pickupDrops = true;
 
@@ -62,15 +60,8 @@ public class MelonFarmerBE extends ItemEnergyBlockEntity {
 					BlockPos posToBreak = new BlockPos(this.x + this.pX, this.y, this.z + this.pZ);
 					destroyBlock(posToBreak, false);
 					setChanged();
-					pX++;
-					if (pX >= this.range) {
-						this.pX = 0;
-						this.pZ++;
-						if (this.pZ >= this.range) {
-							this.pX = 0;
-							this.pZ = 0;
-						}
-					}
+
+					posState();
 				}
 			}
 		}
@@ -89,7 +80,7 @@ public class MelonFarmerBE extends ItemEnergyBlockEntity {
 	}
 	
 	private void redstoneUpgrade() {
-		ItemStack upgradeSlot = itemStorage.getStackInSlot(9);
+		ItemStack upgradeSlot = getStackInSlot(9);
 		if (upgradeSlot.is(ItemInit.REDSTONE_UPGRADE.get())) {
 			this.needRedstone = true;
 		} else if (!upgradeSlot.is(ItemInit.REDSTONE_UPGRADE.get())) {
@@ -98,7 +89,7 @@ public class MelonFarmerBE extends ItemEnergyBlockEntity {
 	}
 	
 	private void dropUpgrade() {
-		ItemStack upgradeSlot = itemStorage.getStackInSlot(10);
+		ItemStack upgradeSlot = getStackInSlot(10);
 		if (upgradeSlot.is(ItemInit.DROP_UPGRADE.get())) {
 			this.pickupDrops = false;
 		} else if (!upgradeSlot.is(ItemInit.DROP_UPGRADE.get())) {
@@ -115,11 +106,11 @@ public class MelonFarmerBE extends ItemEnergyBlockEntity {
 				if (this.pickupDrops) {
 					collectDrops(pos, 0, 9);
 					level.destroyBlock(pos, dropBlock);
-					energyStorage.consumeEnergy(FarmingConfig.MELON_FARMER_USEPERTICK.get());
+					consumeEnergy(FarmingConfig.MELON_FARMER_USEPERTICK.get());
 					return true;
 				} else if (!this.pickupDrops) {
 					level.destroyBlock(pos, true);
-					energyStorage.consumeEnergy(FarmingConfig.MELON_FARMER_USEPERTICK.get());
+					consumeEnergy(FarmingConfig.MELON_FARMER_USEPERTICK.get());
 					return true;
 				}
 				return false;

@@ -17,7 +17,7 @@ public class ModMessages {
         return packetId++;
     }
 
-    public static void register() {
+	public static void register() {
         SimpleChannel net = NetworkRegistry.ChannelBuilder
                 .named(new ResourceLocation(FarmingUtils.MODID, "messages"))
                 .networkProtocolVersion(() -> "1.0")
@@ -28,10 +28,22 @@ public class ModMessages {
         INSTANCE = net;
 
         net.messageBuilder(FluidSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(FluidSyncS2CPacket::new)
-                .encoder(FluidSyncS2CPacket::toBytes)
-                .consumerMainThread(FluidSyncS2CPacket::handle)
-                .add();
+        	.decoder(FluidSyncS2CPacket::new)
+        	.encoder(FluidSyncS2CPacket::toBytes)
+        	.consumerMainThread(FluidSyncS2CPacket::handle)
+        	.add();
+        
+        net.messageBuilder(ItemStackSyncS2CPacket2.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+        	.decoder(ItemStackSyncS2CPacket2::new)
+        	.encoder(ItemStackSyncS2CPacket2::toBytes)
+        	.consumerMainThread(ItemStackSyncS2CPacket2::handle)
+        	.add();
+        
+        net.messageBuilder(GrowthSyncS2CPacket2.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+        	.decoder(GrowthSyncS2CPacket2::new)
+        	.encoder(GrowthSyncS2CPacket2::toBytes)
+        	.consumerMainThread(GrowthSyncS2CPacket2::handle)
+        .add();
     }
 
     public static <MSG> void sendToServer(MSG message) {

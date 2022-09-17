@@ -2,6 +2,8 @@ package com.the_millman.farmingutils.common.blocks;
 
 import com.the_millman.farmingutils.common.blockentity.InternalFarmerBE;
 import com.the_millman.farmingutils.common.containers.InternalFarmerContainer;
+import com.the_millman.farmingutils.core.networking.FluidSyncS2CPacket;
+import com.the_millman.farmingutils.core.networking.ModMessages;
 import com.the_millman.themillmanlib.common.blocks.DirectionalPoweredBlock;
 
 import net.minecraft.core.BlockPos;
@@ -55,6 +57,10 @@ public class InternalFarmerBlock extends DirectionalPoweredBlock implements Enti
 
                     @Override
                     public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerEntity) {
+                    	if(!pLevel.isClientSide()) {
+        	                ModMessages.sendToClients(new FluidSyncS2CPacket(tile.getFluidStack(), tile.getBlockPos()));
+        	            }
+                    	
                         return new InternalFarmerContainer(windowId, pLevel, pPos, playerInventory, playerEntity);
                     }
                 };

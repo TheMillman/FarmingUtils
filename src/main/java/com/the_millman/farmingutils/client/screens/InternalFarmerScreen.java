@@ -4,20 +4,35 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.the_millman.farmingutils.FarmingUtils;
 import com.the_millman.farmingutils.common.containers.InternalFarmerContainer;
-import com.the_millman.themillmanlib.client.screens.ItemEnergyScreen;
+import com.the_millman.farmingutils.core.util.FarmingConfig;
+import com.the_millman.themillmanlib.client.screens.ItemEnergyFluidScreen;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraftforge.fluids.FluidStack;
 
-public class InternalFarmerScreen extends ItemEnergyScreen<InternalFarmerContainer> {
+public class InternalFarmerScreen extends ItemEnergyFluidScreen<InternalFarmerContainer> {
 	
 	private ResourceLocation GUI = new ResourceLocation(FarmingUtils.MODID, "textures/gui/internal_farmer_gui.png");
 	private ResourceLocation OVERLAY = new ResourceLocation(FarmingUtils.MODID, "textures/gui/offset_buttons.png");
 	
 	public InternalFarmerScreen(InternalFarmerContainer pMenu, Inventory pPlayerInventory, Component pTitle) {
 		super(pMenu, pPlayerInventory, pTitle);
+	}
+	
+	@Override
+	protected void init() {
+		super.init();
+		initFluidRenderer(FarmingConfig.INTERNAL_FARMER_FLUID_CAPACITY.get(), true, 13, 52);
+	}
+	
+	@Override
+	protected void renderLabels(PoseStack pPoseStack, int pMouseX, int pMouseY) {
+		int xPos = (width - imageWidth) / 2;
+        int yPos = (height - imageHeight) / 2;
+        super.renderLabels(pPoseStack, pMouseX, pMouseY);
+        renderFluidTooltip(pPoseStack, pMouseX, pMouseY, 108, 120, 18, 69, menu.getFluidStack(), xPos, yPos, "tooltip.farmingutils.fluid_amount_capacity", "tooltip.farmingutils.fluid_amount");
+        
 	}
 
 	@Override
@@ -26,7 +41,6 @@ public class InternalFarmerScreen extends ItemEnergyScreen<InternalFarmerContain
 		super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
 		this.renderTooltip(pPoseStack, pMouseX, pMouseY);
 		this.renderEnergyLevel(pPoseStack, pMouseX, pMouseY);
-		this.renderFluidLevel(pPoseStack, pMouseX, pMouseY);
 	}
 	
 	@Override
@@ -35,30 +49,7 @@ public class InternalFarmerScreen extends ItemEnergyScreen<InternalFarmerContain
         int relX = (this.width - this.imageWidth) / 2;
         int relY = (this.height - this.imageHeight) / 2;
         this.blit(pPoseStack, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
+        renderer.render(pPoseStack, relX + 108, relY + 18, menu.getFluidStack());
         this.renderEnergyBar(pPoseStack, OVERLAY);
-        this.renderFluidBar(pPoseStack, OVERLAY);
-	}
-
-	protected void renderFluidLevel(PoseStack matrixStack, int mouseX, int mouseY) {
-		this.renderTooltip(matrixStack, "Water: ", this.menu.getFluidStack(), mouseX, mouseY, 108, 18, 120, 69);
-	}
-	
-	protected void renderTooltip(PoseStack matrixStack, String energy, FluidStack fluidStack, int mouseX, int mouseY, int xLeft, int yTop, int xRight, int yBot) {
-		if (mouseX >= this.getGuiLeft() + xLeft && mouseX <= this.getGuiLeft() + xRight && mouseY >= this.getGuiTop() + yTop && mouseY <= this.getGuiTop() + yBot) {
-			this.renderTooltip(matrixStack, Component.translatable("Water: " + this.menu.getFluidStack().getAmount()), mouseX, mouseY);
-		}
-	}
-
-	protected void renderFluidBar(PoseStack matrixStack, ResourceLocation overlay) {
-		RenderSystem.setShaderTexture(0, overlay);
-		int i = this.getGuiLeft();
-		int j = this.getGuiTop();
-		int l = this.menu.getFluidStack().getAmount();
-		
-		int e = l / 1000;
-
-		// this.blit(matrixStack, i + 6, j + 21, 177, e * 5, 14, 50);
-		//this.blit(matrixStack, i + 7, j + 20, 71, (e * 5) + 1, 15, 51);
-		this.blit(matrixStack, i + 108, j + 18, 105, (e * 5), 13, 52);
 	}
 }

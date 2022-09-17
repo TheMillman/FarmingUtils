@@ -18,6 +18,8 @@
 	"tooltip.farmingutils.upgrade.diamond": "\u00A77Area: 9x9",
 	"tooltip.farmingutils.upgrade.redstone": "\u00A77The Farmer will only work if it has a Redstone signal",
 	"tooltip.farmingutils.upgrade.drop": "\u00A77The Farmer will not pickup the drops",
+	"tooltip.farmingutils.fluid_amount_capacity": "%s / %s mB",
+	"tooltip.farmingutils.fluid_amount": "%s mB",
 	"screen.farmingutils.test_energy_generator": "Test Energy Generator",
 	"screen.farmingutils.crop_farmer": "Crop Farmer",
 	"screen.farmingutils.melon_farmer": "Melon and Pumpkin Farmer",

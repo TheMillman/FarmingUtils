@@ -13,8 +13,8 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
@@ -36,7 +36,7 @@ public class InternalFarmerContainer extends ItemEnergyContainer
         this.fluidStack = blockEntity.getFluidStack();
         
 		if (blockEntity != null) {
-			blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
+			blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(h -> {
 				layoutInventorySlots(h, 49, 18, 3, 3);
 				layoutUpgradeSlots(h, 9, 152, 18, 3);
 				addSlot(new SlotItemHandler(h, 12, 27, 36));

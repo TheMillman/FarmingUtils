@@ -12,7 +12,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
@@ -29,7 +29,7 @@ public class MelonFarmerContainer extends ItemEnergyContainer {
 		this.playerInventory = new InvWrapper(playerInventory);
 
 		if (blockEntity != null) {
-			blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
+			blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(h -> {
 				layoutInventorySlots(h, 62, 18, 3, 3);
 				layoutUpgradeSlots(h, 9, 147, 18, 2);
 			});

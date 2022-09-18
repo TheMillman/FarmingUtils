@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class TestEnergyGenerator extends ItemEnergyBlockEntity {
@@ -62,7 +62,7 @@ public class TestEnergyGenerator extends ItemEnergyBlockEntity {
             for (Direction direction : Direction.values()) {
                 BlockEntity te = level.getBlockEntity(worldPosition.relative(direction));
                 if (te != null) {
-                    boolean doContinue = te.getCapability(CapabilityEnergy.ENERGY, direction).map(handler -> {
+                    boolean doContinue = te.getCapability(ForgeCapabilities.ENERGY, direction).map(handler -> {
                                 if (handler.canReceive()) {
                                     int received = handler.receiveEnergy(Math.min(capacity.get(), 1000), false);
                                     capacity.addAndGet(-received);

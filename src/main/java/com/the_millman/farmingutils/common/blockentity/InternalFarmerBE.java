@@ -8,7 +8,6 @@ import com.the_millman.farmingutils.common.blocks.InternalFarmerBlock;
 import com.the_millman.farmingutils.core.init.BlockEntityInit;
 import com.the_millman.farmingutils.core.init.ItemInit;
 import com.the_millman.farmingutils.core.networking.FluidSyncS2CPacket;
-import com.the_millman.farmingutils.core.networking.GrowthSyncS2CPacket2;
 import com.the_millman.farmingutils.core.networking.ItemStackSyncS2CPacket2;
 import com.the_millman.farmingutils.core.networking.ModMessages;
 import com.the_millman.farmingutils.core.util.FarmingConfig;
@@ -32,6 +31,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
@@ -64,13 +64,14 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 			init();
 		}
 
-		if (getStackInSlot(13).getItem() == Items.WATER_BUCKET) {
+		ItemStack bucketStack = itemStorage.getStackInSlot(13);
+		if(bucketStack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
 			transferItemFluidToFluidTank(pEntity, 13, 14);
 			setChanged();
 		}
 
 		if (hasPowerToWork(FarmingConfig.INTERNAL_FARMER_USEPERTICK.get())) {
-			if (fluidStorage.getFluidAmount() >= FarmingConfig.INTERNAL_FARMER_FLUID_CONSUMED.get()) {
+			if (getFluidAmount() >= FarmingConfig.INTERNAL_FARMER_FLUID_CONSUMED.get()) {
 				tick++;
 				if (tick == FarmingConfig.INTERNAL_FARMER_TICK.get()) {
 					tick = 0;
@@ -120,10 +121,10 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 				ItemStack copy = ItemHandlerHelper.copyStackWithSize(stack, 2);
 				if(!copy.isEmpty()) {
 					if(copy.is(Items.KELP)) {
-						fluidStorage.drain(FarmingConfig.INTERNAL_FARMER_FLUID_CONSUMED.get() * 2, FluidAction.EXECUTE);
+						drain(FarmingConfig.INTERNAL_FARMER_FLUID_CONSUMED.get() * 2, FluidAction.EXECUTE);
 						consumeEnergy(FarmingConfig.INTERNAL_FARMER_USEPERTICK.get());
 					} else {
-						fluidStorage.drain(FarmingConfig.INTERNAL_FARMER_FLUID_CONSUMED.get(), FluidAction.EXECUTE);
+						drain(FarmingConfig.INTERNAL_FARMER_FLUID_CONSUMED.get(), FluidAction.EXECUTE);
 						consumeEnergy(FarmingConfig.INTERNAL_FARMER_USEPERTICK.get());
 					}
 					
@@ -197,12 +198,12 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 					}
 					return false;
 				} else if(slot == 13) {
-					if(stack.is(Items.WATER_BUCKET)) {
+					if(stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
 						return true;
 					}
 					return false;
 				} else if(slot == 14) {
-					if(stack.is(Items.BUCKET)) {
+					if(stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
 						return true;
 					}
 					return false;
@@ -246,12 +247,10 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 	
 	private void resetGrowthStage() {
         this.growthStage = 1;
-        ModMessages.sendToClients(new GrowthSyncS2CPacket2(growthStage, getBlockPos()));
     }
 
     private void updateGrowthStage() {
         growthStage++;
-        ModMessages.sendToClients(new GrowthSyncS2CPacket2(growthStage, getBlockPos()));
     }
     
     public void setGrowthStage(int growthStage) {

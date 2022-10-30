@@ -31,7 +31,7 @@ public class MelonFarmerContainer extends ItemEnergyContainer {
 		if (blockEntity != null) {
 			blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(h -> {
 				layoutInventorySlots(h, 62, 18, 3, 3);
-				layoutUpgradeSlots(h, 9, 147, 18, 2);
+				layoutUpgradeSlots(h, 9, 147, 18, 3);
 			});
 		}
 		

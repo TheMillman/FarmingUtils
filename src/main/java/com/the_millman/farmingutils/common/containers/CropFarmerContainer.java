@@ -14,7 +14,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
 public class CropFarmerContainer extends ItemEnergyContainer {
@@ -46,15 +45,6 @@ public class CropFarmerContainer extends ItemEnergyContainer {
     public boolean stillValid(Player playerIn) {
         return stillValid(ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos()), playerEntity, BlockInit.CROP_FARMER.get());
     }
-	
-	@Override
-	protected void layoutInventorySlots(IItemHandler handler, int x, int y, int slotRow, int slotColumn) {
-		for (int row = 0; row < slotRow; ++row) {
-			for (int column = 0; column < slotColumn; ++column) {
-				this.addSlot(new SlotItemHandler(handler, (column * 3) + row, x + column * 18, y + row * 18));
-			}
-		}
-	}
     
 	@Override
 	public ItemStack quickMoveStack(Player pPlayer, int pIndex) {

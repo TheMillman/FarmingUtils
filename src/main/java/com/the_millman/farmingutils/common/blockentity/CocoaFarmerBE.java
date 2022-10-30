@@ -4,11 +4,10 @@ import javax.annotation.Nonnull;
 
 import com.the_millman.farmingutils.common.blocks.CocoaFarmerBlock;
 import com.the_millman.farmingutils.core.init.BlockEntityInit;
-import com.the_millman.farmingutils.core.init.ItemInit;
-import com.the_millman.farmingutils.core.tags.ModItemTags;
 import com.the_millman.farmingutils.core.util.FarmingConfig;
 import com.the_millman.themillmanlib.common.blockentity.ItemEnergyBlockEntity;
 import com.the_millman.themillmanlib.core.energy.ModEnergyStorage;
+import com.the_millman.themillmanlib.core.util.LibTags;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -84,7 +83,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 			tick++;
 			if (tick == FarmingConfig.COCOA_BEANS_FARMER_TICK.get()) {
 				tick = 0;
-				redstoneUpgrade();
+				this.needRedstone = getUpgrade(LibTags.Items.REDSTONE_UPGRADE, 9, 11);
 				if (canWork()) {
 					upgradeSlot();
 					BlockPos posToBreak = new BlockPos(this.x + pX, this.y + pY, this.z + pZ);
@@ -100,7 +99,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 	
 	private void upgradeSlot() {
 		rangeUpgrade();
-		dropUpgrade();
+		this.pickupDrops = !getUpgrade(LibTags.Items.DROP_UPGRADE, 9, 11);
 	}
 
 	private void stadioState() {
@@ -161,9 +160,11 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 	}
 	
 	private void rangeUpgrade() {
-		ItemStack upgradeSlot = getStackInSlot(9);
 		Direction facing = getBlockState().getValue(CocoaFarmerBlock.FACING);
-		if (upgradeSlot.is(ItemInit.IRON_UPGRADE.get())) {
+		boolean ironUpgrade = getUpgrade(LibTags.Items.IRON_RANGE_UPGRADE, 9, 11);
+		boolean goldUpgrade = getUpgrade(LibTags.Items.GOLD_RANGE_UPGRADE, 9, 11);
+		boolean diamondUpgrade = getUpgrade(LibTags.Items.DIAMOND_RANGE_UPGRADE, 9, 11);
+		if (ironUpgrade) {
 			if (facing == Direction.NORTH) {
 				// posizione da cui inizia
 				this.x = getBlockPos().getX() - 1;
@@ -189,7 +190,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 				this.z = getBlockPos().getZ() - 1;
 				this.range = 3;
 			}
-		} else if (upgradeSlot.is(ItemInit.GOLD_UPGRADE.get())) {
+		} else if (goldUpgrade) {
 			if (facing == Direction.NORTH) {
 				// posizione da cui inizia
 				this.x = getBlockPos().getX() - 2;
@@ -215,7 +216,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 				this.z = getBlockPos().getZ() - 2;
 				this.range = 5;
 			}
-		} else if (upgradeSlot.is(ItemInit.DIAMOND_UPGRADE.get())) {
+		} else if (diamondUpgrade) {
 			if (facing == Direction.NORTH) {
 				// posizione da cui inizia
 				this.x = getBlockPos().getX() - 3;
@@ -241,7 +242,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 				this.z = getBlockPos().getZ() - 3;
 				this.range = 7;
 			}
-		} else if (upgradeSlot.isEmpty()) {
+		} else {
 			if (facing == Direction.NORTH) {
 				this.x = getBlockPos().getX();
 				this.z = getBlockPos().getZ() - 2;
@@ -259,24 +260,6 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 				this.z = getBlockPos().getZ();
 				this.range = 1;
 			}
-		}
-	}
-	
-	private void redstoneUpgrade() {
-		ItemStack upgradeSlot = getStackInSlot(10);
-		if (upgradeSlot.is(ItemInit.REDSTONE_UPGRADE.get())) {
-			this.needRedstone = true;
-		} else if (!upgradeSlot.is(ItemInit.REDSTONE_UPGRADE.get())) {
-			this.needRedstone = false;
-		}
-	}
-	
-	private void dropUpgrade() {
-		ItemStack upgradeSlot = getStackInSlot(11);
-		if (upgradeSlot.is(ItemInit.DROP_UPGRADE.get())) {
-			this.pickupDrops = false;
-		} else if (!upgradeSlot.is(ItemInit.DROP_UPGRADE.get())) {
-			this.pickupDrops = true;
 		}
 	}
 	
@@ -303,16 +286,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 	}
 	
 	private boolean placeBlock(BlockPos pos) { 
-		int slot = 0;
-		for (int i = 0; i < 9; i++) {
-			if (getStackInSlot(i).isEmpty())
-				continue;
-
-			if (!getStackInSlot(i).isEmpty()) {
-				slot = i;
-				break;
-			}
-		}
+		int slot = getSlot(9);
 
 		Direction facing = getBlockState().getValue(CocoaFarmerBlock.FACING);
 		
@@ -352,6 +326,14 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 		} 
 		return false;
 	}
+	
+	@Override
+	protected boolean isValidBlock(ItemStack stack) {
+		if(stack.is(Items.COCOA_BEANS)) {
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	protected ItemStackHandler itemStorage() {
@@ -364,27 +346,12 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 			@Override
 			public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
 				if (slot < 9) {
-					if(stack.getItem() == Items.COCOA_BEANS) {
+					if (stack.getItem() == Items.COCOA_BEANS) {
 						return true;
 					}
-				} else if (slot >= 9) {
-					if(isValidUpgrade(stack)) {
-						if(slot == 9) {
-							if(stack.is(ModItemTags.RANGE_UPGRADES)) {
-								return true;
-							}
-							return false;
-						} else if(slot == 10) {
-							if(stack.is(ItemInit.REDSTONE_UPGRADE.get())) {
-								return true;
-							}
-							return false;
-						} else if(stack.is(ItemInit.DROP_UPGRADE.get())) {
-							return true;
-						}
-						return false;
-					}
-				} 
+				} else if (slot >= 9 && isValidUpgrade(stack)) {
+					return true;
+				}
 				return false;
 			}
 		};
@@ -403,5 +370,4 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 			}
 		};
 	}
-
 }

@@ -4,12 +4,11 @@ import javax.annotation.Nonnull;
 
 import com.the_millman.farmingutils.common.blocks.CropFarmerBlock;
 import com.the_millman.farmingutils.core.init.BlockEntityInit;
-import com.the_millman.farmingutils.core.init.ItemInit;
 import com.the_millman.farmingutils.core.tags.ModBlockTags;
-import com.the_millman.farmingutils.core.tags.ModItemTags;
 import com.the_millman.farmingutils.core.util.FarmingConfig;
 import com.the_millman.themillmanlib.common.blockentity.ItemEnergyBlockEntity;
 import com.the_millman.themillmanlib.core.energy.ModEnergyStorage;
+import com.the_millman.themillmanlib.core.util.LibTags;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -27,7 +26,7 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class CropFarmerBE extends ItemEnergyBlockEntity {
-
+	
 	private int tick;
 	
 	boolean initialized = false;
@@ -37,7 +36,7 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 	public CropFarmerBE(BlockPos pWorldPosition, BlockState pBlockState) {
 		super(BlockEntityInit.CROP_FARMER.get(), pWorldPosition, pBlockState);
 	}
-	
+
 	@Override
 	protected void init() {
 		initialized = true;
@@ -64,7 +63,7 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 			tick++;
 			if (tick == FarmingConfig.CROP_FARMER_TICK.get()) {
 				tick = 0;
-				redstoneUpgrade();
+				this.needRedstone = getUpgrade(LibTags.Items.REDSTONE_UPGRADE, 18, 20);
 				if (canWork()) {
 					upgradeSlot();
 					BlockPos posToBreak = new BlockPos(this.x + this.pX, this.y, this.z + this.pZ);
@@ -92,20 +91,22 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 
 	private void upgradeSlot() {
 		rangeSlot();
-		dropUpgrade();
+		this.pickupDrops = !getUpgrade(LibTags.Items.DROP_UPGRADE, 18, 20);
 	}
 	
 	private void rangeSlot() {
-		ItemStack upgradeSlot = getStackInSlot(18);
-		if (upgradeSlot.is(ItemInit.IRON_UPGRADE.get())) {
+		boolean ironUpgrade = getUpgrade(LibTags.Items.IRON_RANGE_UPGRADE, 18, 20);
+		boolean goldUpgrade = getUpgrade(LibTags.Items.GOLD_RANGE_UPGRADE, 18, 20);
+		boolean diamondUpgrade = getUpgrade(LibTags.Items.DIAMOND_RANGE_UPGRADE, 18, 20);
+		if (ironUpgrade) {
 			this.x = getBlockPos().getX() - 2;
 			this.z = getBlockPos().getZ() - 2;
 			this.range = 5;
-		} else if (upgradeSlot.is(ItemInit.GOLD_UPGRADE.get())) {
+		} else if (goldUpgrade) {
 			this.x = getBlockPos().getX() - 3;
 			this.z = getBlockPos().getZ() - 3;
 			this.range = 7;
-		} else if (upgradeSlot.is(ItemInit.DIAMOND_UPGRADE.get())) {
+		} else if (diamondUpgrade) {
 			this.x = getBlockPos().getX() - 4;
 			this.z = getBlockPos().getZ() - 4;
 			this.range = 9;
@@ -113,24 +114,6 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 			this.x = getBlockPos().getX() - 1;
 			this.z = getBlockPos().getZ() - 1;
 			this.range = 3;
-		}
-	}
-	
-	private void redstoneUpgrade() {
-		ItemStack upgradeSlot = getStackInSlot(19);
-		if (upgradeSlot.is(ItemInit.REDSTONE_UPGRADE.get())) {
-			this.needRedstone = true;
-		} else if (!upgradeSlot.is(ItemInit.REDSTONE_UPGRADE.get())) {
-			this.needRedstone = false;
-		}
-	}
-	
-	private void dropUpgrade() {
-		ItemStack upgradeSlot = getStackInSlot(20);
-		if (upgradeSlot.is(ItemInit.DROP_UPGRADE.get())) {
-			this.pickupDrops = false;
-		} else if (!upgradeSlot.is(ItemInit.DROP_UPGRADE.get())) {
-			this.pickupDrops = true;
 		}
 	}
 
@@ -161,19 +144,7 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 	}
 
 	private boolean placeBlock(BlockPos pos) {
-		int slot = 0;
-		for (int i = 0; i < 18; i++) {
-			if (getStackInSlot(i).isEmpty())
-				continue;
-
-			if (!getStackInSlot(i).isEmpty()) {
-				if(isValid(getStackInSlot(i))) {
-					slot = i;
-					break;
-				}
-				continue;
-			}
-		}
+		int slot = getSlot(18);
 
 		BlockPos posY = pos.below();
 		BlockState state = level.getBlockState(pos);
@@ -181,7 +152,7 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 		if (state.getBlock() instanceof CropBlock) {
 			return false;
 		} else if (yState.getBlock() instanceof FarmBlock) {
-			if (isValid(getStackInSlot(slot))) {
+			if (isValidBlock(getStackInSlot(slot))) {
 				if (getStackInSlot(slot).getItem() instanceof BlockItem blockItem) {
 					if (!level.isClientSide) {
 						Block block = blockItem.getBlock();
@@ -210,7 +181,8 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 		return false;
 	}
 	
-	private boolean isValid(ItemStack stack) {
+	@Override
+	protected boolean isValidBlock(ItemStack stack) {
 		if (stack.getItem()instanceof ItemNameBlockItem blockItem) {
 			if (blockItem.getBlock() instanceof CropBlock) {
 				return true;
@@ -225,35 +197,18 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 		return new ItemStackHandler(21) {
 			@Override
 			protected void onContentsChanged(int slot) {
-				// To make sure the TE persists when the chunk is saved later we need to
-				// mark it dirty every time the item handler changes
 				setChanged();
 			}
 
 			@Override
 			public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-				if(slot < 18) {
-					if(isValidUpgrade(stack)) {
-						return false;
-					} 
-					return true;
-				} else if (slot >= 18) {
-					if(isValidUpgrade(stack)) {
-						if(slot == 18) {
-							if(stack.is(ModItemTags.RANGE_UPGRADES)) {
-								return true;
-							}
-							return false;
-						} else if(slot == 19) {
-							if(stack.is(ItemInit.REDSTONE_UPGRADE.get())) {
-								return true;
-							}
-							return false;
-						} else if(stack.is(ItemInit.DROP_UPGRADE.get())) {
-							return true;
-						}
+				if (slot < 18) {
+					if (isValidUpgrade(stack)) {
 						return false;
 					}
+					return true;
+				} else if (slot >= 18 && isValidUpgrade(stack)) {
+					return true;
 				}
 				return false;
 			}

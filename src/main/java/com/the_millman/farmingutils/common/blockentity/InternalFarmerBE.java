@@ -14,6 +14,7 @@ import com.the_millman.farmingutils.core.util.FarmingConfig;
 import com.the_millman.themillmanlib.common.blockentity.ItemEnergyFluidBlockEntity;
 import com.the_millman.themillmanlib.core.energy.ModEnergyStorage;
 import com.the_millman.themillmanlib.core.util.BlockUtils;
+import com.the_millman.themillmanlib.core.util.LibTags;
 import com.the_millman.themillmanlib.core.util.ModItemHandlerHelp;
 
 import net.minecraft.core.BlockPos;
@@ -75,7 +76,7 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 				tick++;
 				if (tick == FarmingConfig.INTERNAL_FARMER_TICK.get()) {
 					tick = 0;
-					getUpgrade(9, 11, ItemInit.REDSTONE_UPGRADE.get());
+					this.needRedstone = getUpgrade(LibTags.Items.REDSTONE_UPGRADE, 9, 11);
 					if (canWork()) {
 						updateGrowthStage();
 						if (growthStage >= maxGrowthStage) {
@@ -163,6 +164,11 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 		for (int i = 0; i < itemStackHandler.getSlots(); i++) {
             itemStorage.setStackInSlot(i, itemStackHandler.getStackInSlot(i));
         }
+	}
+	
+	@Override
+	protected boolean isValidBlock(ItemStack stack) {
+		return false;
 	}
 	
 	@Override
@@ -259,14 +265,14 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
     
     @Override
     protected void saveAdditional(CompoundTag pTag) {
-    	pTag.putInt("growth.stage", growthStage);
+    	pTag.putInt("growth_stage", growthStage);
     	super.saveAdditional(pTag);
     }
     
     @Override
     public void load(CompoundTag pTag) {
     	super.load(pTag);
-    	growthStage = pTag.getInt("growth.stage");
+    	growthStage = pTag.getInt("growth_stage");
     }
     
     //Makes the InternalFarmerBERenderer rendering when the world is loaded

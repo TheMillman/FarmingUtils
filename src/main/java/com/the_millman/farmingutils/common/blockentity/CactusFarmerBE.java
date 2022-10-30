@@ -4,11 +4,10 @@ import javax.annotation.Nonnull;
 
 import com.the_millman.farmingutils.common.blocks.CactusFarmerBlock;
 import com.the_millman.farmingutils.core.init.BlockEntityInit;
-import com.the_millman.farmingutils.core.init.ItemInit;
-import com.the_millman.farmingutils.core.tags.ModItemTags;
 import com.the_millman.farmingutils.core.util.FarmingConfig;
 import com.the_millman.themillmanlib.common.blockentity.ItemEnergyBlockEntity;
 import com.the_millman.themillmanlib.core.energy.ModEnergyStorage;
+import com.the_millman.themillmanlib.core.util.LibTags;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
@@ -55,7 +54,7 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 			tick++;
 			if (tick == FarmingConfig.CACTUS_FARMER_TICK.get()) {
 				tick = 0;
-				redstoneUpgrade();
+				this.getUpgrade(LibTags.Items.REDSTONE_UPGRADE, 9, 11);
 				if (canWork()) {
 					upgradeSlot();
 					BlockPos posToBreak = new BlockPos(this.x + this.pX, this.y, this.z + this.pZ);
@@ -83,42 +82,26 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 	
 	private void upgradeSlot() {
 		rangeUpgrade();
-		dropUpgrade();
-	}
-	
-	private void redstoneUpgrade() {
-		ItemStack upgradeSlot = getStackInSlot(10);
-		if (upgradeSlot.is(ItemInit.REDSTONE_UPGRADE.get())) {
-			this.needRedstone = true;
-		} else if (!upgradeSlot.is(ItemInit.REDSTONE_UPGRADE.get())) {
-			this.needRedstone = false;
-		}
-	}
-	
-	private void dropUpgrade() {
-		ItemStack upgradeSlot = getStackInSlot(11);
-		if (upgradeSlot.is(ItemInit.DROP_UPGRADE.get())) {
-			this.pickupDrops = false;
-		} else if (!upgradeSlot.is(ItemInit.DROP_UPGRADE.get())) {
-			this.pickupDrops = true;
-		}
+		this.pickupDrops = !getUpgrade(LibTags.Items.DROP_UPGRADE, 9, 11);
 	}
 	
 	private void rangeUpgrade() {
-		ItemStack upgradeSlot = getStackInSlot(9);
-		if (upgradeSlot.is(ItemInit.IRON_UPGRADE.get())) {
+		boolean ironUpgrade = getUpgrade(LibTags.Items.IRON_RANGE_UPGRADE, 9, 11);
+		boolean goldUpgrade = getUpgrade(LibTags.Items.GOLD_RANGE_UPGRADE, 9, 11);
+		boolean diamondUpgrade = getUpgrade(LibTags.Items.DIAMOND_RANGE_UPGRADE, 9, 11);
+		if (ironUpgrade) {
 			this.x = getBlockPos().getX() - 2;
 			this.z = getBlockPos().getZ() - 2;
 			this.range = 5;
-		} else if (upgradeSlot.is(ItemInit.GOLD_UPGRADE.get())) {
+		} else if (goldUpgrade) {
 			this.x = getBlockPos().getX() - 3;
 			this.z = getBlockPos().getZ() - 3;
 			this.range = 7;
-		} else if (upgradeSlot.is(ItemInit.DIAMOND_UPGRADE.get())) {
+		} else if (diamondUpgrade) {
 			this.x = getBlockPos().getX() - 4;
 			this.z = getBlockPos().getZ() - 4;
 			this.range = 9;
-		} else if (upgradeSlot.isEmpty()) {
+		} else {
 			this.x = getBlockPos().getX() - 1;
 			this.z = getBlockPos().getZ() - 1;
 			this.range = 3;
@@ -167,6 +150,11 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 	}
 	
 	@Override
+	protected boolean isValidBlock(ItemStack stack) {
+		return false;
+	}
+	
+	@Override
 	protected ItemStackHandler itemStorage() {
 		return new ItemStackHandler(12) {
 			@Override
@@ -180,25 +168,8 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 					if (stack.getItem() == Items.CACTUS) {
 						return true;
 					}
-				} else if (slot > 8) {
-					if (isValidUpgrade(stack)) {
-						if (slot == 9) {
-							if (stack.is(ModItemTags.RANGE_UPGRADES)) {
-								return true;
-							}
-							return false;
-						} else if (slot == 10) {
-							if (stack.is(ItemInit.REDSTONE_UPGRADE.get())) {
-								return true;
-							}
-							return false;
-						} else if (slot == 11) {
-							if (stack.is(ItemInit.DROP_UPGRADE.get())) {
-								return true;
-							}
-							return false;
-						}
-					}
+				} else if (slot > 8 && isValidUpgrade(stack)) {
+					return true;
 				}
 				return false;
 			}

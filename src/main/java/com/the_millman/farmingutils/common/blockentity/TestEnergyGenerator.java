@@ -128,4 +128,9 @@ public class TestEnergyGenerator extends ItemEnergyBlockEntity {
 	protected void init() {
 		
 	}
+
+	@Override
+	protected boolean isValidBlock(ItemStack arg0) {
+		return false;
+	}
 }

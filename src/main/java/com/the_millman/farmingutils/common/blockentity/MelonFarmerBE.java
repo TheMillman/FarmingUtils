@@ -4,10 +4,10 @@ import javax.annotation.Nonnull;
 
 import com.the_millman.farmingutils.common.blocks.MelonFarmerBlock;
 import com.the_millman.farmingutils.core.init.BlockEntityInit;
-import com.the_millman.farmingutils.core.init.ItemInit;
 import com.the_millman.farmingutils.core.util.FarmingConfig;
 import com.the_millman.themillmanlib.common.blockentity.ItemEnergyBlockEntity;
 import com.the_millman.themillmanlib.core.energy.ModEnergyStorage;
+import com.the_millman.themillmanlib.core.util.LibTags;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
@@ -32,10 +32,10 @@ public class MelonFarmerBE extends ItemEnergyBlockEntity {
 	@Override
 	protected void init() {
 		initialized = true;
-		this.x = getBlockPos().getX() - 2;
+		this.x = getBlockPos().getX() - 1;
 		this.y = getBlockPos().getY();
-		this.z = getBlockPos().getZ() - 2;
-		this.range = 5;
+		this.z = getBlockPos().getZ() - 1;
+		this.range = 3;
 		tick = 0;
 
 		this.pX = 0;
@@ -54,9 +54,9 @@ public class MelonFarmerBE extends ItemEnergyBlockEntity {
 			tick++;
 			if (tick == FarmingConfig.MELON_FARMER_TICK.get()) {
 				tick = 0;
-				redstoneUpgrade();
+				this.needRedstone = getUpgrade(LibTags.Items.REDSTONE_UPGRADE, 9, 11);
 				if (canWork()) {
-					dropUpgrade();
+					upgradeSlot();
 					BlockPos posToBreak = new BlockPos(this.x + this.pX, this.y, this.z + this.pZ);
 					destroyBlock(posToBreak, false);
 					setChanged();
@@ -79,21 +79,31 @@ public class MelonFarmerBE extends ItemEnergyBlockEntity {
 		return true;
 	}
 	
-	private void redstoneUpgrade() {
-		ItemStack upgradeSlot = getStackInSlot(9);
-		if (upgradeSlot.is(ItemInit.REDSTONE_UPGRADE.get())) {
-			this.needRedstone = true;
-		} else if (!upgradeSlot.is(ItemInit.REDSTONE_UPGRADE.get())) {
-			this.needRedstone = false;
-		}
+	private void upgradeSlot() {
+		rangeSlot();
+		this.pickupDrops = !getUpgrade(LibTags.Items.DROP_UPGRADE, 9, 11);
 	}
 	
-	private void dropUpgrade() {
-		ItemStack upgradeSlot = getStackInSlot(10);
-		if (upgradeSlot.is(ItemInit.DROP_UPGRADE.get())) {
-			this.pickupDrops = false;
-		} else if (!upgradeSlot.is(ItemInit.DROP_UPGRADE.get())) {
-			this.pickupDrops = true;
+	private void rangeSlot() {
+		boolean ironUpgrade = getUpgrade(LibTags.Items.IRON_RANGE_UPGRADE, 9, 11);
+		boolean goldUpgrade = getUpgrade(LibTags.Items.GOLD_RANGE_UPGRADE, 9, 11);
+		boolean diamondUpgrade = getUpgrade(LibTags.Items.DIAMOND_RANGE_UPGRADE, 9, 11);
+		if (ironUpgrade) {
+			this.x = getBlockPos().getX() - 2;
+			this.z = getBlockPos().getZ() - 2;
+			this.range = 5;
+		} else if (goldUpgrade) {
+			this.x = getBlockPos().getX() - 3;
+			this.z = getBlockPos().getZ() - 3;
+			this.range = 7;
+		} else if (diamondUpgrade) {
+			this.x = getBlockPos().getX() - 4;
+			this.z = getBlockPos().getZ() - 4;
+			this.range = 9;
+		} else {
+			this.x = getBlockPos().getX() - 1;
+			this.z = getBlockPos().getZ() - 1;
+			this.range = 3;
 		}
 	}
 
@@ -126,10 +136,15 @@ public class MelonFarmerBE extends ItemEnergyBlockEntity {
 		}
 		return false;
 	}
+	
+	@Override
+	protected boolean isValidBlock(ItemStack stack) {
+		return false;
+	}
 
 	@Override
 	protected ItemStackHandler itemStorage() {
-		return new ItemStackHandler(11) {
+		return new ItemStackHandler(12) {
 			@Override
 			protected void onContentsChanged(int slot) {
 				// To make sure the TE persists when the chunk is saved later we need to
@@ -140,16 +155,8 @@ public class MelonFarmerBE extends ItemEnergyBlockEntity {
 			@Override
 			public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
 				if(slot > 8) {
-					if(slot == 9) {
-						if(stack.is(ItemInit.REDSTONE_UPGRADE.get())) {
-							return true;
-						}
-						return false;
-					} else if(slot == 10) {
-						if(stack.is(ItemInit.DROP_UPGRADE.get())) {
-							return true;
-						}
-						return false;
+					if(stack.is(LibTags.Items.REDSTONE_UPGRADE) || stack.is(LibTags.Items.DROP_UPGRADE) || stack.is(LibTags.Items.RANGE_UPGRADE)) {
+						return true;
 					}
 				}
 				if(slot <= 8) {

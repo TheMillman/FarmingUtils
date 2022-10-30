@@ -2,10 +2,11 @@ package com.the_millman.farmingutils.client.screens;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.the_millman.farmingutils.FarmingUtils;
 import com.the_millman.farmingutils.common.containers.InternalFarmerContainer;
 import com.the_millman.farmingutils.core.util.FarmingConfig;
+import com.the_millman.farmingutils.core.util.FarmingResources;
 import com.the_millman.themillmanlib.client.screens.ItemEnergyFluidScreen;
+import com.the_millman.themillmanlib.core.util.LibResources;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -13,8 +14,8 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class InternalFarmerScreen extends ItemEnergyFluidScreen<InternalFarmerContainer> {
 	
-	private ResourceLocation GUI = new ResourceLocation(FarmingUtils.MODID, "textures/gui/internal_farmer_gui.png");
-	private ResourceLocation OVERLAY = new ResourceLocation(FarmingUtils.MODID, "textures/gui/offset_buttons.png");
+	private ResourceLocation GUI = FarmingResources.INTERNAL_FARMER_GUI;
+	private ResourceLocation OVERLAY = LibResources.OFFSETS;
 	
 	public InternalFarmerScreen(InternalFarmerContainer pMenu, Inventory pPlayerInventory, Component pTitle) {
 		super(pMenu, pPlayerInventory, pTitle);
@@ -26,6 +27,7 @@ public class InternalFarmerScreen extends ItemEnergyFluidScreen<InternalFarmerCo
 		initFluidRenderer(FarmingConfig.INTERNAL_FARMER_FLUID_CAPACITY.get(), true, 13, 52);
 	}
 	
+	//TODO Spostare in lib
 	@Override
 	protected void renderLabels(PoseStack pPoseStack, int pMouseX, int pMouseY) {
 		int xPos = (width - imageWidth) / 2;

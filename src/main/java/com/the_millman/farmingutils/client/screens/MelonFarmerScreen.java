@@ -2,9 +2,9 @@ package com.the_millman.farmingutils.client.screens;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.the_millman.farmingutils.FarmingUtils;
 import com.the_millman.farmingutils.common.containers.MelonFarmerContainer;
 import com.the_millman.themillmanlib.client.screens.ItemEnergyScreen;
+import com.the_millman.themillmanlib.core.util.LibResources;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -12,8 +12,8 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class MelonFarmerScreen extends ItemEnergyScreen<MelonFarmerContainer> {
 
-	private ResourceLocation GUI = new ResourceLocation(FarmingUtils.MODID, "textures/gui/melon_farmer_gui.png");
-	private ResourceLocation OVERLAY = new ResourceLocation(FarmingUtils.MODID, "textures/gui/offset_buttons.png");
+	private ResourceLocation GUI = LibResources.THREE_FOR_THREE_GUI;
+	private ResourceLocation OVERLAY = LibResources.OFFSETS;
 	
 	public MelonFarmerScreen(MelonFarmerContainer pMenu, Inventory pPlayerInventory, Component pTitle) {
 		super(pMenu, pPlayerInventory, pTitle);

@@ -8,6 +8,8 @@ public class FarmingConfig {
 	public static ForgeConfigSpec CLIENT_CONFIG;
 	public static ForgeConfigSpec SERVER_CONFIG;
     
+	public static ForgeConfigSpec.BooleanValue FARMERS_NEEDS_ENERGY;
+	
     public static ForgeConfigSpec.IntValue CROP_FARMER_CAPACITY;
     public static ForgeConfigSpec.IntValue CROP_FARMER_USEPERTICK;
     public static ForgeConfigSpec.IntValue CROP_FARMER_TICK;
@@ -54,6 +56,11 @@ public class FarmingConfig {
     private static void initServer() {
     	ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
         
+    	builder.comment("Farmers Needs Energy").push("farmers_needs_energy");
+    	FARMERS_NEEDS_ENERGY = builder.comment("Set if farmers need energy to work")
+    			.define("farmers_needs_energy", true);
+    	builder.pop();
+    	
         builder.comment("Crop Farmer settings").push("crop_farmer");
         CROP_FARMER_CAPACITY = builder
                 .comment("How much FE the crop farmer can store")

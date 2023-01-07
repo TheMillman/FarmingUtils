@@ -50,7 +50,7 @@ public class BambooFarmerBE extends ItemEnergyBlockEntity {
 			init();
 		}
 		
-		if(hasPowerToWork(FarmingConfig.BAMBOO_FARMER_USEPERTICK.get())) {
+		if(hasPowerToWork(FarmingConfig.FARMERS_NEEDS_ENERGY.get(), FarmingConfig.BAMBOO_FARMER_USEPERTICK.get())) {
 			tick++;
 			if(tick == FarmingConfig.BAMBOO_FARMER_TICK.get()) {
 				tick = 0;

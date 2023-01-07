@@ -55,7 +55,7 @@ public class NetherWartFarmerBE extends ItemEnergyBlockEntity {
 			init();
 		}
 
-		if (hasPowerToWork(FarmingConfig.NETHER_WART_FARMER_USEPERTICK.get())) {
+		if (hasPowerToWork(FarmingConfig.FARMERS_NEEDS_ENERGY.get(), FarmingConfig.NETHER_WART_FARMER_USEPERTICK.get())) {
 			tick++;
 			if (tick == FarmingConfig.NETHER_WART_FARMER_TICK.get()) {
 				tick = 0;

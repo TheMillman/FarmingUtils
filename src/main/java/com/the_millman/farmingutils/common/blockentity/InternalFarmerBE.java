@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 import com.the_millman.farmingutils.common.blocks.InternalFarmerBlock;
 import com.the_millman.farmingutils.core.init.BlockEntityInit;
-import com.the_millman.farmingutils.core.init.ItemInit;
 import com.the_millman.farmingutils.core.networking.FluidSyncS2CPacket;
 import com.the_millman.farmingutils.core.networking.ItemStackSyncS2CPacket2;
 import com.the_millman.farmingutils.core.networking.ModMessages;
@@ -67,7 +66,7 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 
 		ItemStack bucketStack = itemStorage.getStackInSlot(13);
 		if(bucketStack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
-			transferItemFluidToFluidTank(pEntity, 13, 14);
+			transferItemFluidToFluidTank(pEntity, 13);
 			setChanged();
 		}
 
@@ -187,7 +186,7 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 				if(slot >=0 && slot <= 8) {
 					return true;
 				} else if(slot >= 9 && slot <= 11) {
-					if(stack.is(ItemInit.REDSTONE_UPGRADE.get())) {
+					if(stack.is(LibTags.Items.REDSTONE_UPGRADE)) {
 						return true;
 					}
 					return false;
@@ -209,9 +208,6 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 					}
 					return false;
 				} else if(slot == 14) {
-					if(stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
-						return true;
-					}
 					return false;
 				}
 				return false;

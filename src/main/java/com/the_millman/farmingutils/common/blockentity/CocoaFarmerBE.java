@@ -79,7 +79,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 			init();
 		}
 
-		if (hasPowerToWork(FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get())) {
+		if (hasPowerToWork(FarmingConfig.FARMERS_NEEDS_ENERGY.get(), FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get())) {
 			tick++;
 			if (tick == FarmingConfig.COCOA_BEANS_FARMER_TICK.get()) {
 				tick = 0;

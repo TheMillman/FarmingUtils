@@ -59,7 +59,7 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 			init();
 		}
 
-		if (hasPowerToWork(FarmingConfig.CROP_FARMER_USEPERTICK.get())) {
+		if (hasPowerToWork(FarmingConfig.FARMERS_NEEDS_ENERGY.get(), FarmingConfig.CROP_FARMER_USEPERTICK.get())) {
 			tick++;
 			if (tick == FarmingConfig.CROP_FARMER_TICK.get()) {
 				tick = 0;

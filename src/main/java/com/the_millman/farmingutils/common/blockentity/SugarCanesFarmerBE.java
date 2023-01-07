@@ -50,7 +50,7 @@ public class SugarCanesFarmerBE extends ItemEnergyBlockEntity {
 			init();
 		}
 
-		if (hasPowerToWork(FarmingConfig.SUGAR_CANES_FARMER_USEPERTICK.get())) {
+		if (hasPowerToWork(FarmingConfig.FARMERS_NEEDS_ENERGY.get(), FarmingConfig.SUGAR_CANES_FARMER_USEPERTICK.get())) {
 			tick++;
 			if (tick == FarmingConfig.SUGAR_CANES_FARMER_TICK.get()) {
 				tick = 0;

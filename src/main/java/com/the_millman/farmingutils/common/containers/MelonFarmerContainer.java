@@ -50,11 +50,11 @@ public class MelonFarmerContainer extends ItemEnergyContainer {
 		if (slot != null && slot.hasItem()) {
 			ItemStack itemstack1 = slot.getItem();
 			itemstack = itemstack1.copy();
-			if (pIndex < 11) {
-				if (!this.moveItemStackTo(itemstack1, 11, 47, true)) {
+			if (pIndex < 12) {
+				if (!this.moveItemStackTo(itemstack1, 12, 48, true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.moveItemStackTo(itemstack1, 0, 11, false)) {
+			} else if (!this.moveItemStackTo(itemstack1, 0, 12, false)) {
 				return ItemStack.EMPTY;
 			}
 

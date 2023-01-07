@@ -50,7 +50,7 @@ public class MelonFarmerBE extends ItemEnergyBlockEntity {
 			init();
 		}
 
-		if (hasPowerToWork(FarmingConfig.MELON_FARMER_USEPERTICK.get())) {
+		if (hasPowerToWork(FarmingConfig.FARMERS_NEEDS_ENERGY.get(), FarmingConfig.MELON_FARMER_USEPERTICK.get())) {
 			tick++;
 			if (tick == FarmingConfig.MELON_FARMER_TICK.get()) {
 				tick = 0;

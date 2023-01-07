@@ -1,23 +1,27 @@
 package com.the_millman.farmingutils.core.data.providers;
 
+import java.util.concurrent.CompletableFuture;
+
 import com.the_millman.farmingutils.FarmingUtils;
 import com.the_millman.farmingutils.core.init.BlockInit;
 import com.the_millman.farmingutils.core.tags.ModBlockTags;
 
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderLookup.Provider;
+import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class ModBlockTagsProvider extends BlockTagsProvider {
 
-	public ModBlockTagsProvider(DataGenerator pGenerator, ExistingFileHelper existingFileHelper) {
-		super(pGenerator, FarmingUtils.MODID, existingFileHelper);
+	public ModBlockTagsProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper helper) {
+		super(packOutput, lookupProvider, FarmingUtils.MODID, helper);
 	}
 
 	@Override
-	protected void addTags() {
+	protected void addTags(Provider pProvider) {
 		tag(ModBlockTags.MINEABLE_PICKAXE)
 			.add(BlockInit.CROP_FARMER.get())
 			.add(BlockInit.MELON_FARMER.get())

@@ -1,5 +1,5 @@
 modLoader="javafml" 
-loaderVersion="[43,)" 
+loaderVersion="[44,)" 
 license="MIT License"
 issueTrackerURL="https://github.com/TheMillman/FarmingUtils/issues" 
 
@@ -18,20 +18,20 @@ This mod adds different blocks and items for a easy way to farming resources in 
 [[dependencies.farmingutils]] 
     modId="forge" 
     mandatory=true 
-    versionRange="[43,)"
+    versionRange="[44,)"
     ordering="NONE"
     side="BOTH"
     
 [[dependencies.farmingutils]] 
     modId="themillmanlib" 
     mandatory=true 
-    versionRange="[1.19.2-0.1.4,1.19.2-0.1.5)"
+    versionRange="[1.19.3-0.1.7,1.19.3-0.1.8)"
     ordering="NONE"
     side="BOTH"    
 
 [[dependencies.farmingutils]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.2,1.20)"
+    versionRange="[1.19.3,1.20)"
     ordering="NONE"
     side="BOTH"

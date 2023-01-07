@@ -3,12 +3,12 @@ package com.the_millman.farmingutils.core.data.providers;
 import java.util.function.Consumer;
 
 import com.the_millman.farmingutils.core.init.BlockInit;
-import com.the_millman.farmingutils.core.init.ItemInit;
 import com.the_millman.farmingutils.core.tags.ModItemTags;
 
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.tags.ItemTags;
@@ -17,13 +17,13 @@ import net.minecraftforge.common.Tags;
 
 public class ModRecipeProvider extends RecipeProvider {
 
-	public ModRecipeProvider(DataGenerator pGenerator) {
-		super(pGenerator);
+	public ModRecipeProvider(PackOutput output) {
+		super(output);
 	}
-
+	
 	@Override
-	protected void buildCraftingRecipes(Consumer<FinishedRecipe> pFinishedRecipeConsumer) {
-		ShapedRecipeBuilder.shaped(BlockInit.CROP_FARMER.get())
+	protected void buildRecipes(Consumer<FinishedRecipe> pWriter) {
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BlockInit.CROP_FARMER.get())
         .pattern("iii")
         .pattern("ipi")
         .pattern("srs")
@@ -32,9 +32,9 @@ public class ModRecipeProvider extends RecipeProvider {
         .define('r', Items.REDSTONE)
         .define('s', Items.STONE)
         .unlockedBy("hoe", InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_HOE))
-        .save(pFinishedRecipeConsumer);
+        .save(pWriter);
 		
-		ShapedRecipeBuilder.shaped(BlockInit.MELON_FARMER.get())
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BlockInit.MELON_FARMER.get())
         .pattern("iii")
         .pattern("ipi")
         .pattern("srs")
@@ -43,9 +43,9 @@ public class ModRecipeProvider extends RecipeProvider {
         .define('r', Items.REDSTONE)
         .define('s', Items.STONE)
         .unlockedBy("seeds", InventoryChangeTrigger.TriggerInstance.hasItems(Items.MELON_SEEDS))
-        .save(pFinishedRecipeConsumer);
+        .save(pWriter);
 		
-		ShapedRecipeBuilder.shaped(BlockInit.NETHER_WART_FARMER.get())
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BlockInit.NETHER_WART_FARMER.get())
         .pattern("iii")
         .pattern("ipi")
         .pattern("srs")
@@ -54,9 +54,9 @@ public class ModRecipeProvider extends RecipeProvider {
         .define('r', Items.REDSTONE)
         .define('s', Items.RED_NETHER_BRICKS)
         .unlockedBy("nether_wart", InventoryChangeTrigger.TriggerInstance.hasItems(Items.NETHER_WART))
-        .save(pFinishedRecipeConsumer);
+        .save(pWriter);
 		
-		ShapedRecipeBuilder.shaped(BlockInit.COCOA_BEANS_FARMER.get())
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BlockInit.COCOA_BEANS_FARMER.get())
         .pattern("iii")
         .pattern("ipi")
         .pattern("srs")
@@ -65,9 +65,9 @@ public class ModRecipeProvider extends RecipeProvider {
         .define('r', Items.REDSTONE)
         .define('s', Items.STONE)
         .unlockedBy("cocoa_beans", InventoryChangeTrigger.TriggerInstance.hasItems(Items.COCOA_BEANS))
-        .save(pFinishedRecipeConsumer);
+        .save(pWriter);
 		
-		ShapedRecipeBuilder.shaped(BlockInit.CACTUS_FARMER.get())
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BlockInit.CACTUS_FARMER.get())
         .pattern("iii")
         .pattern("ipi")
         .pattern("srs")
@@ -76,9 +76,9 @@ public class ModRecipeProvider extends RecipeProvider {
         .define('r', Items.REDSTONE)
         .define('s', Items.SANDSTONE)
         .unlockedBy("cactus", InventoryChangeTrigger.TriggerInstance.hasItems(Items.CACTUS))
-        .save(pFinishedRecipeConsumer);
+        .save(pWriter);
 		
-		ShapedRecipeBuilder.shaped(BlockInit.SUGAR_CANES_FARMER.get())
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BlockInit.SUGAR_CANES_FARMER.get())
         .pattern("iii")
         .pattern("ipi")
         .pattern("srs")
@@ -87,9 +87,9 @@ public class ModRecipeProvider extends RecipeProvider {
         .define('r', Items.REDSTONE)
         .define('s', Items.SANDSTONE)
         .unlockedBy("sugar_cane", InventoryChangeTrigger.TriggerInstance.hasItems(Items.SUGAR_CANE))
-        .save(pFinishedRecipeConsumer);
+        .save(pWriter);
 		
-		ShapedRecipeBuilder.shaped(BlockInit.BAMBOO_FARMER.get())
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BlockInit.BAMBOO_FARMER.get())
         .pattern("iii")
         .pattern("ipi")
         .pattern("srs")
@@ -98,9 +98,9 @@ public class ModRecipeProvider extends RecipeProvider {
         .define('r', Items.REDSTONE)
         .define('s', Items.STONE)
         .unlockedBy("bamboo", InventoryChangeTrigger.TriggerInstance.hasItems(Items.BAMBOO))
-        .save(pFinishedRecipeConsumer);
+        .save(pWriter);
 		
-		ShapedRecipeBuilder.shaped(BlockInit.MUSHROOM_FARMER.get())
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BlockInit.MUSHROOM_FARMER.get())
         .pattern("iri")
         .pattern("ipg")
         .pattern("sds")
@@ -111,57 +111,6 @@ public class ModRecipeProvider extends RecipeProvider {
         .define('g', Items.TINTED_GLASS)
         .define('d', Items.DIRT)
         .unlockedBy("small_flower", InventoryChangeTrigger.TriggerInstance.hasItems(Items.DANDELION, Items.POPPY))
-        .save(pFinishedRecipeConsumer);
-		
-		
-		ShapedRecipeBuilder.shaped(ItemInit.IRON_UPGRADE.get())
-        .pattern("iii")
-        .pattern("iri")
-        .pattern("iii")
-        .define('i', Tags.Items.INGOTS_IRON)
-        .define('r', Items.REDSTONE)
-        .group("farmingutils_upgrade")
-        .unlockedBy("farmers", InventoryChangeTrigger.TriggerInstance.hasItems(ItemInit.CROP_FARMER.get()))
-        .save(pFinishedRecipeConsumer);
-		
-		ShapedRecipeBuilder.shaped(ItemInit.GOLD_UPGRADE.get())
-        .pattern("iii")
-        .pattern("iri")
-        .pattern("iii")
-        .define('i', Tags.Items.INGOTS_GOLD)
-        .define('r', ItemInit.IRON_UPGRADE.get())
-        .group("farmingutils_upgrade")
-        .unlockedBy("upgrade", InventoryChangeTrigger.TriggerInstance.hasItems(ItemInit.IRON_UPGRADE.get()))
-        .save(pFinishedRecipeConsumer);
-		
-		ShapedRecipeBuilder.shaped(ItemInit.DIAMOND_UPGRADE.get())
-        .pattern("iii")
-        .pattern("iri")
-        .pattern("iii")
-        .define('i', Tags.Items.GEMS_DIAMOND)
-        .define('r', ItemInit.GOLD_UPGRADE.get())
-        .group("farmingutils_upgrade")
-        .unlockedBy("upgrade", InventoryChangeTrigger.TriggerInstance.hasItems(ItemInit.GOLD_UPGRADE.get()))
-        .save(pFinishedRecipeConsumer);
-		
-		ShapedRecipeBuilder.shaped(ItemInit.REDSTONE_UPGRADE.get())
-        .pattern("iii")
-        .pattern("iri")
-        .pattern("iii")
-        .define('i', Tags.Items.INGOTS_IRON)
-        .define('r', Items.REDSTONE_BLOCK)
-        .group("farmingutils_upgrade")
-        .unlockedBy("farmers", InventoryChangeTrigger.TriggerInstance.hasItems(ItemInit.CROP_FARMER.get()))
-        .save(pFinishedRecipeConsumer);
-		
-		ShapedRecipeBuilder.shaped(ItemInit.DROP_UPGRADE.get())
-        .pattern("iii")
-        .pattern("iri")
-        .pattern("iii")
-        .define('i', Tags.Items.INGOTS_COPPER)
-        .define('r', ModItemTags.CROP_RESULTS)
-        .group("farmingutils_upgrade")
-        .unlockedBy("farmers", InventoryChangeTrigger.TriggerInstance.hasItems(ItemInit.CROP_FARMER.get()))
-        .save(pFinishedRecipeConsumer);
+        .save(pWriter);
 	}
 }

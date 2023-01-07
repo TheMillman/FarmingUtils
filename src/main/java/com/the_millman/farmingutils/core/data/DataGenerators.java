@@ -1,5 +1,9 @@
 package com.the_millman.farmingutils.core.data;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 import com.the_millman.farmingutils.FarmingUtils;
 import com.the_millman.farmingutils.core.data.providers.ModBlockStateModelProvider;
 import com.the_millman.farmingutils.core.data.providers.ModBlockTagsProvider;
@@ -8,8 +12,11 @@ import com.the_millman.farmingutils.core.data.providers.ModItemTagsProvider;
 import com.the_millman.farmingutils.core.data.providers.ModLootTableProvider;
 import com.the_millman.farmingutils.core.data.providers.ModRecipeProvider;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -22,15 +29,18 @@ public class DataGenerators {
 	@SubscribeEvent
 	public static void gatherData(GatherDataEvent event) {
 		DataGenerator gen = event.getGenerator();
-		ExistingFileHelper exFileHelper = event.getExistingFileHelper();
+		PackOutput packOutput = gen.getPackOutput();
+        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
+        
+		gen.addProvider(event.includeServer(), new LootTableProvider(packOutput, Collections.emptySet(),
+                List.of(new LootTableProvider.SubProviderEntry(ModLootTableProvider::new, LootContextParamSets.BLOCK))));
 		
-		gen.addProvider(event.includeServer(), new ModLootTableProvider(gen));
-		gen.addProvider(event.includeServer(), new ModRecipeProvider(gen));
-		ModBlockTagsProvider blockTags = new ModBlockTagsProvider(gen, exFileHelper);
+		gen.addProvider(event.includeServer(), new ModRecipeProvider(packOutput));
+		ModBlockTagsProvider blockTags = new ModBlockTagsProvider(packOutput, lookupProvider, event.getExistingFileHelper());
 		gen.addProvider(event.includeServer(), blockTags);
-		gen.addProvider(event.includeServer(), new ModItemTagsProvider(gen, blockTags, exFileHelper));
+		gen.addProvider(event.includeServer(), new ModItemTagsProvider(packOutput, lookupProvider, blockTags, event.getExistingFileHelper()));
 		
-		gen.addProvider(event.includeClient(), new ModBlockStateModelProvider(gen, exFileHelper));
-		gen.addProvider(event.includeClient(), new ModItemModelProvider(gen, exFileHelper));
+		gen.addProvider(event.includeClient(), new ModBlockStateModelProvider(packOutput, event.getExistingFileHelper()));
+		gen.addProvider(event.includeClient(), new ModItemModelProvider(packOutput, event.getExistingFileHelper()));
 	}
 }

@@ -3,14 +3,14 @@ package com.the_millman.farmingutils.core.data.providers;
 import com.the_millman.farmingutils.FarmingUtils;
 import com.the_millman.farmingutils.core.init.BlockInit;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class ModBlockStateModelProvider extends BlockStateProvider {
 
-	public ModBlockStateModelProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
-		super(gen, FarmingUtils.MODID, exFileHelper);
+	public ModBlockStateModelProvider(PackOutput output, ExistingFileHelper exFileHelper) {
+		super(output, FarmingUtils.MODID, exFileHelper);
 	}
 
 	@Override

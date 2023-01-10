@@ -41,7 +41,6 @@ public class FarmingConfig {
     public static ForgeConfigSpec.IntValue INTERNAL_FARMER_CAPACITY;
     public static ForgeConfigSpec.IntValue INTERNAL_FARMER_USEPERTICK;
     public static ForgeConfigSpec.IntValue INTERNAL_FARMER_FLUID_CAPACITY;
-    public static ForgeConfigSpec.IntValue INTERNAL_FARMER_FLUID_CONSUMED;
     public static ForgeConfigSpec.IntValue INTERNAL_FARMER_TICK;
     
     
@@ -171,10 +170,6 @@ public class FarmingConfig {
         INTERNAL_FARMER_FLUID_CAPACITY = builder
 				.comment("How much mB the internal farmer can store")
 				.defineInRange("internal_farmer_fluid_capacity", 10000, 1000, Integer.MAX_VALUE);
-        
-        INTERNAL_FARMER_FLUID_CONSUMED = builder
-                .comment("How much mB the internal farmer can use per tick")
-                .defineInRange("internal_farmer_fluid_consumed", 100, 0, Integer.MAX_VALUE);
         
         INTERNAL_FARMER_TICK = builder
                 .comment("How many ticks must pass before the internal farmer works")

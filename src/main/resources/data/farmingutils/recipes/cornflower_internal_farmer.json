@@ -1,0 +1,16 @@
+{
+  "type": "farmingutils:internal_farmer",
+  "ingredients": [
+    {
+      "item": "minecraft:cornflower"
+    }
+  ],
+  "fluid": {
+	"FluidName": "minecraft:water",
+	"Amount": 100
+  },
+  "output": {
+    "item": "minecraft:cornflower",
+	"count": 2
+  }
+}

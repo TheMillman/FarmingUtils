@@ -1,0 +1,16 @@
+{
+  "type": "farmingutils:internal_farmer",
+  "ingredients": [
+    {
+      "item": "minecraft:dandelion"
+    }
+  ],
+  "fluid": {
+	"FluidName": "minecraft:water",
+	"Amount": 100
+  },
+  "output": {
+    "item": "minecraft:dandelion",
+	"count": 2
+  }
+}

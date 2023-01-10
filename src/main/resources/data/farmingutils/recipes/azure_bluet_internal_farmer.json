@@ -1,0 +1,16 @@
+{
+  "type": "farmingutils:internal_farmer",
+  "ingredients": [
+    {
+      "item": "minecraft:azure_bluet"
+    }
+  ],
+  "fluid": {
+	"FluidName": "minecraft:water",
+	"Amount": 100
+  },
+  "output": {
+    "item": "minecraft:azure_bluet",
+	"count": 2
+  }
+}

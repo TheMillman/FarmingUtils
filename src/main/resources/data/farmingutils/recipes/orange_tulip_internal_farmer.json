@@ -1,0 +1,16 @@
+{
+  "type": "farmingutils:internal_farmer",
+  "ingredients": [
+    {
+      "item": "minecraft:orange_tulip"
+    }
+  ],
+  "fluid": {
+	"FluidName": "minecraft:water",
+	"Amount": 100
+  },
+  "output": {
+    "item": "minecraft:orange_tulip",
+	"count": 2
+  }
+}

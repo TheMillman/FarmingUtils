@@ -32,7 +32,6 @@ public class GrowthSyncS2CPacket2 {
 	public boolean handle(Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context context = contextSupplier.get();
         context.enqueueWork(() -> {
-            // HERE WE ARE ON THE CLIENT YES
             if(Minecraft.getInstance().level.getBlockEntity(pos) instanceof InternalFarmerBE blockEntity) {
                 blockEntity.setGrowthStage(progress);
             }

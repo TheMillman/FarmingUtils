@@ -1,5 +1,7 @@
 package com.the_millman.farmingutils.common.blockentity;
 
+import java.util.Optional;
+
 import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
@@ -9,6 +11,7 @@ import com.the_millman.farmingutils.core.init.BlockEntityInit;
 import com.the_millman.farmingutils.core.networking.FluidSyncS2CPacket;
 import com.the_millman.farmingutils.core.networking.ItemStackSyncS2CPacket2;
 import com.the_millman.farmingutils.core.networking.ModMessages;
+import com.the_millman.farmingutils.core.recipes.InternalFarmerRecipe;
 import com.the_millman.farmingutils.core.util.FarmingConfig;
 import com.the_millman.themillmanlib.common.blockentity.ItemEnergyFluidBlockEntity;
 import com.the_millman.themillmanlib.core.energy.ModEnergyStorage;
@@ -22,20 +25,15 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
@@ -58,30 +56,25 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 		this.needRedstone = false;
 		pos = new BlockPos(getBlockPos().getX(), getBlockPos().getY(), getBlockPos().getZ());
 	}
-
+	
 	public void tickServer(InternalFarmerBE pEntity) {
-		if (!initialized) {
+		if(!initialized)
 			init();
-		}
-
-		ItemStack bucketStack = itemStorage.getStackInSlot(13);
-		if(bucketStack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
-			transferItemFluidToFluidTank(pEntity, 13);
-			setChanged();
-		}
-
-		if (hasPowerToWork(FarmingConfig.INTERNAL_FARMER_USEPERTICK.get())) {
-			if (getFluidAmount() >= FarmingConfig.INTERNAL_FARMER_FLUID_CONSUMED.get()) {
+		
+		transferItemFluidToFluidTank(pEntity, 13, 14);
+		setChanged();
+		
+		if(hasPowerToWork(FarmingConfig.INTERNAL_FARMER_USEPERTICK.get())) {
+			if (getFluidAmount() >= 100) {
 				tick++;
-				if (tick == FarmingConfig.INTERNAL_FARMER_TICK.get()) {
+				if(tick >= FarmingConfig.INTERNAL_FARMER_TICK.get()) {
 					tick = 0;
 					this.needRedstone = getUpgrade(LibTags.Items.REDSTONE_UPGRADE, 9, 11);
 					if (canWork()) {
 						updateGrowthStage();
 						if (growthStage >= maxGrowthStage) {
-							farm(pos);
-							this.growthStage = 1;
 							resetGrowthStage();
+							craftItem(pEntity);
 							setChanged();
 						}
 					}
@@ -90,15 +83,61 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 		}
 	}
 	
-	public float getScaledProgress() {
-        float standardSize = 1f;
-        int progess = this.growthStage;
-        int maxProgress = this.maxGrowthStage;
+	private void craftItem(InternalFarmerBE pEntity) {
+        Level level = pEntity.level;
+        SimpleContainer inventory = setInventory();
 
-        return maxProgress != 0 && progess != 0 ? progess * standardSize / maxProgress : 0;
+        Optional<InternalFarmerRecipe> recipe = level.getRecipeManager()
+                .getRecipeFor(InternalFarmerRecipe.Type.INSTANCE, inventory, level);
+        
+        if(hasRecipe(pEntity)) {
+        	if (!level.isClientSide()) {
+	            ItemStack recipeOutput = new ItemStack(recipe.get().getResultItem().getItem(), recipe.get().getResultItem().getCount());
+	            drain(recipe.get().getFluidStack().getAmount(), FluidAction.EXECUTE);
+	            consumeEnergy(FarmingConfig.INTERNAL_FARMER_USEPERTICK.get());
+	            ItemStack result = ModItemHandlerHelp.insertItemStacked(pEntity.itemStorage, recipeOutput, 0, 9, false);
+	            
+	            if (!result.isEmpty()) {
+					BlockUtils.spawnItemStack(result, level, pEntity.pos.above());
+				}
+        	}
+        }
+        pEntity.resetGrowthStage();
     }
 	
-	private boolean canWork() {
+	private boolean hasRecipe(InternalFarmerBE blockEntity) {
+		SimpleContainer inventory = setInventory();
+		
+		Optional<InternalFarmerRecipe> recipe = level.getRecipeManager()
+                .getRecipeFor(InternalFarmerRecipe.Type.INSTANCE, inventory, level);
+		
+		return recipe.isPresent() && hasCorrectFluidInTank(blockEntity, recipe) && hasCorrectFluidAmountInTank(blockEntity, recipe);
+	}
+	
+	/**
+	 * TODO Mettere in lib
+	 * @return
+	 */
+	private SimpleContainer setInventory() {
+		int slots = itemStorage.getSlots();
+		SimpleContainer inventory = new SimpleContainer(slots);
+		
+		for(int i = 0; i < slots; i++) {
+			inventory.setItem(i, itemStorage.getStackInSlot(i));
+		}
+		
+		return inventory;
+	}
+	
+	private boolean hasCorrectFluidAmountInTank(InternalFarmerBE entity, Optional<InternalFarmerRecipe> recipe) {
+        return getFluidAmount() >= recipe.get().getFluidStack().getAmount();
+    }
+
+    private boolean hasCorrectFluidInTank(InternalFarmerBE entity, Optional<InternalFarmerRecipe> recipe) {
+        return recipe.get().getFluidStack().equals(getFluidStack());
+    }
+    
+    private boolean canWork() {
 		if(this.needRedstone) {
 			if(getBlockState().getValue(InternalFarmerBlock.POWERED)) {
 				return true;
@@ -110,50 +149,13 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 		return true;
 	}
 	
-	/**
-	 * TODO Controllare quanta energia consuma.
-	 * Destroy equivalent in another classes.
-	 */
-	private boolean farm(BlockPos pos) {
-		ItemStack stack = getStackInSlot(12);
-		if(isValidItem(stack)) {
-			if(!level.isClientSide()) {
-				ItemStack copy = ItemHandlerHelper.copyStackWithSize(stack, 2);
-				if(!copy.isEmpty()) {
-					if(copy.is(Items.KELP)) {
-						drain(FarmingConfig.INTERNAL_FARMER_FLUID_CONSUMED.get() * 2, FluidAction.EXECUTE);
-						consumeEnergy(FarmingConfig.INTERNAL_FARMER_USEPERTICK.get());
-					} else {
-						drain(FarmingConfig.INTERNAL_FARMER_FLUID_CONSUMED.get(), FluidAction.EXECUTE);
-						consumeEnergy(FarmingConfig.INTERNAL_FARMER_USEPERTICK.get());
-					}
-					
-					ItemStack result = ModItemHandlerHelp.insertItemStacked(itemStorage, copy, 0, 9, false);
-					if(!result.isEmpty()) {
-						BlockUtils.spawnItemStack(copy, this.level, pos);
-					}
-					setChanged();
-				}
-				setChanged();
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private boolean isValidItem(ItemStack stack) {
-		Item item = stack.getItem();
-		if (item instanceof BlockItem blockItem) {
-			if (blockItem.getBlock() instanceof IPlantable || stack.is(Items.KELP)) {
-				if (stack.is(ItemTags.SMALL_FLOWERS) || stack.is(ItemTags.TALL_FLOWERS) || stack.is(Items.BROWN_MUSHROOM) || stack.is(Items.RED_MUSHROOM) || stack.is(Items.KELP)) {
-					return true;
-				}
-				return false;
-			}
-			return false;
-		}
-		return false;
-	}
+	public float getScaledProgress() {
+        float standardSize = 1f;
+        int progess = this.growthStage;
+        int maxProgress = this.maxGrowthStage;
+
+        return maxProgress != 0 && progess != 0 ? progess * standardSize / maxProgress : 0;
+    }
 	
 	public ItemStack getRenderStack() {
 		return getStackInSlot(12);
@@ -184,6 +186,9 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 			@Override
 			public boolean isItemValid(int slot, @NotNull ItemStack stack) {
 				if(slot >=0 && slot <= 8) {
+					if(stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent() || stack.is(LibTags.Items.UPGRADES)) {
+						return false;
+					}
 					return true;
 				} else if(slot >= 9 && slot <= 11) {
 					if(stack.is(LibTags.Items.REDSTONE_UPGRADE)) {
@@ -191,23 +196,14 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 					}
 					return false;
 				} else if(slot == 12) {
-					Item item = stack.getItem();
-					if (item instanceof BlockItem blockItem) {
-						if (blockItem.getBlock() instanceof IPlantable || stack.is(Items.KELP)) {
-							if (stack.is(ItemTags.SMALL_FLOWERS) || stack.is(ItemTags.TALL_FLOWERS) || stack.is(Items.BROWN_MUSHROOM) || stack.is(Items.RED_MUSHROOM) || stack.is(Items.KELP)) {
-								return true;
-							}
-							return false;
-						}
+					if(stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
 						return false;
 					}
-					return false;
-				} else if(slot == 13) {
+					return true;
+				} else if(slot == 13 || slot == 14) {
 					if(stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
 						return true;
 					}
-					return false;
-				} else if(slot == 14) {
 					return false;
 				}
 				return false;
@@ -242,7 +238,7 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 			
 			@Override
 			public boolean isFluidValid(FluidStack stack) {
-				return stack.getFluid() == Fluids.WATER;
+				return stack.isFluidEqual(getFluidStack()) || fluidStorage.isEmpty();
 			}
 		};
 	}

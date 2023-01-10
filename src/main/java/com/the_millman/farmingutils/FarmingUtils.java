@@ -7,6 +7,7 @@ import com.the_millman.farmingutils.core.init.BlockEntityInit;
 import com.the_millman.farmingutils.core.init.BlockInit;
 import com.the_millman.farmingutils.core.init.ContainerInit;
 import com.the_millman.farmingutils.core.init.ItemInit;
+import com.the_millman.farmingutils.core.init.RecipeInit;
 import com.the_millman.farmingutils.core.networking.ModMessages;
 import com.the_millman.farmingutils.core.util.FarmingConfig;
 
@@ -29,6 +30,7 @@ public class FarmingUtils
     	BlockInit.BLOCKS.register(bus);
     	BlockEntityInit.BLOCK_ENTITIES.register(bus);
     	ContainerInit.CONTAINERS.register(bus);
+    	RecipeInit.SERIALIZERS.register(bus);
     	
     	FarmingConfig.init();
     	

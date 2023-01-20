@@ -36,3 +36,8 @@ Require a Redstone signal for Farmers to work, it works for all Farmers.
 
 ## Drop Upgrade
 The farmer stops collecting the drop and drops it into the world.
+
+# Tags
+## Block Tags:
+The mod adds tags to make the mod more compatible with other mods.
+The tag is called age_3_crops, just enter the block name in the Json file, as you do with normal vanilla minecraft blocks, and the Crop Farmer will recognize the block.

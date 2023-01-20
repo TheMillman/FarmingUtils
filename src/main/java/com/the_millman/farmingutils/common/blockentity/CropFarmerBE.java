@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -59,11 +60,11 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 			init();
 		}
 
-		if (hasPowerToWork(FarmingConfig.FARMERS_NEEDS_ENERGY.get(), FarmingConfig.CROP_FARMER_USEPERTICK.get())) {
+		if (hasPowerToWork(energyStorage, FarmingConfig.FARMERS_NEEDS_ENERGY.get(), FarmingConfig.CROP_FARMER_USEPERTICK.get())) {
 			tick++;
 			if (tick == FarmingConfig.CROP_FARMER_TICK.get()) {
 				tick = 0;
-				this.needRedstone = getUpgrade(LibTags.Items.REDSTONE_UPGRADE, 18, 20);
+				this.needRedstone = getUpgrade(itemStorage, LibTags.Items.REDSTONE_UPGRADE, 18, 20);
 				if (canWork()) {
 					upgradeSlot();
 					BlockPos posToBreak = new BlockPos(this.x + this.pX, this.y, this.z + this.pZ);
@@ -91,13 +92,13 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 
 	private void upgradeSlot() {
 		rangeSlot();
-		this.pickupDrops = !getUpgrade(LibTags.Items.DROP_UPGRADE, 18, 20);
+		this.pickupDrops = !getUpgrade(itemStorage, LibTags.Items.DROP_UPGRADE, 18, 20);
 	}
 	
 	private void rangeSlot() {
-		boolean ironUpgrade = getUpgrade(LibTags.Items.IRON_RANGE_UPGRADE, 18, 20);
-		boolean goldUpgrade = getUpgrade(LibTags.Items.GOLD_RANGE_UPGRADE, 18, 20);
-		boolean diamondUpgrade = getUpgrade(LibTags.Items.DIAMOND_RANGE_UPGRADE, 18, 20);
+		boolean ironUpgrade = getUpgrade(itemStorage, LibTags.Items.IRON_RANGE_UPGRADE, 18, 20);
+		boolean goldUpgrade = getUpgrade(itemStorage, LibTags.Items.GOLD_RANGE_UPGRADE, 18, 20);
+		boolean diamondUpgrade = getUpgrade(itemStorage, LibTags.Items.DIAMOND_RANGE_UPGRADE, 18, 20);
 		if (ironUpgrade) {
 			this.x = getBlockPos().getX() - 2;
 			this.z = getBlockPos().getZ() - 2;
@@ -123,17 +124,17 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 		if (state.isAir()) {
 			return false;
 			//Sostituito getDestBlock(state)
-		} else if (getDestBlock(state)) {
+		} else if (testBlock(state)) {
 			if (!level.isClientSide) {
 				if (this.pickupDrops) {
-					collectDrops(pos, 0, 18);
+					collectDrops(level, itemStorage, pos, 0, 18);
 					level.destroyBlock(pos, dropBlock);
-					consumeEnergy(FarmingConfig.CROP_FARMER_USEPERTICK.get());
+					consumeEnergy(energyStorage, FarmingConfig.CROP_FARMER_USEPERTICK.get());
 					return true;
 				} else if(!this.pickupDrops) {
 					// collectDrops(pos, dropBlock);
 					level.destroyBlock(pos, true);
-					consumeEnergy(FarmingConfig.CROP_FARMER_USEPERTICK.get());
+					consumeEnergy(energyStorage, FarmingConfig.CROP_FARMER_USEPERTICK.get());
 					return true;
 				}
 				return false;
@@ -144,7 +145,7 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 	}
 
 	private boolean placeBlock(BlockPos pos) {
-		int slot = getSlot(18);
+		int slot = getSlot(itemStorage, 18);
 
 		BlockPos posY = pos.below();
 		BlockState state = level.getBlockState(pos);
@@ -152,14 +153,14 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 		if (state.getBlock() instanceof CropBlock) {
 			return false;
 		} else if (yState.getBlock() instanceof FarmBlock) {
-			if (isValidBlock(getStackInSlot(slot))) {
-				if (getStackInSlot(slot).getItem() instanceof BlockItem blockItem) {
+			if (isValidBlock(getStackInSlot(itemStorage, slot))) {
+				if (getStackInSlot(itemStorage, slot).getItem() instanceof BlockItem blockItem) {
 					if (!level.isClientSide) {
 						Block block = blockItem.getBlock();
 						level.setBlock(pos, block.defaultBlockState(), Block.UPDATE_ALL);
 						level.playSound(null, pos, SoundEvents.CROP_PLANTED, SoundSource.BLOCKS, 1F, 1F);
-						consumeStack(slot, 1);
-						consumeEnergy(FarmingConfig.CROP_FARMER_USEPERTICK.get());
+						consumeStack(itemStorage, slot, 1);
+						consumeEnergy(energyStorage, FarmingConfig.CROP_FARMER_USEPERTICK.get());
 					}
 				}
 			}
@@ -167,6 +168,7 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 		return false;
 	}
 	
+	@SuppressWarnings("unused")
 	private boolean getDestBlock(BlockState state) {
 		if (state.is(ModBlockTags.AGE_3_CROPS)
 				&& state.getValue(BlockStateProperties.AGE_3) == BeetrootBlock.MAX_AGE) {
@@ -181,8 +183,32 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 		return false;
 	}
 	
+	/**
+	 * TODO BOY, WE MUST BE BETTER!.
+	 * @param state
+	 * @return
+	 */
+	private boolean testBlock(BlockState state) {
+		if (state.getBlock() instanceof IPlantable) {
+			IntegerProperty AGE_3 = BlockStateProperties.AGE_3;
+			if (state.hasProperty(AGE_3)) {
+				if (state.getValue(AGE_3) == BeetrootBlock.MAX_AGE) {
+					return true;
+				}
+			}
+
+			IntegerProperty AGE_7 = BlockStateProperties.AGE_7;
+			if (state.hasProperty(AGE_7)) {
+				if (state.getValue(AGE_7) == CropBlock.MAX_AGE) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	@Override
-	protected boolean isValidBlock(ItemStack stack) {
+	public boolean isValidBlock(ItemStack stack) {
 		if (stack.getItem()instanceof ItemNameBlockItem blockItem) {
 			if (blockItem.getBlock() instanceof CropBlock) {
 				return true;
@@ -219,7 +245,7 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 		return new ModEnergyStorage(true, FarmingConfig.CROP_FARMER_CAPACITY.get(), FarmingConfig.CROP_FARMER_USEPERTICK.get() * 2) {
 			@Override
 			protected void onEnergyChanged() {
-				boolean newHasPower = hasPowerToWork(FarmingConfig.CROP_FARMER_USEPERTICK.get());
+				boolean newHasPower = hasPowerToWork(energyStorage, FarmingConfig.CROP_FARMER_USEPERTICK.get());
 				if (newHasPower) {
 					level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
 				}

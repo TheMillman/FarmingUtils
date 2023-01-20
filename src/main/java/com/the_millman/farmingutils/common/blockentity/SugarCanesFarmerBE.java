@@ -50,11 +50,11 @@ public class SugarCanesFarmerBE extends ItemEnergyBlockEntity {
 			init();
 		}
 
-		if (hasPowerToWork(FarmingConfig.FARMERS_NEEDS_ENERGY.get(), FarmingConfig.SUGAR_CANES_FARMER_USEPERTICK.get())) {
+		if (hasPowerToWork(energyStorage, FarmingConfig.FARMERS_NEEDS_ENERGY.get(), FarmingConfig.SUGAR_CANES_FARMER_USEPERTICK.get())) {
 			tick++;
 			if (tick == FarmingConfig.SUGAR_CANES_FARMER_TICK.get()) {
 				tick = 0;
-				this.needRedstone = getUpgrade(LibTags.Items.REDSTONE_UPGRADE, 9, 11);
+				this.needRedstone = getUpgrade(itemStorage, LibTags.Items.REDSTONE_UPGRADE, 9, 11);
 				if (canWork()) {
 					upgradeSlot();
 					BlockPos posToBreak = new BlockPos(this.x + this.pX, this.y, this.z + this.pZ);
@@ -82,13 +82,13 @@ public class SugarCanesFarmerBE extends ItemEnergyBlockEntity {
 	
 	private void upgradeSlot() {
 		rangeUpgrade();
-		this.pickupDrops = !getUpgrade(LibTags.Items.DROP_UPGRADE, 9, 11);
+		this.pickupDrops = !getUpgrade(itemStorage, LibTags.Items.DROP_UPGRADE, 9, 11);
 	}
 	
 	private void rangeUpgrade() {
-		boolean ironUpgrade = getUpgrade(LibTags.Items.IRON_RANGE_UPGRADE, 9, 11);
-		boolean goldUpgrade = getUpgrade(LibTags.Items.GOLD_RANGE_UPGRADE, 9, 11);
-		boolean diamondUpgrade = getUpgrade(LibTags.Items.DIAMOND_RANGE_UPGRADE, 9, 11);
+		boolean ironUpgrade = getUpgrade(itemStorage, LibTags.Items.IRON_RANGE_UPGRADE, 9, 11);
+		boolean goldUpgrade = getUpgrade(itemStorage, LibTags.Items.GOLD_RANGE_UPGRADE, 9, 11);
+		boolean diamondUpgrade = getUpgrade(itemStorage, LibTags.Items.DIAMOND_RANGE_UPGRADE, 9, 11);
 		if (ironUpgrade) {
 			this.x = getBlockPos().getX() - 2;
 			this.z = getBlockPos().getZ() - 2;
@@ -115,13 +115,13 @@ public class SugarCanesFarmerBE extends ItemEnergyBlockEntity {
 		} else if (getDestBlock(state)) {
 			if (!level.isClientSide) {
 				if (this.pickupDrops) {
-					collectDrops(pos, 0, 9);
+					collectDrops(level, itemStorage, pos, 0, 9);
 					level.destroyBlock(pos, dropBlock);
-					consumeEnergy(FarmingConfig.SUGAR_CANES_FARMER_USEPERTICK.get());
+					consumeEnergy(energyStorage, FarmingConfig.SUGAR_CANES_FARMER_USEPERTICK.get());
 					return true;
 				} else if(!this.pickupDrops) {
 					level.destroyBlock(pos, true);
-					consumeEnergy(FarmingConfig.SUGAR_CANES_FARMER_USEPERTICK.get());
+					consumeEnergy(energyStorage, FarmingConfig.SUGAR_CANES_FARMER_USEPERTICK.get());
 					return true;
 				}
 				return false;
@@ -150,7 +150,7 @@ public class SugarCanesFarmerBE extends ItemEnergyBlockEntity {
 	}
 	
 	@Override
-	protected boolean isValidBlock(ItemStack stack) {
+	public boolean isValidBlock(ItemStack stack) {
 		return false;
 	}
 
@@ -181,7 +181,7 @@ public class SugarCanesFarmerBE extends ItemEnergyBlockEntity {
 		return new ModEnergyStorage(true, FarmingConfig.SUGAR_CANES_FARMER_CAPACITY.get(), FarmingConfig.SUGAR_CANES_FARMER_USEPERTICK.get() * 2) {
 			@Override
 			protected void onEnergyChanged() {
-				boolean newHasPower = hasPowerToWork(FarmingConfig.SUGAR_CANES_FARMER_USEPERTICK.get());
+				boolean newHasPower = hasPowerToWork(energyStorage, FarmingConfig.SUGAR_CANES_FARMER_USEPERTICK.get());
 				if (newHasPower) {
 					level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
 				}

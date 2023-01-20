@@ -61,15 +61,17 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 		if(!initialized)
 			init();
 		
-		transferItemFluidToFluidTank(pEntity, 13, 14);
-		setChanged();
+		if(getStackInSlot(itemStorage, 14).getCount() < 16) {
+			transferItemFluidToFluidTank(itemStorage, fluidStorage, 13, 14);
+			setChanged();
+		}
 		
-		if(hasPowerToWork(FarmingConfig.INTERNAL_FARMER_USEPERTICK.get())) {
-			if (getFluidAmount() >= 100) {
+		if(hasPowerToWork(energyStorage, FarmingConfig.INTERNAL_FARMER_USEPERTICK.get())) {
+			if (getFluidAmount(fluidStorage) >= 100) {
 				tick++;
 				if(tick >= FarmingConfig.INTERNAL_FARMER_TICK.get()) {
 					tick = 0;
-					this.needRedstone = getUpgrade(LibTags.Items.REDSTONE_UPGRADE, 9, 11);
+					this.needRedstone = getUpgrade(itemStorage, LibTags.Items.REDSTONE_UPGRADE, 9, 11);
 					if (canWork()) {
 						updateGrowthStage();
 						if (growthStage >= maxGrowthStage) {
@@ -93,8 +95,8 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
         if(hasRecipe(pEntity)) {
         	if (!level.isClientSide()) {
 	            ItemStack recipeOutput = new ItemStack(recipe.get().getResultItem().getItem(), recipe.get().getResultItem().getCount());
-	            drain(recipe.get().getFluidStack().getAmount(), FluidAction.EXECUTE);
-	            consumeEnergy(FarmingConfig.INTERNAL_FARMER_USEPERTICK.get());
+	            drain(fluidStorage, recipe.get().getFluidStack().getAmount(), FluidAction.EXECUTE);
+	            consumeEnergy(energyStorage, FarmingConfig.INTERNAL_FARMER_USEPERTICK.get());
 	            ItemStack result = ModItemHandlerHelp.insertItemStacked(pEntity.itemStorage, recipeOutput, 0, 9, false);
 	            
 	            if (!result.isEmpty()) {
@@ -114,23 +116,8 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 		return recipe.isPresent() && hasCorrectFluidInTank(blockEntity, recipe) && hasCorrectFluidAmountInTank(blockEntity, recipe);
 	}
 	
-	/**
-	 * TODO Mettere in lib
-	 * @return
-	 */
-	private SimpleContainer setInventory() {
-		int slots = itemStorage.getSlots();
-		SimpleContainer inventory = new SimpleContainer(slots);
-		
-		for(int i = 0; i < slots; i++) {
-			inventory.setItem(i, itemStorage.getStackInSlot(i));
-		}
-		
-		return inventory;
-	}
-	
 	private boolean hasCorrectFluidAmountInTank(InternalFarmerBE entity, Optional<InternalFarmerRecipe> recipe) {
-        return getFluidAmount() >= recipe.get().getFluidStack().getAmount();
+        return getFluidAmount(fluidStorage) >= recipe.get().getFluidStack().getAmount();
     }
 
     private boolean hasCorrectFluidInTank(InternalFarmerBE entity, Optional<InternalFarmerRecipe> recipe) {
@@ -158,7 +145,7 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
     }
 	
 	public ItemStack getRenderStack() {
-		return getStackInSlot(12);
+		return getStackInSlot(itemStorage, 12);
 	}
 	
 	public void setHandler(ItemStackHandler itemStackHandler) {
@@ -167,8 +154,12 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
         }
 	}
 	
+	public void setFluid(FluidStack fluidStack) {
+		setFluid(fluidStorage, fluidStack);
+	}
+	
 	@Override
-	protected boolean isValidBlock(ItemStack stack) {
+	public boolean isValidBlock(ItemStack stack) {
 		return false;
 	}
 	
@@ -216,7 +207,7 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 		return new ModEnergyStorage(true, FarmingConfig.INTERNAL_FARMER_CAPACITY.get(), FarmingConfig.INTERNAL_FARMER_USEPERTICK.get() * 2) {
 			@Override
 			protected void onEnergyChanged() {
-				boolean newHasPower = hasPowerToWork(FarmingConfig.INTERNAL_FARMER_USEPERTICK.get());
+				boolean newHasPower = hasPowerToWork(energyStorage, FarmingConfig.INTERNAL_FARMER_USEPERTICK.get());
 				if (newHasPower) {
 					level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
 				}

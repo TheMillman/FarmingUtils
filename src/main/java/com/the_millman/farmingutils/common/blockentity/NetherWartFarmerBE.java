@@ -55,11 +55,11 @@ public class NetherWartFarmerBE extends ItemEnergyBlockEntity {
 			init();
 		}
 
-		if (hasPowerToWork(FarmingConfig.FARMERS_NEEDS_ENERGY.get(), FarmingConfig.NETHER_WART_FARMER_USEPERTICK.get())) {
+		if (hasPowerToWork(energyStorage, FarmingConfig.FARMERS_NEEDS_ENERGY.get(), FarmingConfig.NETHER_WART_FARMER_USEPERTICK.get())) {
 			tick++;
 			if (tick == FarmingConfig.NETHER_WART_FARMER_TICK.get()) {
 				tick = 0;
-				this.needRedstone = getUpgrade(LibTags.Items.REDSTONE_UPGRADE, 9, 11);
+				this.needRedstone = getUpgrade(itemStorage, LibTags.Items.REDSTONE_UPGRADE, 9, 11);
 				if (canWork()) {
 					upgradeSlot();
 					BlockPos posToBreak = new BlockPos(this.x + this.pX, this.y, this.z + this.pZ);
@@ -87,13 +87,13 @@ public class NetherWartFarmerBE extends ItemEnergyBlockEntity {
 	
 	private void upgradeSlot() {
 		rangeUpgrade();
-		this.pickupDrops = !getUpgrade(LibTags.Items.DROP_UPGRADE, 9, 11);
+		this.pickupDrops = !getUpgrade(itemStorage, LibTags.Items.DROP_UPGRADE, 9, 11);
 	}
 	
 	private void rangeUpgrade() {
-		boolean ironUpgrade = getUpgrade(LibTags.Items.IRON_RANGE_UPGRADE, 9, 11);
-		boolean goldUpgrade = getUpgrade(LibTags.Items.GOLD_RANGE_UPGRADE, 9, 11);
-		boolean diamondUpgrade = getUpgrade(LibTags.Items.DIAMOND_RANGE_UPGRADE, 9, 11);
+		boolean ironUpgrade = getUpgrade(itemStorage, LibTags.Items.IRON_RANGE_UPGRADE, 9, 11);
+		boolean goldUpgrade = getUpgrade(itemStorage, LibTags.Items.GOLD_RANGE_UPGRADE, 9, 11);
+		boolean diamondUpgrade = getUpgrade(itemStorage, LibTags.Items.DIAMOND_RANGE_UPGRADE, 9, 11);
 		if (ironUpgrade) {
 			this.x = getBlockPos().getX() - 2;
 			this.z = getBlockPos().getZ() - 2;
@@ -120,13 +120,13 @@ public class NetherWartFarmerBE extends ItemEnergyBlockEntity {
 		} else if (getDestBlock(state)) {
 			if (!level.isClientSide) {
 				if (this.pickupDrops) {
-					collectDrops(pos, 0, 9);
+					collectDrops(level, itemStorage, pos, 0, 9);
 					level.destroyBlock(pos, dropBlock);
-					consumeEnergy(FarmingConfig.NETHER_WART_FARMER_USEPERTICK.get());
+					consumeEnergy(energyStorage, FarmingConfig.NETHER_WART_FARMER_USEPERTICK.get());
 					return true;
 				} else if(!this.pickupDrops) {
 					level.destroyBlock(pos, true);
-					consumeEnergy(FarmingConfig.NETHER_WART_FARMER_USEPERTICK.get());
+					consumeEnergy(energyStorage, FarmingConfig.NETHER_WART_FARMER_USEPERTICK.get());
 					return true;
 				}
 				return false;
@@ -137,7 +137,7 @@ public class NetherWartFarmerBE extends ItemEnergyBlockEntity {
 	}
 
 	private boolean placeBlock(BlockPos pos) {
-		int slot = getSlot(9);
+		int slot = getSlot(itemStorage, 9);
 
 		BlockPos posY = pos.below();
 		BlockState state = level.getBlockState(pos);
@@ -148,14 +148,14 @@ public class NetherWartFarmerBE extends ItemEnergyBlockEntity {
 		} else if(!state.isAir()) {
 			return true;
 		} else if (yState.is(Blocks.SOUL_SAND)) {
-			if (getStackInSlot(slot).getItem() instanceof BlockItem blockItem) {
+			if (getStackInSlot(itemStorage, slot).getItem() instanceof BlockItem blockItem) {
 				if (!level.isClientSide) {
 					if (blockItem.asItem() == Items.NETHER_WART) {
 						Block block = blockItem.getBlock();
 						level.setBlock(pos, block.defaultBlockState(), Block.UPDATE_ALL);
 						level.playSound(null, pos, SoundEvents.CROP_PLANTED, SoundSource.BLOCKS, 1F, 1F);
-						consumeStack(slot, 1);
-						consumeEnergy(FarmingConfig.NETHER_WART_FARMER_USEPERTICK.get());
+						consumeStack(itemStorage, slot, 1);
+						consumeEnergy(energyStorage, FarmingConfig.NETHER_WART_FARMER_USEPERTICK.get());
 						return true;
 					}
 				}
@@ -172,7 +172,7 @@ public class NetherWartFarmerBE extends ItemEnergyBlockEntity {
 	}
 	
 	@Override
-	protected boolean isValidBlock(ItemStack stack) {
+	public boolean isValidBlock(ItemStack stack) {
 		return stack.is(Items.NETHER_WART) ? true : false;
 	}
 	
@@ -206,7 +206,7 @@ public class NetherWartFarmerBE extends ItemEnergyBlockEntity {
 		return new ModEnergyStorage(true, FarmingConfig.NETHER_WART_FARMER_CAPACITY.get(), FarmingConfig.NETHER_WART_FARMER_USEPERTICK.get() * 2) {
 			@Override
 			protected void onEnergyChanged() {
-				boolean newHasPower = hasPowerToWork(FarmingConfig.NETHER_WART_FARMER_USEPERTICK.get());
+				boolean newHasPower = hasPowerToWork(energyStorage, FarmingConfig.NETHER_WART_FARMER_USEPERTICK.get());
 				if (newHasPower) {
 					level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
 				}

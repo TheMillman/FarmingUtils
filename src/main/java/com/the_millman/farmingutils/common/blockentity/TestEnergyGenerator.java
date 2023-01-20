@@ -130,7 +130,7 @@ public class TestEnergyGenerator extends ItemEnergyBlockEntity {
 	}
 
 	@Override
-	protected boolean isValidBlock(ItemStack arg0) {
+	public boolean isValidBlock(ItemStack arg0) {
 		return false;
 	}
 }

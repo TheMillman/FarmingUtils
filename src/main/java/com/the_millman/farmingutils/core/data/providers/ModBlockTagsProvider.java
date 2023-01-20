@@ -29,7 +29,8 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
 			.add(BlockInit.COCOA_BEANS_FARMER.get())
 			.add(BlockInit.CACTUS_FARMER.get())
 			.add(BlockInit.SUGAR_CANES_FARMER.get())
-			.add(BlockInit.BAMBOO_FARMER.get());
+			.add(BlockInit.BAMBOO_FARMER.get())
+			.add(BlockInit.MUSHROOM_FARMER.get());
 		
 		tag(ModBlockTags.AGE_3_CROPS)
 			.add(Blocks.BEETROOTS);

@@ -79,11 +79,11 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 			init();
 		}
 
-		if (hasPowerToWork(FarmingConfig.FARMERS_NEEDS_ENERGY.get(), FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get())) {
+		if (hasPowerToWork(energyStorage, FarmingConfig.FARMERS_NEEDS_ENERGY.get(), FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get())) {
 			tick++;
 			if (tick == FarmingConfig.COCOA_BEANS_FARMER_TICK.get()) {
 				tick = 0;
-				this.needRedstone = getUpgrade(LibTags.Items.REDSTONE_UPGRADE, 9, 11);
+				this.needRedstone = getUpgrade(itemStorage, LibTags.Items.REDSTONE_UPGRADE, 9, 11);
 				if (canWork()) {
 					upgradeSlot();
 					BlockPos posToBreak = new BlockPos(this.x + pX, this.y + pY, this.z + pZ);
@@ -99,7 +99,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 	
 	private void upgradeSlot() {
 		rangeUpgrade();
-		this.pickupDrops = !getUpgrade(LibTags.Items.DROP_UPGRADE, 9, 11);
+		this.pickupDrops = !getUpgrade(itemStorage, LibTags.Items.DROP_UPGRADE, 9, 11);
 	}
 
 	private void stadioState() {
@@ -161,9 +161,9 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 	
 	private void rangeUpgrade() {
 		Direction facing = getBlockState().getValue(CocoaFarmerBlock.FACING);
-		boolean ironUpgrade = getUpgrade(LibTags.Items.IRON_RANGE_UPGRADE, 9, 11);
-		boolean goldUpgrade = getUpgrade(LibTags.Items.GOLD_RANGE_UPGRADE, 9, 11);
-		boolean diamondUpgrade = getUpgrade(LibTags.Items.DIAMOND_RANGE_UPGRADE, 9, 11);
+		boolean ironUpgrade = getUpgrade(itemStorage, LibTags.Items.IRON_RANGE_UPGRADE, 9, 11);
+		boolean goldUpgrade = getUpgrade(itemStorage, LibTags.Items.GOLD_RANGE_UPGRADE, 9, 11);
+		boolean diamondUpgrade = getUpgrade(itemStorage, LibTags.Items.DIAMOND_RANGE_UPGRADE, 9, 11);
 		if (ironUpgrade) {
 			if (facing == Direction.NORTH) {
 				// posizione da cui inizia
@@ -270,13 +270,13 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 		} else if (getDestBlock(state)) {
 			if (!level.isClientSide) {
 				if (this.pickupDrops) {
-					collectDrops(pos, 0, 9);
+					collectDrops(level, itemStorage, pos, 0, 9);
 					level.destroyBlock(pos, dropBlock);
-					consumeEnergy(FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get());
+					consumeEnergy(energyStorage, FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get());
 					return true;
 				} else if (!this.pickupDrops) {
 					level.destroyBlock(pos, true);
-					consumeEnergy(FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get());
+					consumeEnergy(energyStorage, FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get());
 					return true;
 				}
 			}
@@ -286,7 +286,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 	}
 	
 	private boolean placeBlock(BlockPos pos) { 
-		int slot = getSlot(9);
+		int slot = getSlot(itemStorage, 9);
 
 		Direction facing = getBlockState().getValue(CocoaFarmerBlock.FACING);
 		
@@ -305,14 +305,14 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 		if (state.getBlock() == Blocks.COCOA) {
 			return false;
 		} else if (facingState.is(Blocks.JUNGLE_LOG)) {
-			if (getStackInSlot(slot).getItem()instanceof BlockItem blockItem) {
+			if (getStackInSlot(itemStorage, slot).getItem()instanceof BlockItem blockItem) {
 				if (!level.isClientSide) {
 					if (blockItem.asItem() == Items.COCOA_BEANS) {
 						Block block = blockItem.getBlock();
 						level.setBlock(pos, block.defaultBlockState().setValue(CocoaBlock.FACING, getBlockState().getValue(CocoaFarmerBlock.FACING)), Block.UPDATE_ALL);
 						level.playSound(null, pos, SoundEvents.CROP_PLANTED, SoundSource.BLOCKS, 1F, 1F);
-						consumeStack(slot, 1);
-						consumeEnergy(FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get());
+						consumeStack(itemStorage, slot, 1);
+						consumeEnergy(energyStorage, FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get());
 					}
 				}
 			}
@@ -328,7 +328,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 	}
 	
 	@Override
-	protected boolean isValidBlock(ItemStack stack) {
+	public boolean isValidBlock(ItemStack stack) {
 		if(stack.is(Items.COCOA_BEANS)) {
 			return true;
 		}
@@ -362,7 +362,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 		return new ModEnergyStorage(true, FarmingConfig.COCOA_BEANS_FARMER_CAPACITY.get(), FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get() * 2) {
 			@Override
 			protected void onEnergyChanged() {
-				boolean newHasPower = hasPowerToWork(FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get());
+				boolean newHasPower = hasPowerToWork(energyStorage, FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get());
 				if (newHasPower) {
 					level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
 				}

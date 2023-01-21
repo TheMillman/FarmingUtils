@@ -38,10 +38,10 @@ public class InternalFarmerContainer extends ItemEnergyContainer
 		if (blockEntity != null) {
 			blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(h -> {
 				layoutInventorySlots(h, 49, 18, 3, 3);
-				layoutUpgradeSlots(h, 9, 152, 18, 3);
-				addSlot(new SlotItemHandler(h, 12, 27, 36));
-				addSlot(new SlotItemHandler(h, 13, 128, 18));
-				addSlot(new SlotItemHandler(h, 14, 128, 54));
+				layoutUpgradeSlots(h, 12, 152, 18, 3);
+				addSlot(new SlotItemHandler(h, 9, 27, 36));
+				addSlot(new SlotItemHandler(h, 10, 128, 18));
+				addSlot(new SlotItemHandler(h, 11, 128, 54));
 			});
 		}
 		

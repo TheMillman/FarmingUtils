@@ -5,10 +5,10 @@ import com.the_millman.farmingutils.common.blocks.BambooFarmerBlock;
 import com.the_millman.farmingutils.common.blocks.CactusFarmerBlock;
 import com.the_millman.farmingutils.common.blocks.CocoaFarmerBlock;
 import com.the_millman.farmingutils.common.blocks.CropFarmerBlock;
+import com.the_millman.farmingutils.common.blocks.InternalFarmerBlock;
 import com.the_millman.farmingutils.common.blocks.MelonFarmerBlock;
 import com.the_millman.farmingutils.common.blocks.NetherWartFarmerBlock;
 import com.the_millman.farmingutils.common.blocks.SugarCanesFarmerBlock;
-import com.the_millman.farmingutils.common.blocks.InternalFarmerBlock;
 import com.the_millman.farmingutils.common.blocks.TestEnergyGeneratorBlock;
 
 import net.minecraft.world.level.block.Block;

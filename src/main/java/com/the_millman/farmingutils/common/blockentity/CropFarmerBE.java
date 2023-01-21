@@ -11,6 +11,7 @@ import com.the_millman.themillmanlib.core.energy.ModEnergyStorage;
 import com.the_millman.themillmanlib.core.util.LibTags;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.BlockItem;
@@ -24,7 +25,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 
 public class CropFarmerBE extends ItemEnergyBlockEntity {
 	
@@ -64,7 +70,7 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 			tick++;
 			if (tick == FarmingConfig.CROP_FARMER_TICK.get()) {
 				tick = 0;
-				this.needRedstone = getUpgrade(itemStorage, LibTags.Items.REDSTONE_UPGRADE, 18, 20);
+				this.needRedstone = getUpgrade(upgradeItemStorage, LibTags.Items.REDSTONE_UPGRADE, 0, 2);
 				if (canWork()) {
 					upgradeSlot();
 					BlockPos posToBreak = new BlockPos(this.x + this.pX, this.y, this.z + this.pZ);
@@ -92,13 +98,13 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 
 	private void upgradeSlot() {
 		rangeSlot();
-		this.pickupDrops = !getUpgrade(itemStorage, LibTags.Items.DROP_UPGRADE, 18, 20);
+		this.pickupDrops = !getUpgrade(upgradeItemStorage, LibTags.Items.DROP_UPGRADE, 0, 2);
 	}
 	
 	private void rangeSlot() {
-		boolean ironUpgrade = getUpgrade(itemStorage, LibTags.Items.IRON_RANGE_UPGRADE, 18, 20);
-		boolean goldUpgrade = getUpgrade(itemStorage, LibTags.Items.GOLD_RANGE_UPGRADE, 18, 20);
-		boolean diamondUpgrade = getUpgrade(itemStorage, LibTags.Items.DIAMOND_RANGE_UPGRADE, 18, 20);
+		boolean ironUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.IRON_RANGE_UPGRADE, 0, 2);
+		boolean goldUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.GOLD_RANGE_UPGRADE, 0, 2);
+		boolean diamondUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.DIAMOND_RANGE_UPGRADE, 0, 2);
 		if (ironUpgrade) {
 			this.x = getBlockPos().getX() - 2;
 			this.z = getBlockPos().getZ() - 2;
@@ -145,7 +151,7 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 	}
 
 	private boolean placeBlock(BlockPos pos) {
-		int slot = getSlot(itemStorage, 18);
+		int slot = getSlot(itemStorage, 17);
 
 		BlockPos posY = pos.below();
 		BlockState state = level.getBlockState(pos);
@@ -217,10 +223,10 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 		}
 		return false;
 	}
-
+	
 	@Override
 	protected ItemStackHandler itemStorage() {
-		return new ItemStackHandler(21) {
+		return new ItemStackHandler(18) {
 			@Override
 			protected void onContentsChanged(int slot) {
 				setChanged();
@@ -233,14 +239,35 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 						return false;
 					}
 					return true;
-				} else if (slot >= 18 && isValidUpgrade(stack)) {
-					return true;
 				}
 				return false;
 			}
 		};
 	}
 
+	@Override
+	protected ItemStackHandler upgradeItemStorage() {
+		return new ItemStackHandler(3) {
+			@Override
+			protected void onContentsChanged(int slot) {
+				setChanged();
+			}
+
+			@Override
+			public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+				return isValidUpgrade(stack) ? true : false;
+			}
+		};
+	}
+
+	@Override
+	protected IItemHandler createCombinedItemHandler() {
+		return new CombinedInvWrapper(itemStorage, upgradeItemStorage) {
+            
+        };
+	}
+	
+	@Override
 	protected ModEnergyStorage createEnergy() {
 		return new ModEnergyStorage(true, FarmingConfig.CROP_FARMER_CAPACITY.get(), FarmingConfig.CROP_FARMER_USEPERTICK.get() * 2) {
 			@Override
@@ -253,4 +280,22 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 			}
 		};
 	}
+
+	@Override
+	protected <T> LazyOptional<T> callCapability(Capability<T> cap, Direction side) {
+		return null;
+	}
+	
+	@Override
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+    	if(cap == ForgeCapabilities.ITEM_HANDLER) {
+			if (side == null) {
+            	upgradeItemHandler.cast();
+                return combinedItemHandler.cast();
+            } else {
+                return itemStorageHandler.cast();
+            }
+        }
+    	return super.getCapability(cap, side);
+    }
 }

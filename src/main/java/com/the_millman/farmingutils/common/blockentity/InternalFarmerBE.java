@@ -20,6 +20,7 @@ import com.the_millman.themillmanlib.core.util.LibTags;
 import com.the_millman.themillmanlib.core.util.ModItemHandlerHelp;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
@@ -30,11 +31,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 
 public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 
@@ -61,8 +66,8 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 		if(!initialized)
 			init();
 		
-		if(getStackInSlot(itemStorage, 14).getCount() < 16) {
-			transferItemFluidToFluidTank(itemStorage, fluidStorage, 13, 14);
+		if(getStackInSlot(itemStorage, 11).getCount() < 16) {
+			transferItemFluidToFluidTank(itemStorage, fluidStorage, 10, 11);
 			setChanged();
 		}
 		
@@ -71,7 +76,7 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 				tick++;
 				if(tick >= FarmingConfig.INTERNAL_FARMER_TICK.get()) {
 					tick = 0;
-					this.needRedstone = getUpgrade(itemStorage, LibTags.Items.REDSTONE_UPGRADE, 9, 11);
+					this.needRedstone = getUpgrade(upgradeItemStorage, LibTags.Items.REDSTONE_UPGRADE, 0, 2);
 					if (canWork()) {
 						updateGrowthStage();
 						if (growthStage >= maxGrowthStage) {
@@ -145,7 +150,7 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
     }
 	
 	public ItemStack getRenderStack() {
-		return getStackInSlot(itemStorage, 12);
+		return getStackInSlot(itemStorage, 9);
 	}
 	
 	public void setHandler(ItemStackHandler itemStackHandler) {
@@ -165,7 +170,7 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 	
 	@Override
 	protected ItemStackHandler itemStorage() {
-		return new ItemStackHandler(15) {
+		return new ItemStackHandler(12) {
 			@Override
 			protected void onContentsChanged(int slot) {
 				setChanged();
@@ -181,17 +186,12 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 						return false;
 					}
 					return true;
-				} else if(slot >= 9 && slot <= 11) {
-					if(stack.is(LibTags.Items.REDSTONE_UPGRADE)) {
-						return true;
-					}
-					return false;
-				} else if(slot == 12) {
+				}  else if(slot == 9) {
 					if(stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
 						return false;
 					}
 					return true;
-				} else if(slot == 13 || slot == 14) {
+				} else if(slot == 10 || slot == 11) {
 					if(stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
 						return true;
 					}
@@ -199,6 +199,28 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 				}
 				return false;
 			}
+		};
+	}
+	
+	@Override
+	protected ItemStackHandler upgradeItemStorage() {
+		return new ItemStackHandler(3) {
+			@Override
+			protected void onContentsChanged(int slot) {
+				setChanged();
+			}
+			
+			@Override
+			public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+				return stack.is(LibTags.Items.REDSTONE_UPGRADE) ? true : false;
+			}
+		};
+	}
+	
+	@Override
+	protected IItemHandler createCombinedItemHandler() {
+		return new CombinedInvWrapper(itemStorage, upgradeItemStorage) {
+			
 		};
 	}
 	
@@ -256,6 +278,24 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
     public void load(CompoundTag pTag) {
     	super.load(pTag);
     	growthStage = pTag.getInt("growth_stage");
+    }
+    
+    @Override
+	protected <T> LazyOptional<T> callCapability(Capability<T> cap, Direction side) {
+    	return null;
+	}
+    
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+    	if(cap == ForgeCapabilities.ITEM_HANDLER) {
+			if (side == null) {
+            	upgradeItemHandler.cast();
+                return combinedItemHandler.cast();
+            } else {
+                return itemStorageHandler.cast();
+            }
+        }
+    	return super.getCapability(cap, side);
     }
     
     //Makes the InternalFarmerBERenderer rendering when the world is loaded

@@ -28,5 +28,4 @@ public class BlockEntityInit {
 	public static final RegistryObject<BlockEntityType<SugarCanesFarmerBE>> SUGAR_CANES_FARMER = BLOCK_ENTITIES.register("sugar_canes_farmer", () -> BlockEntityType.Builder.of(SugarCanesFarmerBE::new, BlockInit.SUGAR_CANES_FARMER.get()).build(null));
 	public static final RegistryObject<BlockEntityType<BambooFarmerBE>> BAMBOO_FARMER = BLOCK_ENTITIES.register("bamboo_farmer", () -> BlockEntityType.Builder.of(BambooFarmerBE::new, BlockInit.BAMBOO_FARMER.get()).build(null));
 	public static final RegistryObject<BlockEntityType<InternalFarmerBE>> INTERNAL_FARMER = BLOCK_ENTITIES.register("internal_farmer", () -> BlockEntityType.Builder.of(InternalFarmerBE::new, BlockInit.MUSHROOM_FARMER.get()).build(null));
-	
 }

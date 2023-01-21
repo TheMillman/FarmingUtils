@@ -2,6 +2,8 @@ package com.the_millman.farmingutils.common.blockentity;
 
 import javax.annotation.Nonnull;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.the_millman.farmingutils.common.blocks.CocoaFarmerBlock;
 import com.the_millman.farmingutils.core.init.BlockEntityInit;
 import com.the_millman.farmingutils.core.util.FarmingConfig;
@@ -21,7 +23,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CocoaBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 
 public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 
@@ -83,7 +90,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 			tick++;
 			if (tick == FarmingConfig.COCOA_BEANS_FARMER_TICK.get()) {
 				tick = 0;
-				this.needRedstone = getUpgrade(itemStorage, LibTags.Items.REDSTONE_UPGRADE, 9, 11);
+				this.needRedstone = getUpgrade(upgradeItemStorage, LibTags.Items.REDSTONE_UPGRADE, 0, 2);
 				if (canWork()) {
 					upgradeSlot();
 					BlockPos posToBreak = new BlockPos(this.x + pX, this.y + pY, this.z + pZ);
@@ -99,7 +106,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 	
 	private void upgradeSlot() {
 		rangeUpgrade();
-		this.pickupDrops = !getUpgrade(itemStorage, LibTags.Items.DROP_UPGRADE, 9, 11);
+		this.pickupDrops = !getUpgrade(upgradeItemStorage, LibTags.Items.DROP_UPGRADE, 0, 2);
 	}
 
 	private void stadioState() {
@@ -161,9 +168,9 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 	
 	private void rangeUpgrade() {
 		Direction facing = getBlockState().getValue(CocoaFarmerBlock.FACING);
-		boolean ironUpgrade = getUpgrade(itemStorage, LibTags.Items.IRON_RANGE_UPGRADE, 9, 11);
-		boolean goldUpgrade = getUpgrade(itemStorage, LibTags.Items.GOLD_RANGE_UPGRADE, 9, 11);
-		boolean diamondUpgrade = getUpgrade(itemStorage, LibTags.Items.DIAMOND_RANGE_UPGRADE, 9, 11);
+		boolean ironUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.IRON_RANGE_UPGRADE, 0, 2);
+		boolean goldUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.GOLD_RANGE_UPGRADE, 0, 2);
+		boolean diamondUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.DIAMOND_RANGE_UPGRADE, 0, 2);
 		if (ironUpgrade) {
 			if (facing == Direction.NORTH) {
 				// posizione da cui inizia
@@ -286,7 +293,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 	}
 	
 	private boolean placeBlock(BlockPos pos) { 
-		int slot = getSlot(itemStorage, 9);
+		int slot = getSlot(itemStorage, 8);
 
 		Direction facing = getBlockState().getValue(CocoaFarmerBlock.FACING);
 		
@@ -337,7 +344,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 
 	@Override
 	protected ItemStackHandler itemStorage() {
-		return new ItemStackHandler(12) {
+		return new ItemStackHandler(9) {
 			@Override
 			protected void onContentsChanged(int slot) {
 				setChanged();
@@ -349,11 +356,31 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 					if (stack.getItem() == Items.COCOA_BEANS) {
 						return true;
 					}
-				} else if (slot >= 9 && isValidUpgrade(stack)) {
-					return true;
-				}
+				} 
 				return false;
 			}
+		};
+	}
+	
+	@Override
+	protected ItemStackHandler upgradeItemStorage() {
+		return new ItemStackHandler(3) {
+			@Override
+			protected void onContentsChanged(int slot) {
+				setChanged();
+			}
+			
+			@Override
+			public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+				return isValidUpgrade(stack) ? true : false;
+			}
+		};
+	}
+	
+	@Override
+	protected IItemHandler createCombinedItemHandler() {
+		return new CombinedInvWrapper(itemStorage, upgradeItemStorage) {
+			
 		};
 	}
 	
@@ -370,4 +397,22 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 			}
 		};
 	}
+
+	@Override
+	protected <T> LazyOptional<T> callCapability(Capability<T> cap, Direction side) {
+		return null;
+	}
+	
+	@Override
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+    	if(cap == ForgeCapabilities.ITEM_HANDLER) {
+			if (side == null) {
+            	upgradeItemHandler.cast();
+                return combinedItemHandler.cast();
+            } else {
+                return itemStorageHandler.cast();
+            }
+        }
+    	return super.getCapability(cap, side);
+    }
 }

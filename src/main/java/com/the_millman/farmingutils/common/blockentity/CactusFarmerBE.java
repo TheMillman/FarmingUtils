@@ -27,6 +27,9 @@ import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 
 public class CactusFarmerBE extends ItemEnergyBlockEntity {
 	
+	private final int UP_SLOT_MIN = 0;
+	private final int UP_SLOT_MAX = 2;
+	
 	private int tick;
 
 	boolean initialized = false;
@@ -62,7 +65,7 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 			tick++;
 			if (tick == FarmingConfig.CACTUS_FARMER_TICK.get()) {
 				tick = 0;
-				this.needRedstone = this.getUpgrade(upgradeItemStorage, LibTags.Items.REDSTONE_UPGRADE, 0, 2);
+				this.needRedstone = this.getUpgrade(upgradeItemStorage, LibTags.Items.REDSTONE_UPGRADE, UP_SLOT_MIN, UP_SLOT_MAX);
 				if (canWork()) {
 					upgradeSlot();
 					BlockPos posToBreak = new BlockPos(this.x + this.pX, this.y, this.z + this.pZ);
@@ -90,13 +93,13 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 	
 	private void upgradeSlot() {
 		rangeUpgrade();
-		this.pickupDrops = !getUpgrade(upgradeItemStorage, LibTags.Items.DROP_UPGRADE, 0, 2);
+		this.pickupDrops = !getUpgrade(upgradeItemStorage, LibTags.Items.DROP_UPGRADE, UP_SLOT_MIN, UP_SLOT_MAX);
 	}
 	
 	private void rangeUpgrade() {
-		boolean ironUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.IRON_RANGE_UPGRADE, 0, 2);
-		boolean goldUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.GOLD_RANGE_UPGRADE, 0, 2);
-		boolean diamondUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.DIAMOND_RANGE_UPGRADE, 0, 2);
+		boolean ironUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.IRON_RANGE_UPGRADE, UP_SLOT_MIN, UP_SLOT_MAX);
+		boolean goldUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.GOLD_RANGE_UPGRADE, UP_SLOT_MIN, UP_SLOT_MAX);
+		boolean diamondUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.DIAMOND_RANGE_UPGRADE, UP_SLOT_MIN, UP_SLOT_MAX);
 		if (ironUpgrade) {
 			this.x = getBlockPos().getX() - 2;
 			this.z = getBlockPos().getZ() - 2;
@@ -172,12 +175,7 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 
 			@Override
 			public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-				if (slot <= 8) {
-					if (stack.getItem() == Items.CACTUS) {
-						return true;
-					}
-				} 
-				return false;
+				return stack.is(Items.CACTUS) ? true : false;
 			}
 		};
 	}

@@ -32,6 +32,9 @@ import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 
 public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 
+	private final int UP_SLOT_MIN = 0;
+	private final int UP_SLOT_MAX = 2;
+	
 	private int tick;
 	int pY;
 	
@@ -90,7 +93,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 			tick++;
 			if (tick == FarmingConfig.COCOA_BEANS_FARMER_TICK.get()) {
 				tick = 0;
-				this.needRedstone = getUpgrade(upgradeItemStorage, LibTags.Items.REDSTONE_UPGRADE, 0, 2);
+				this.needRedstone = getUpgrade(upgradeItemStorage, LibTags.Items.REDSTONE_UPGRADE, UP_SLOT_MIN, UP_SLOT_MAX);
 				if (canWork()) {
 					upgradeSlot();
 					BlockPos posToBreak = new BlockPos(this.x + pX, this.y + pY, this.z + pZ);
@@ -106,7 +109,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 	
 	private void upgradeSlot() {
 		rangeUpgrade();
-		this.pickupDrops = !getUpgrade(upgradeItemStorage, LibTags.Items.DROP_UPGRADE, 0, 2);
+		this.pickupDrops = !getUpgrade(upgradeItemStorage, LibTags.Items.DROP_UPGRADE, UP_SLOT_MIN, UP_SLOT_MAX);
 	}
 
 	private void stadioState() {
@@ -168,9 +171,9 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 	
 	private void rangeUpgrade() {
 		Direction facing = getBlockState().getValue(CocoaFarmerBlock.FACING);
-		boolean ironUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.IRON_RANGE_UPGRADE, 0, 2);
-		boolean goldUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.GOLD_RANGE_UPGRADE, 0, 2);
-		boolean diamondUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.DIAMOND_RANGE_UPGRADE, 0, 2);
+		boolean ironUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.IRON_RANGE_UPGRADE, UP_SLOT_MIN, UP_SLOT_MAX);
+		boolean goldUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.GOLD_RANGE_UPGRADE, UP_SLOT_MIN, UP_SLOT_MAX);
+		boolean diamondUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.DIAMOND_RANGE_UPGRADE, UP_SLOT_MIN, UP_SLOT_MAX);
 		if (ironUpgrade) {
 			if (facing == Direction.NORTH) {
 				// posizione da cui inizia
@@ -336,10 +339,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 	
 	@Override
 	public boolean isValidBlock(ItemStack stack) {
-		if(stack.is(Items.COCOA_BEANS)) {
-			return true;
-		}
-		return false;
+		return stack.is(Items.COCOA_BEANS) ? true : false;
 	}
 
 	@Override
@@ -352,12 +352,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 
 			@Override
 			public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-				if (slot < 9) {
-					if (stack.getItem() == Items.COCOA_BEANS) {
-						return true;
-					}
-				} 
-				return false;
+				return isValidBlock(stack);
 			}
 		};
 	}

@@ -43,6 +43,9 @@ import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 
 public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 
+	private final int UP_SLOT_MIN = 0;
+	private final int UP_SLOT_MAX = 2;
+	
 	private int tick;
 	private int growthStage;
     private int maxGrowthStage = 5;
@@ -76,7 +79,7 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 				tick++;
 				if(tick >= FarmingConfig.INTERNAL_FARMER_TICK.get()) {
 					tick = 0;
-					this.needRedstone = getUpgrade(upgradeItemStorage, LibTags.Items.REDSTONE_UPGRADE, 0, 2);
+					this.needRedstone = getUpgrade(upgradeItemStorage, LibTags.Items.REDSTONE_UPGRADE, UP_SLOT_MIN, UP_SLOT_MAX);
 					if (canWork()) {
 						updateGrowthStage();
 						if (growthStage >= maxGrowthStage) {

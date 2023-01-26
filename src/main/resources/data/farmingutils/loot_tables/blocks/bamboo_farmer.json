@@ -21,8 +21,8 @@
                 },
                 {
                   "op": "replace",
-                  "source": "InventorySlot",
-                  "target": "BlockEntityTag.InventorySlot"
+                  "source": "Inventory",
+                  "target": "BlockEntityTag.Inventory"
                 },
                 {
                   "op": "replace",

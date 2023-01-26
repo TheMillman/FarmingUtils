@@ -41,7 +41,7 @@ public class InternalFarmerRecipe implements Recipe<SimpleContainer> {
 			return false;
 		}
 		
-		return recipeItems.get(0).test(pContainer.getItem(/*INDEX SLOT IMPUT*/12));
+		return recipeItems.get(0).test(pContainer.getItem(/*INDEX SLOT IMPUT*/9));
 	}
 	
 	public FluidStack getFluidStack() {

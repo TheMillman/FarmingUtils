@@ -2,6 +2,8 @@ package com.the_millman.farmingutils.common.blockentity;
 
 import javax.annotation.Nonnull;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.the_millman.farmingutils.common.blocks.CactusFarmerBlock;
 import com.the_millman.farmingutils.core.init.BlockEntityInit;
 import com.the_millman.farmingutils.core.util.FarmingConfig;
@@ -10,14 +12,23 @@ import com.the_millman.themillmanlib.core.energy.ModEnergyStorage;
 import com.the_millman.themillmanlib.core.util.LibTags;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 
 public class CactusFarmerBE extends ItemEnergyBlockEntity {
+	
+	private final int UP_SLOT_MIN = 0;
+	private final int UP_SLOT_MAX = 2;
 	
 	private int tick;
 
@@ -54,7 +65,7 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 			tick++;
 			if (tick == FarmingConfig.CACTUS_FARMER_TICK.get()) {
 				tick = 0;
-				this.getUpgrade(itemStorage, LibTags.Items.REDSTONE_UPGRADE, 9, 11);
+				this.needRedstone = this.getUpgrade(upgradeItemStorage, LibTags.Items.REDSTONE_UPGRADE, UP_SLOT_MIN, UP_SLOT_MAX);
 				if (canWork()) {
 					upgradeSlot();
 					BlockPos posToBreak = new BlockPos(this.x + this.pX, this.y, this.z + this.pZ);
@@ -82,13 +93,13 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 	
 	private void upgradeSlot() {
 		rangeUpgrade();
-		this.pickupDrops = !getUpgrade(itemStorage, LibTags.Items.DROP_UPGRADE, 9, 11);
+		this.pickupDrops = !getUpgrade(upgradeItemStorage, LibTags.Items.DROP_UPGRADE, UP_SLOT_MIN, UP_SLOT_MAX);
 	}
 	
 	private void rangeUpgrade() {
-		boolean ironUpgrade = getUpgrade(itemStorage, LibTags.Items.IRON_RANGE_UPGRADE, 9, 11);
-		boolean goldUpgrade = getUpgrade(itemStorage, LibTags.Items.GOLD_RANGE_UPGRADE, 9, 11);
-		boolean diamondUpgrade = getUpgrade(itemStorage, LibTags.Items.DIAMOND_RANGE_UPGRADE, 9, 11);
+		boolean ironUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.IRON_RANGE_UPGRADE, UP_SLOT_MIN, UP_SLOT_MAX);
+		boolean goldUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.GOLD_RANGE_UPGRADE, UP_SLOT_MIN, UP_SLOT_MAX);
+		boolean diamondUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.DIAMOND_RANGE_UPGRADE, UP_SLOT_MIN, UP_SLOT_MAX);
 		if (ironUpgrade) {
 			this.x = getBlockPos().getX() - 2;
 			this.z = getBlockPos().getZ() - 2;
@@ -156,7 +167,7 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 	
 	@Override
 	protected ItemStackHandler itemStorage() {
-		return new ItemStackHandler(12) {
+		return new ItemStackHandler(9) {
 			@Override
 			protected void onContentsChanged(int slot) {
 				setChanged();
@@ -164,15 +175,30 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 
 			@Override
 			public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-				if (slot <= 8) {
-					if (stack.getItem() == Items.CACTUS) {
-						return true;
-					}
-				} else if (slot > 8 && isValidUpgrade(stack)) {
-					return true;
-				}
-				return false;
+				return stack.is(Items.CACTUS) ? true : false;
 			}
+		};
+	}
+	
+	@Override
+	protected ItemStackHandler upgradeItemStorage() {
+		return new ItemStackHandler(3) {
+			@Override
+			protected void onContentsChanged(int slot) {
+				setChanged();
+			}
+			
+			@Override
+			public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+				return isValidUpgrade(stack) ? true : false;
+			}
+		};
+	}
+	
+	@Override
+	protected IItemHandler createCombinedItemHandler() {
+		return new CombinedInvWrapper(itemStorage, upgradeItemStorage) {
+			
 		};
 	}
 
@@ -189,4 +215,17 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 			}
 		};
 	}
+	
+	@Override
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+    	if(cap == ForgeCapabilities.ITEM_HANDLER) {
+			if (side == null) {
+            	upgradeItemHandler.cast();
+                return combinedItemHandler.cast();
+            } else {
+                return itemStorageHandler.cast();
+            }
+        }
+    	return super.getCapability(cap, side);
+    }
 }

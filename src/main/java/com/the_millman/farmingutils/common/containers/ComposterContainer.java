@@ -1,5 +1,6 @@
 package com.the_millman.farmingutils.common.containers;
 
+import com.the_millman.farmingutils.common.blockentity.ComposterBE;
 import com.the_millman.farmingutils.core.init.BlockInit;
 import com.the_millman.farmingutils.core.init.ContainerInit;
 import com.the_millman.themillmanlib.common.containers.ItemEnergyContainer;
@@ -14,27 +15,26 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-public class CropFarmerContainer extends ItemEnergyContainer {
+public class ComposterContainer extends ItemEnergyContainer {
 
-	private BlockEntity blockEntity;
+	private ComposterBE blockEntity;
     private Player playerEntity;
 	private IItemHandler playerInventory;
 	
-	public CropFarmerContainer(int windowId, Level world, BlockPos pos, Inventory playerInventory, Player player) 
-	{
-		super(ContainerInit.CROP_FARMER_CONTAINER.get(), windowId, world, pos, playerInventory, player);
-        blockEntity = world.getBlockEntity(pos);
+	public ComposterContainer(int windowId, Level world, BlockPos pos, Inventory playerInventory, Player player) {
+		super(ContainerInit.COMPOSTER_CONTAINER.get(), windowId, world, pos, playerInventory, player);
+		BlockEntity entity = world.getBlockEntity(pos);
+		this.blockEntity = (ComposterBE) entity;
         this.playerEntity = player;
         this.playerInventory = new InvWrapper(playerInventory);
 
 		if (blockEntity != null) {
 			blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(h -> {
-				//addSlot(new SlotItemHandler(h, 18, 147, 18));
-				layoutInventorySlots(h, 26, 18, 3, 6);
-				layoutUpgradeSlots(h, 18, 147, 18, 3);
-				//outputInventorySlots(h, 80, 18);
+				addSlot(new SlotItemHandler(h, 0, 62, 36));
+				addSlot(new SlotItemHandler(h, 1, 116, 36));
 			});
 		}
 		
@@ -42,10 +42,10 @@ public class CropFarmerContainer extends ItemEnergyContainer {
 	}
 
 	@Override
-    public boolean stillValid(Player playerIn) {
-        return stillValid(ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos()), playerEntity, BlockInit.CROP_FARMER.get());
-    }
-    
+	public boolean stillValid(Player pPlayer) {
+		return stillValid(ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos()), playerEntity, BlockInit.COMPOSTER.get());
+	}
+	
 	@Override
 	public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
 		ItemStack itemstack = ItemStack.EMPTY;
@@ -75,5 +75,13 @@ public class CropFarmerContainer extends ItemEnergyContainer {
 		}
 
 		return itemstack;
+	}
+
+	public int getProgress() {
+		return blockEntity.getProgress();
+	}
+	
+	public int getMaxProgress() {
+		return blockEntity.getMaxProgress();
 	}
 }

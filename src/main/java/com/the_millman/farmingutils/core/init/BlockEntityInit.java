@@ -4,6 +4,7 @@ import com.the_millman.farmingutils.FarmingUtils;
 import com.the_millman.farmingutils.common.blockentity.BambooFarmerBE;
 import com.the_millman.farmingutils.common.blockentity.CactusFarmerBE;
 import com.the_millman.farmingutils.common.blockentity.CocoaFarmerBE;
+import com.the_millman.farmingutils.common.blockentity.ComposterBE;
 import com.the_millman.farmingutils.common.blockentity.CropFarmerBE;
 import com.the_millman.farmingutils.common.blockentity.InternalFarmerBE;
 import com.the_millman.farmingutils.common.blockentity.MelonFarmerBE;
@@ -28,4 +29,6 @@ public class BlockEntityInit {
 	public static final RegistryObject<BlockEntityType<SugarCanesFarmerBE>> SUGAR_CANES_FARMER = BLOCK_ENTITIES.register("sugar_canes_farmer", () -> BlockEntityType.Builder.of(SugarCanesFarmerBE::new, BlockInit.SUGAR_CANES_FARMER.get()).build(null));
 	public static final RegistryObject<BlockEntityType<BambooFarmerBE>> BAMBOO_FARMER = BLOCK_ENTITIES.register("bamboo_farmer", () -> BlockEntityType.Builder.of(BambooFarmerBE::new, BlockInit.BAMBOO_FARMER.get()).build(null));
 	public static final RegistryObject<BlockEntityType<InternalFarmerBE>> INTERNAL_FARMER = BLOCK_ENTITIES.register("internal_farmer", () -> BlockEntityType.Builder.of(InternalFarmerBE::new, BlockInit.MUSHROOM_FARMER.get()).build(null));
+	public static final RegistryObject<BlockEntityType<ComposterBE>> COMPOSTER = BLOCK_ENTITIES.register("composter", () -> BlockEntityType.Builder.of(ComposterBE::new, BlockInit.COMPOSTER.get()).build(null));
+	
 }

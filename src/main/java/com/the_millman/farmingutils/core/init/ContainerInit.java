@@ -4,6 +4,7 @@ import com.the_millman.farmingutils.FarmingUtils;
 import com.the_millman.farmingutils.common.containers.BambooFarmerContainer;
 import com.the_millman.farmingutils.common.containers.CactusFarmerContainer;
 import com.the_millman.farmingutils.common.containers.CocoaFarmerContainer;
+import com.the_millman.farmingutils.common.containers.ComposterContainer;
 import com.the_millman.farmingutils.common.containers.CropFarmerContainer;
 import com.the_millman.farmingutils.common.containers.InternalFarmerContainer;
 import com.the_millman.farmingutils.common.containers.MelonFarmerContainer;
@@ -74,5 +75,11 @@ public class ContainerInit {
         BlockPos pos = data.readBlockPos();
         Level world = inv.player.getCommandSenderWorld();
         return new InternalFarmerContainer(windowId, world, pos, inv, inv.player);
+    }));
+	
+	public static final RegistryObject<MenuType<ComposterContainer>> COMPOSTER_CONTAINER = CONTAINERS.register("composter_container", () -> IForgeMenuType.create((windowId, inv, data) -> {
+        BlockPos pos = data.readBlockPos();
+        Level world = inv.player.getCommandSenderWorld();
+        return new ComposterContainer(windowId, world, pos, inv, inv.player);
     }));
 }

@@ -4,6 +4,7 @@ import com.the_millman.farmingutils.FarmingUtils;
 import com.the_millman.farmingutils.client.screens.BambooFarmerScreen;
 import com.the_millman.farmingutils.client.screens.CactusFarmerScreen;
 import com.the_millman.farmingutils.client.screens.CocoaFarmerScreen;
+import com.the_millman.farmingutils.client.screens.ComposterScreen;
 import com.the_millman.farmingutils.client.screens.CropFarmerScreen;
 import com.the_millman.farmingutils.client.screens.GeneratorScreen;
 import com.the_millman.farmingutils.client.screens.InternalFarmerScreen;
@@ -49,6 +50,8 @@ public class ClientEvents {
 			MenuScreens.register(ContainerInit.SUGAR_CANES_FARMER_CONTAINER.get(), SugarCanesFarmerScreen::new);
 			MenuScreens.register(ContainerInit.BAMBOO_FARMER_CONTAINER.get(), BambooFarmerScreen::new);
 			MenuScreens.register(ContainerInit.INTERNAL_FARMER_CONTAINER.get(), InternalFarmerScreen::new);
+			MenuScreens.register(ContainerInit.COMPOSTER_CONTAINER.get(), ComposterScreen::new);
+			
 		}
 	}
 	
@@ -71,6 +74,7 @@ public class ClientEvents {
 	                    	output.accept(ItemInit.SUGAR_CANES_FARMER.get());
 	                    	output.accept(ItemInit.BAMBOO_FARMER.get());
 	                    	output.accept(ItemInit.MUSHROOM_FARMER.get());
+	                    	output.accept(ItemInit.COMPOSTER.get());
 	                    	
 	                    	//Items
 	                    	output.accept(LibItemInit.IRON_UPGRADE.get());

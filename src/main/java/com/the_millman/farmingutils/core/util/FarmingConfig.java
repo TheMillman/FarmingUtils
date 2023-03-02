@@ -43,6 +43,9 @@ public class FarmingConfig {
     public static ForgeConfigSpec.IntValue INTERNAL_FARMER_FLUID_CAPACITY;
     public static ForgeConfigSpec.IntValue INTERNAL_FARMER_TICK;
     
+    public static ForgeConfigSpec.IntValue COMPOSTER_CAPACITY;
+    public static ForgeConfigSpec.IntValue COMPOSTER_USEPERTICK;
+    public static ForgeConfigSpec.IntValue COMPOSTER_TICK;
     
     public static void init() {
     	initServer();
@@ -174,6 +177,20 @@ public class FarmingConfig {
         INTERNAL_FARMER_TICK = builder
                 .comment("How many ticks must pass before the internal farmer works")
                 .defineInRange("internal_farmer_tick", 40, 20, 200);
+        builder.pop();
+        
+        builder.comment("Composter settings").push("composter");
+		COMPOSTER_CAPACITY = builder
+				.comment("How much FE the composter can store")
+				.defineInRange("composter_store", 10000, 0, Integer.MAX_VALUE);
+		
+		COMPOSTER_USEPERTICK = builder
+                .comment("How much FE the composter can use per tick")
+                .defineInRange("composter_use_per_tick", 40, 0, Integer.MAX_VALUE);
+        
+		COMPOSTER_TICK = builder
+                .comment("How many ticks must pass before the composter works")
+                .defineInRange("composter_tick", 40, 20, 200);
         builder.pop();
         
     	SERVER_CONFIG = builder.build();

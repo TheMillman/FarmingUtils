@@ -112,5 +112,14 @@ public class ModRecipeProvider extends RecipeProvider {
         .define('d', Items.DIRT)
         .unlockedBy("small_flower", InventoryChangeTrigger.TriggerInstance.hasItems(Items.DANDELION, Items.POPPY))
         .save(pWriter);
+		
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BlockInit.COMPOSTER.get())
+        .pattern("i i")
+        .pattern("iri")
+        .pattern("iii")
+        .define('i', Tags.Items.INGOTS_IRON)
+        .define('r', Items.REDSTONE)
+        .unlockedBy("iron", InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
+        .save(pWriter);
 	}
 }

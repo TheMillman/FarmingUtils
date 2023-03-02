@@ -8,6 +8,7 @@
 	"block.farmingutils.sugar_canes_farmer": "Sugar Cane Farmer",
 	"block.farmingutils.bamboo_farmer": "Bamboo Farmer",
 	"block.farmingutils.internal_farmer": "Internal Farmer",
+	"block.farmingutils.composter": "Composter",
 	"tooltip.farmingutils.fluid_amount_capacity": "%s / %s mB",
 	"tooltip.farmingutils.fluid_amount": "%s mB",
 	"screen.farmingutils.test_energy_generator": "Test Energy Generator",
@@ -19,5 +20,6 @@
 	"screen.farmingutils.sugar_canes_farmer": "Sugar Cane Farmer",
 	"screen.farmingutils.bamboo_farmer": "Bamboo Farmer",
 	"screen.farmingutils.internal_farmer": "Internal Farmer",
+	"screen.farmingutils.composter": "Composter",
 	"itemGroup.farming_utils_tab": "Farming Utils"
 }

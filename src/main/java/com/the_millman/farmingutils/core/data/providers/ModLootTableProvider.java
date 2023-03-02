@@ -22,7 +22,7 @@ public class ModLootTableProvider implements LootTableSubProvider {
 		builder.accept(BlockInit.SUGAR_CANES_FARMER.getId(), LibLootTables.createItemEnergyTable("sugar_canes_farmer", BlockInit.SUGAR_CANES_FARMER.get(), BlockEntityInit.SUGAR_CANES_FARMER.get()));
 		builder.accept(BlockInit.BAMBOO_FARMER.getId(), LibLootTables.createItemEnergyTable("bamboo_farmer", BlockInit.BAMBOO_FARMER.get(), BlockEntityInit.BAMBOO_FARMER.get()));
 		builder.accept(BlockInit.MUSHROOM_FARMER.getId(), LibLootTables.createItemEnergyTable("internal_farmer", BlockInit.MUSHROOM_FARMER.get(), BlockEntityInit.INTERNAL_FARMER.get()));
-		
+		builder.accept(BlockInit.COMPOSTER.getId(), LibLootTables.createItemEnergyTable("composter", BlockInit.COMPOSTER.get(), BlockEntityInit.COMPOSTER.get()));
 	}
 
 }

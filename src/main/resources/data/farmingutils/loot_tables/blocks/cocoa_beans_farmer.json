@@ -26,6 +26,11 @@
                 },
                 {
                   "op": "replace",
+                  "source": "UpgradeInventory",
+                  "target": "BlockEntityTag.UpgradeInventory"
+                },
+                {
+                  "op": "replace",
                   "source": "Energy",
                   "target": "BlockEntityTag.Energy"
                 }

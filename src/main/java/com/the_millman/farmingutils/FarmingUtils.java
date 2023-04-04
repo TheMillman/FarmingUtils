@@ -35,18 +35,13 @@ public class FarmingUtils
     	FarmingConfig.init();
     	
     	bus.addListener(this::setup);
-    	bus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     private void setup(final FMLCommonSetupEvent event)
     {
-    	
-    }
-    
-    private void commonSetup(final FMLCommonSetupEvent event) {
-        event.enqueueWork(() -> {
+    	event.enqueueWork(() -> {
             ModMessages.register();
         });
     }

@@ -25,7 +25,7 @@ This mod adds different blocks and items for a easy way to farming resources in 
 [[dependencies.farmingutils]] 
     modId="themillmanlib" 
     mandatory=true 
-    versionRange="[1.19.3-0.1.13,1.19.3-0.1.15)"
+    versionRange="[1.19.3-0.2.0,1.19.3-0.2.1)"
     ordering="NONE"
     side="BOTH"    
 

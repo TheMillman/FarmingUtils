@@ -1,13 +1,13 @@
-package com.the_millman.farmingutils.core.data;
+package com.the_millman.farmingutils.data;
 
 import java.util.concurrent.CompletableFuture;
 
 import com.the_millman.farmingutils.FarmingUtils;
-import com.the_millman.farmingutils.core.data.providers.ModBlockStateModelProvider;
-import com.the_millman.farmingutils.core.data.providers.ModBlockTagsProvider;
-import com.the_millman.farmingutils.core.data.providers.ModItemModelProvider;
-import com.the_millman.farmingutils.core.data.providers.ModItemTagsProvider;
-import com.the_millman.farmingutils.core.data.providers.ModRecipeProvider;
+import com.the_millman.farmingutils.data.providers.ModBlockStateModelProvider;
+import com.the_millman.farmingutils.data.providers.ModBlockTagsProvider;
+import com.the_millman.farmingutils.data.providers.ModItemModelProvider;
+import com.the_millman.farmingutils.data.providers.ModItemTagsProvider;
+import com.the_millman.farmingutils.data.providers.ModRecipeProvider;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;

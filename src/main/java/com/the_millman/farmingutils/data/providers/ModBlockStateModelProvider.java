@@ -1,4 +1,4 @@
-package com.the_millman.farmingutils.core.data.providers;
+package com.the_millman.farmingutils.data.providers;
 
 import com.the_millman.farmingutils.FarmingUtils;
 import com.the_millman.farmingutils.core.init.BlockInit;

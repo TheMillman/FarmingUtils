@@ -1,4 +1,4 @@
-package com.the_millman.farmingutils.core.recipes;
+package com.the_millman.farmingutils.common.recipes;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -41,7 +41,12 @@ public class InternalFarmerRecipe implements Recipe<SimpleContainer> {
 			return false;
 		}
 		
-		return recipeItems.get(0).test(pContainer.getItem(/*INDEX SLOT IMPUT*/9));
+		return recipeItems.get(0).test(pContainer.getItem(/*INDEX SLOT INPUT*/9));
+	}
+	
+	@Override
+	public NonNullList<Ingredient> getIngredients() {
+		return recipeItems;
 	}
 	
 	public FluidStack getFluidStack() {

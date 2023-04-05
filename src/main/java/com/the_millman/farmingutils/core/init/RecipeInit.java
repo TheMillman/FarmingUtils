@@ -1,7 +1,7 @@
 package com.the_millman.farmingutils.core.init;
 
 import com.the_millman.farmingutils.FarmingUtils;
-import com.the_millman.farmingutils.core.recipes.InternalFarmerRecipe;
+import com.the_millman.farmingutils.common.recipes.InternalFarmerRecipe;
 
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.registries.DeferredRegister;

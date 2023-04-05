@@ -21,6 +21,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 
 public class TestEnergyGenerator extends ItemEnergyBlockEntity {
 
@@ -140,6 +141,10 @@ public class TestEnergyGenerator extends ItemEnergyBlockEntity {
 	@Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
     	if(cap == ForgeCapabilities.ITEM_HANDLER) {
+    		if(side == null) {
+    			upgradeItemHandler.cast();
+    			return combinedItemHandler.cast();
+    		}
 			return itemStorageHandler.cast();
         }
     	
@@ -148,11 +153,15 @@ public class TestEnergyGenerator extends ItemEnergyBlockEntity {
 
 	@Override
 	protected IItemHandler createCombinedItemHandler() {
-		return null;
+		return new CombinedInvWrapper(itemStorage, upgradeItemStorage) {
+			
+		};
 	}
 
 	@Override
 	protected ItemStackHandler upgradeItemStorage() {
-		return null;
+		return new ItemStackHandler(1) {
+			
+		};
 	}
 }

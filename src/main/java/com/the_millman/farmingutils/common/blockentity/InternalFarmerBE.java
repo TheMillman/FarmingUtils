@@ -7,11 +7,11 @@ import javax.annotation.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 import com.the_millman.farmingutils.common.blocks.InternalFarmerBlock;
+import com.the_millman.farmingutils.common.recipes.InternalFarmerRecipe;
 import com.the_millman.farmingutils.core.init.BlockEntityInit;
 import com.the_millman.farmingutils.core.networking.FluidSyncS2CPacket;
 import com.the_millman.farmingutils.core.networking.ItemStackSyncS2CPacket2;
 import com.the_millman.farmingutils.core.networking.ModMessages;
-import com.the_millman.farmingutils.core.recipes.InternalFarmerRecipe;
 import com.the_millman.farmingutils.core.util.FarmingConfig;
 import com.the_millman.themillmanlib.common.blockentity.ItemEnergyFluidBlockEntity;
 import com.the_millman.themillmanlib.core.energy.ModEnergyStorage;
@@ -26,7 +26,9 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -79,7 +81,7 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 				tick++;
 				if(tick >= FarmingConfig.INTERNAL_FARMER_TICK.get()) {
 					tick = 0;
-					this.needRedstone = getUpgrade(upgradeItemStorage, LibTags.Items.REDSTONE_UPGRADE, UP_SLOT_MIN, UP_SLOT_MAX);
+					this.needRedstone = getUpgrade(LibTags.Items.REDSTONE_UPGRADE);
 					if (canWork()) {
 						updateGrowthStage();
 						if (growthStage >= maxGrowthStage) {
@@ -169,6 +171,10 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 	@Override
 	public boolean isValidBlock(ItemStack stack) {
 		return false;
+	}
+	
+	public boolean getUpgrade(TagKey<Item> upgrade) {
+		return getUpgrade(upgradeItemStorage, upgrade, UP_SLOT_MIN, UP_SLOT_MAX);
 	}
 	
 	@Override

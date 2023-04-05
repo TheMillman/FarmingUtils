@@ -14,7 +14,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.BeetrootBlock;
@@ -73,7 +75,7 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 			tick++;
 			if (tick == FarmingConfig.CROP_FARMER_TICK.get()) {
 				tick = 0;
-				this.needRedstone = getUpgrade(upgradeItemStorage, LibTags.Items.REDSTONE_UPGRADE, UP_SLOT_MIN, UP_SLOT_MAX);
+				this.needRedstone = getUpgrade(LibTags.Items.REDSTONE_UPGRADE);
 				if (canWork()) {
 					upgradeSlot();
 					BlockPos posToBreak = new BlockPos(this.x + this.pX, this.y, this.z + this.pZ);
@@ -101,13 +103,13 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 
 	private void upgradeSlot() {
 		rangeSlot();
-		this.pickupDrops = !getUpgrade(upgradeItemStorage, LibTags.Items.DROP_UPGRADE, UP_SLOT_MIN, UP_SLOT_MAX);
+		this.pickupDrops = !getUpgrade(LibTags.Items.DROP_UPGRADE);
 	}
 	
 	private void rangeSlot() {
-		boolean ironUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.IRON_RANGE_UPGRADE, UP_SLOT_MIN, UP_SLOT_MAX);
-		boolean goldUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.GOLD_RANGE_UPGRADE, UP_SLOT_MIN, UP_SLOT_MAX);
-		boolean diamondUpgrade = getUpgrade(upgradeItemStorage, LibTags.Items.DIAMOND_RANGE_UPGRADE, UP_SLOT_MIN, UP_SLOT_MAX);
+		boolean ironUpgrade = getUpgrade(LibTags.Items.IRON_RANGE_UPGRADE);
+		boolean goldUpgrade = getUpgrade(LibTags.Items.GOLD_RANGE_UPGRADE);
+		boolean diamondUpgrade = getUpgrade(LibTags.Items.DIAMOND_RANGE_UPGRADE);
 		if (ironUpgrade) {
 			this.x = getBlockPos().getX() - 2;
 			this.z = getBlockPos().getZ() - 2;
@@ -225,6 +227,10 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 			return false;
 		}
 		return false;
+	}
+	
+	public boolean getUpgrade(TagKey<Item> upgrade) {
+		return getUpgrade(upgradeItemStorage, upgrade, UP_SLOT_MIN, UP_SLOT_MAX);
 	}
 	
 	@Override

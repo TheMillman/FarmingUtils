@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.the_millman.farmingutils.FarmingUtils;
-import com.the_millman.farmingutils.core.util.FluidJsonUtil;
+import com.the_millman.themillmanlib.core.util.FluidJsonUtil;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;

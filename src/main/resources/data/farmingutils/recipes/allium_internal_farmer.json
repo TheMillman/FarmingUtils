@@ -2,8 +2,11 @@
   "type": "farmingutils:internal_farmer",
   "ingredients": [
     {
-      "item": "minecraft:allium"
-    }
+	  "item": "farmingutils:compost"
+    },
+	{
+	  "item": "minecraft:allium"
+	}
   ],
   "fluid": {
 	"FluidName": "minecraft:water",

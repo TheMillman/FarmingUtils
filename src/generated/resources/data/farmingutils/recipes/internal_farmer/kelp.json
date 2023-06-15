@@ -1,0 +1,19 @@
+{
+  "type": "farmingutils:internal_farmer",
+  "fluid": {
+    "Amount": 500,
+    "FluidName": "minecraft:water"
+  },
+  "ingredients": [
+    {
+      "item": "farmingutils:compost"
+    },
+    {
+      "item": "minecraft:kelp"
+    }
+  ],
+  "output": {
+    "count": 2,
+    "item": "minecraft:kelp"
+  }
+}

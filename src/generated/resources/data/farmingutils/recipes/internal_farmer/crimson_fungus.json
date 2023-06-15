@@ -1,0 +1,19 @@
+{
+  "type": "farmingutils:internal_farmer",
+  "fluid": {
+    "Amount": 200,
+    "FluidName": "minecraft:lava"
+  },
+  "ingredients": [
+    {
+      "item": "farmingutils:compost"
+    },
+    {
+      "item": "minecraft:crimson_fungus"
+    }
+  ],
+  "output": {
+    "count": 2,
+    "item": "minecraft:crimson_fungus"
+  }
+}

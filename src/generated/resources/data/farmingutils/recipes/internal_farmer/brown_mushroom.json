@@ -1,0 +1,19 @@
+{
+  "type": "farmingutils:internal_farmer",
+  "fluid": {
+    "Amount": 100,
+    "FluidName": "minecraft:water"
+  },
+  "ingredients": [
+    {
+      "item": "farmingutils:compost"
+    },
+    {
+      "item": "minecraft:brown_mushroom"
+    }
+  ],
+  "output": {
+    "count": 2,
+    "item": "minecraft:brown_mushroom"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "farmingutils:internal_farmer",
+  "fluid": {
+    "Amount": 100,
+    "FluidName": "minecraft:water"
+  },
+  "ingredients": [
+    {
+      "item": "farmingutils:compost"
+    },
+    {
+      "item": "minecraft:lily_of_the_valley"
+    }
+  ],
+  "output": {
+    "count": 2,
+    "item": "minecraft:lily_of_the_valley"
+  }
+}

@@ -22,5 +22,6 @@
   ],
   "result": {
     "item": "farmingutils:bamboo_farmer"
-  }
+  },
+  "show_notification": true
 }

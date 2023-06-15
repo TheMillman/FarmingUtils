@@ -28,5 +28,6 @@
   ],
   "result": {
     "item": "farmingutils:internal_farmer"
-  }
+  },
+  "show_notification": true
 }

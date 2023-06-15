@@ -22,5 +22,6 @@
   ],
   "result": {
     "item": "farmingutils:cocoa_beans_farmer"
-  }
+  },
+  "show_notification": true
 }

@@ -16,5 +16,6 @@
   ],
   "result": {
     "item": "farmingutils:composter"
-  }
+  },
+  "show_notification": true
 }

@@ -22,5 +22,6 @@
   ],
   "result": {
     "item": "farmingutils:crop_farmer"
-  }
+  },
+  "show_notification": true
 }

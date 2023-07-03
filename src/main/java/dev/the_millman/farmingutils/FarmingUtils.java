@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import dev.the_millman.farmingutils.core.init.BlockEntityInit;
 import dev.the_millman.farmingutils.core.init.BlockInit;
 import dev.the_millman.farmingutils.core.init.ContainerInit;
+import dev.the_millman.farmingutils.core.init.CreativeTabInit;
 import dev.the_millman.farmingutils.core.init.ItemInit;
 import dev.the_millman.farmingutils.core.init.RecipeSerializersInit;
 import dev.the_millman.farmingutils.core.init.RecipeTypesInit;
@@ -28,6 +29,7 @@ public class FarmingUtils
     	
     	ItemInit.ITEMS.register(bus);
     	BlockInit.BLOCKS.register(bus);
+    	CreativeTabInit.CREATIVE_TABS.register(bus);
     	BlockEntityInit.BLOCK_ENTITIES.register(bus);
     	ContainerInit.CONTAINERS.register(bus);
     	RecipeSerializersInit.SERIALIZERS.register(bus);

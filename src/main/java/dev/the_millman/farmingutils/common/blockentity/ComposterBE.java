@@ -11,6 +11,7 @@ import dev.the_millman.themillmanlib.core.energy.ModEnergyStorage;
 import dev.the_millman.themillmanlib.core.util.ModItemHandlerHelp;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -25,9 +26,23 @@ public class ComposterBE extends ItemEnergyBlockEntity {
 
 	int tick;
 	boolean initialized = false;
+	public final ContainerData data;
 	
 	public ComposterBE(BlockPos pWorldPosition, BlockState pBlockState) {
 		super(BlockEntityInit.COMPOSTER.get(), pWorldPosition, pBlockState);
+		this.data = new ContainerData() {
+			public int get(int index) {
+				return ComposterBE.this.tick;
+			}
+
+			public void set(int index, int value) {
+				ComposterBE.this.tick = value;
+			}
+
+			public int getCount() {
+				return 1;
+			}
+		};
 	}
 
 	@Override

@@ -1,11 +1,9 @@
 package dev.the_millman.farmingutils.client.screens;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import dev.the_millman.farmingutils.common.containers.MelonFarmerContainer;
 import dev.the_millman.themillmanlib.client.screens.ItemEnergyScreen;
 import dev.the_millman.themillmanlib.core.util.LibResources;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -20,20 +18,19 @@ public class MelonFarmerScreen extends ItemEnergyScreen<MelonFarmerContainer> {
 	}
 	
 	@Override
-	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(matrixStack);
-		super.render(matrixStack, mouseX, mouseY, partialTicks);
-		this.renderTooltip(matrixStack, mouseX, mouseY);
-		this.renderEnergyLevel(matrixStack, mouseX, mouseY);
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+		this.renderBackground(guiGraphics);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		this.renderTooltip(guiGraphics, mouseX, mouseY);
+		this.renderEnergyLevel(guiGraphics, mouseX, mouseY);
 	}
 
 	@Override
-	protected void renderBg(PoseStack pPoseStack, float pPartialTick, int pMouseX, int pMouseY) {
-		RenderSystem.setShaderTexture(0, GUI);
+	protected void renderBg(GuiGraphics guiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
         int relX = (this.width - this.imageWidth) / 2;
         int relY = (this.height - this.imageHeight) / 2;
-        blit(pPoseStack, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
-        this.renderEnergyBar(pPoseStack, OVERLAY);
+        guiGraphics.blit(GUI, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
+        this.renderEnergyBar(guiGraphics, OVERLAY);
 	}
 
 }

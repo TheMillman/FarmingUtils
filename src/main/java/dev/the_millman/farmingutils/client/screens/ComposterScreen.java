@@ -1,12 +1,10 @@
 package dev.the_millman.farmingutils.client.screens;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import dev.the_millman.farmingutils.common.containers.ComposterContainer;
 import dev.the_millman.farmingutils.core.util.FarmingResources;
 import dev.the_millman.themillmanlib.client.screens.ItemEnergyScreen;
 import dev.the_millman.themillmanlib.core.util.LibResources;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -21,28 +19,26 @@ public class ComposterScreen extends ItemEnergyScreen<ComposterContainer> {
 	}
 
 	@Override
-	public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-		this.renderBackground(pPoseStack);
-		super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
-		this.renderTooltip(pPoseStack, pMouseX, pMouseY);
-		this.renderEnergyLevel(pPoseStack, pMouseX, pMouseY);
+	public void render(GuiGraphics guiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+		this.renderBackground(guiGraphics);
+		super.render(guiGraphics, pMouseX, pMouseY, pPartialTick);
+		this.renderTooltip(guiGraphics, pMouseX, pMouseY);
+		this.renderEnergyLevel(guiGraphics, pMouseX, pMouseY);
 	}
 
 	@Override
-	protected void renderBg(PoseStack pPoseStack, float pPartialTick, int pMouseX, int pMouseY) {
-		RenderSystem.setShaderTexture(0, GUI);
+	protected void renderBg(GuiGraphics guiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
         int relX = (this.width - this.imageWidth) / 2;
         int relY = (this.height - this.imageHeight) / 2;
-        blit(pPoseStack, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
-        this.renderEnergyBar(pPoseStack, OVERLAY);
-        renderProgress(pPoseStack);
+        guiGraphics.blit(GUI, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
+        this.renderEnergyBar(guiGraphics, OVERLAY);
+        renderProgress(guiGraphics);
 	}
 	
-	private void renderProgress(PoseStack pPoseStack) {
-		RenderSystem.setShaderTexture(0, GUI);
+	private void renderProgress(GuiGraphics guiGraphics) {
 		int gL = this.getGuiLeft();
 		int gT = this.getGuiTop();
 		int progress = (int)(23*menu.getProgress()/(float)menu.getMaxProgress());
-		blit(pPoseStack, gL + 85, gT + 36, 176, 0, progress+1, 16);
+		guiGraphics.blit(GUI, gL + 85, gT + 36, 176, 0, progress+1, 16);
 	}
 }

@@ -180,14 +180,7 @@ public class SugarCanesFarmerBE extends ItemEnergyBlockEntity {
 
 			@Override
 			public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-				if (slot <= 8) {
-					if (stack.getItem() == Items.SUGAR_CANE) {
-						return true;
-					}
-				} else if (slot > 8 && isValidUpgrade(stack)) {
-					return true;
-				}
-				return false;
+				return stack.is(Items.SUGAR_CANE) ? true : false;
 			}
 		};
 	}

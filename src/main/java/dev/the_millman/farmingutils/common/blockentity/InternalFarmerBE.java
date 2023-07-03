@@ -49,10 +49,13 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 
 	private final int UP_SLOT_MIN = 0;
 	private final int UP_SLOT_MAX = 2;
+	private final int BUCKET_SLOT = 2;
 	
-	public int ciao;
+	protected final ItemStackHandler outputStorage = outputStorage();
+	protected final LazyOptional<IItemHandler> outputStorageHandler = LazyOptional.of(() -> outputStorage);
+	
 	private int tick;
-	boolean initialized = false, hasRecipe = false;
+	boolean initialized = false;
 	BlockPos pos;
 	public final ContainerData data;
 	
@@ -78,26 +81,25 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 		this.initialized = true;
 		tick = 0;
 		this.needRedstone = false;
-		this.hasRecipe = hasRecipe(this);
 		pos = new BlockPos(getBlockPos().getX(), getBlockPos().getY(), getBlockPos().getZ());
 	}
 	
 	public void tickServer(InternalFarmerBE pEntity) {
 		if (!initialized)
 			init();
-		
-		if (getStackInSlot(itemStorage, 3).getCount() < 16) {
-			transferItemFluidToFluidTank(itemStorage, fluidStorage, 3);
+
+		if (getStackInSlot(itemStorage, BUCKET_SLOT).getCount() < 16) {
+			transferItemFluidToFluidTank(itemStorage, fluidStorage, BUCKET_SLOT);
 			setChanged();
 		}
 
 		if (hasPowerToWork(energyStorage, FarmingConfig.INTERNAL_FARMER_USEPERTICK.get())) {
 			this.needRedstone = getUpgrade(LibTags.Items.REDSTONE_UPGRADE);
-			if (hasRecipe(pEntity)) {
-				pEntity.tick++;
-				if (pEntity.tick >= FarmingConfig.INTERNAL_FARMER_TICK.get()) {
-					pEntity.tick = 0;
-					if (canWork()) {
+			if (canWork()) {
+				if (hasRecipe(pEntity)) {
+					pEntity.tick++;
+					if (pEntity.tick >= FarmingConfig.INTERNAL_FARMER_TICK.get()) {
+						pEntity.tick = 0;
 						craftItem(pEntity);
 						setChanged();
 					}
@@ -124,7 +126,7 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 	            drain(fluidStorage, recipe.get().getFluidStack().getAmount(), FluidAction.EXECUTE);
 	            consumeEnergy(energyStorage, FarmingConfig.INTERNAL_FARMER_USEPERTICK.get());
 	            consumeStack(itemStorage, 0, 1);
-	            ItemStack result = ModItemHandlerHelp.insertItemStacked(pEntity.itemStorage, recipeOutput, 2, 3, false);
+	            ItemStack result = ModItemHandlerHelp.insertItemStacked(outputStorage, recipeOutput, 0, 1, false);
 	            
 	            if (!result.isEmpty()) {
 					BlockUtils.spawnItemStack(result, level, pEntity.pos.above());
@@ -204,7 +206,7 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 	
 	@Override
 	protected ItemStackHandler itemStorage() {
-		return new ItemStackHandler(4) {
+		return new ItemStackHandler(3) {
 			@Override
 			protected void onContentsChanged(int slot) {
 				setChanged();
@@ -216,20 +218,34 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 			@Override
 			public boolean isItemValid(int slot, @NotNull ItemStack stack) {
 				if (slot == 0) {
-					if (stack.is(ModItemTags.COMPOST))
-						return true;
-				} else if (slot == 1 || slot == 2) {
+					return stack.is(ModItemTags.COMPOST) ? true : false;
+				} else if (slot == 1) {
 					if (stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()
 							|| stack.is(LibTags.Items.UPGRADES)) {
 						return false;
-					} return true;
-				} else if (slot == 3) {
+					}
+					return true;
+				} else if (slot == 2) {
 					if (stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
 						return true;
 					}
 					return false;
 				}
 				return false;
+			}
+		};
+	}
+	
+	protected ItemStackHandler outputStorage() {
+		return new ItemStackHandler(1) {
+			@Override
+			public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+				return true;
+			}
+			
+			@Override
+			protected void onContentsChanged(int slot) {
+				setChanged();
 			}
 		};
 	}
@@ -251,8 +267,15 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 	
 	@Override
 	protected IItemHandler createCombinedItemHandler() {
-		return new CombinedInvWrapper(itemStorage, upgradeItemStorage) {
-			
+		return new CombinedInvWrapper(itemStorage, outputStorage, upgradeItemStorage) {
+			@Override
+			public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+				int index = getIndexForSlot(slot);
+				if (getHandlerFromIndex(index) == outputStorage) {
+					return stack;
+				}
+				return super.insertItem(slot, stack, simulate);
+			}
 		};
 	}
 	
@@ -288,18 +311,40 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 		};
 	}
     
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-    	if(cap == ForgeCapabilities.ITEM_HANDLER) {
+	@Override
+	public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+		if (cap == ForgeCapabilities.ITEM_HANDLER) {
 			if (side == null) {
-            	upgradeItemHandler.cast();
-                return combinedItemHandler.cast();
-            } else {
-                return itemStorageHandler.cast();
-            }
+				upgradeItemHandler.cast();
+				return combinedItemHandler.cast();
+			} else if (side == Direction.DOWN) {
+				return outputStorageHandler.cast();
+			} else {
+				return itemStorageHandler.cast();
+			}
+		}
+		return super.getCapability(cap, side);
+	}
+	
+	@Override
+	public void setRemoved() {
+		super.setRemoved();
+		outputStorageHandler.invalidate();
+	}
+	
+	@Override
+	protected void saveAdditional(CompoundTag pTag) {
+		super.saveAdditional(pTag);
+		pTag.put("InventoryOutput", outputStorage.serializeNBT());
+	}
+	
+	@Override
+	public void load(CompoundTag pTag) {
+		super.load(pTag);
+		if (pTag.contains("InventoryOutput")) {
+        	outputStorage.deserializeNBT(pTag.getCompound("InventoryOutput"));
         }
-    	return super.getCapability(cap, side);
-    }
+	}
     
     //Autoload renderer
     @Nullable

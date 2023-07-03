@@ -9,6 +9,7 @@
 	"block.farmingutils.bamboo_farmer": "Bamboo Farmer",
 	"block.farmingutils.internal_farmer": "Internal Farmer",
 	"block.farmingutils.composter": "Composter",
+	"item.farmingutils.compost": "Compost",
 	"tooltip.farmingutils.fluid_amount_capacity": "%s / %s mB",
 	"tooltip.farmingutils.fluid_amount": "%s mB",
 	"screen.farmingutils.test_energy_generator": "Test Energy Generator",

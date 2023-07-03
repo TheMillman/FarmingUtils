@@ -7,6 +7,7 @@ import dev.the_millman.themillmanlib.common.containers.ItemEnergyContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -22,14 +23,16 @@ public class ComposterContainer extends ItemEnergyContainer {
 	private ComposterBE blockEntity;
     private Player playerEntity;
 	private IItemHandler playerInventory;
-	
+	private final ContainerData data;
+
 	public ComposterContainer(int windowId, Level world, BlockPos pos, Inventory playerInventory, Player player) {
 		super(ContainerInit.COMPOSTER_CONTAINER.get(), windowId, world, pos, playerInventory, player);
 		BlockEntity entity = world.getBlockEntity(pos);
 		this.blockEntity = (ComposterBE) entity;
         this.playerEntity = player;
         this.playerInventory = new InvWrapper(playerInventory);
-
+        this.data= blockEntity.data;
+        
 		if (blockEntity != null) {
 			blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(h -> {
 				addSlot(new SlotItemHandler(h, 0, 62, 36));
@@ -38,6 +41,7 @@ public class ComposterContainer extends ItemEnergyContainer {
 		}
 		
 		layoutPlayerInventorySlots(this.playerInventory, 8, 84);
+		addDataSlots(this.data);
 	}
 
 	@Override

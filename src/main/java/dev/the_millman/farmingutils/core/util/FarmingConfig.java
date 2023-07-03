@@ -190,7 +190,7 @@ public class FarmingConfig {
         
 		COMPOSTER_TICK = builder
                 .comment("How many ticks must pass before the composter works")
-                .defineInRange("composter_tick", 40, 20, 200);
+                .defineInRange("composter_tick", 80, 20, 200);
         builder.pop();
         
     	SERVER_CONFIG = builder.build();

@@ -26,7 +26,6 @@ public class InternalFarmerContainer extends ItemEnergyContainer
 	protected IItemHandler playerInventory;
 	protected FluidStack fluidStack;
 	private final ContainerData data;
-
 	
 	public InternalFarmerContainer(int windowId, Level world, BlockPos pos, Inventory playerInventory, Player player) {
 		super(ContainerInit.INTERNAL_FARMER_CONTAINER.get(), windowId, world, pos, playerInventory, player);
@@ -42,8 +41,8 @@ public class InternalFarmerContainer extends ItemEnergyContainer
 			blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(h -> {
 				addSlot(new SlotItemHandler(h, 0, 27, 18));
 				addSlot(new SlotItemHandler(h, 1, 27, 54));
-				addSlot(new SlotItemHandler(h, 2, 80, 36));
-				addSlot(new SlotItemHandler(h, 3, 128, 36));
+				addSlot(new SlotItemHandler(h, 2, 128, 36));
+				addSlot(new SlotItemHandler(h, 3, 80, 36));
 				layoutUpgradeSlots(h, 4, 152, 18, 3);
 			});
 		}

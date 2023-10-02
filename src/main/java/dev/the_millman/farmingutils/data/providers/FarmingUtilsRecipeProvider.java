@@ -3,6 +3,8 @@ package dev.the_millman.farmingutils.data.providers;
 import java.util.function.Consumer;
 
 import dev.the_millman.farmingutils.core.init.ItemInit;
+import dev.the_millman.farmingutils.core.tags.ModItemTags;
+import dev.the_millman.farmingutils.data.builder.ComposterRecipeBuilder;
 import dev.the_millman.farmingutils.data.builder.InternalFarmerBuilder;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Items;
@@ -10,9 +12,10 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 
-public class InternalFarmerRecipeProvider {
+public class FarmingUtilsRecipeProvider {
 
 	public static void register(Consumer<FinishedRecipe> consumer) {
+		compostRecipes(consumer);
 		flowerFarmer(consumer);
 	}
 	
@@ -59,5 +62,9 @@ public class InternalFarmerRecipeProvider {
 				new FluidStack(Fluids.WATER, 100), Items.WHITE_TULIP, 2).build(consumer);
 		InternalFarmerBuilder.internalFarmer(Ingredient.of(ItemInit.COMPOST.get()), Ingredient.of(Items.WITHER_ROSE),
 				new FluidStack(Fluids.WATER, 100), Items.WITHER_ROSE, 2).build(consumer);
+	}
+	
+	public static void compostRecipes(Consumer<FinishedRecipe> consumer) {
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(ModItemTags.COMPOSTER_ITEMS), ItemInit.COMPOST.get() ,1).build(consumer);
 	}
 }

@@ -30,5 +30,6 @@
     "recipes": [
       "farmingutils:melon_farmer"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

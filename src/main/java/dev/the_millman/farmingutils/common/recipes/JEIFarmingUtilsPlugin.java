@@ -18,6 +18,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 public class JEIFarmingUtilsPlugin implements IModPlugin {
 	
 	public static RecipeType<InternalFarmerRecipe> INTERNAL_FARMER_TYPE = new RecipeType<>(InternalFarmerRecipeCategory.UID, InternalFarmerRecipe.class);
+	public static RecipeType<ComposterRecipe> COMPOSTER_TYPE = new RecipeType<>(ComposterRecipeCategory.UID, ComposterRecipe.class);
 	
 	@Override
 	public ResourceLocation getPluginUid() {
@@ -27,6 +28,7 @@ public class JEIFarmingUtilsPlugin implements IModPlugin {
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registration) {
 		registration.addRecipeCategories(new InternalFarmerRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
+		registration.addRecipeCategories(new ComposterRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
 	}
 	
 	@SuppressWarnings("resource")
@@ -34,7 +36,9 @@ public class JEIFarmingUtilsPlugin implements IModPlugin {
 	public void registerRecipes(IRecipeRegistration registration) {
 		RecipeManager rm= Objects.requireNonNull(Minecraft.getInstance().level.getRecipeManager());
 		List<InternalFarmerRecipe> internalFarmerRecipe = rm.getAllRecipesFor(RecipeTypesInit.INTERNAL_FARMER_TYPE.get());
+		List<ComposterRecipe> composterRecipe = rm.getAllRecipesFor(RecipeTypesInit.COMPOSTER_TYPE.get());
 		registration.addRecipes(INTERNAL_FARMER_TYPE, internalFarmerRecipe);
+		registration.addRecipes(COMPOSTER_TYPE, composterRecipe);
 	}
 
 }

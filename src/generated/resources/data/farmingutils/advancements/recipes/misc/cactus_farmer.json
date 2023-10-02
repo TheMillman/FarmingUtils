@@ -30,5 +30,6 @@
     "recipes": [
       "farmingutils:cactus_farmer"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

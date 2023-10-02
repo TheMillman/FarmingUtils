@@ -1,9 +1,12 @@
 package dev.the_millman.farmingutils.common.blockentity;
 
+import java.util.Optional;
+
 import org.jetbrains.annotations.NotNull;
 
+import dev.the_millman.farmingutils.common.recipes.ComposterRecipe;
 import dev.the_millman.farmingutils.core.init.BlockEntityInit;
-import dev.the_millman.farmingutils.core.init.ItemInit;
+import dev.the_millman.farmingutils.core.init.RecipeTypesInit;
 import dev.the_millman.farmingutils.core.tags.ModItemTags;
 import dev.the_millman.farmingutils.core.util.FarmingConfig;
 import dev.the_millman.themillmanlib.common.blockentity.ItemEnergyBlockEntity;
@@ -11,8 +14,10 @@ import dev.the_millman.themillmanlib.core.energy.ModEnergyStorage;
 import dev.the_millman.themillmanlib.core.util.ModItemHandlerHelp;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -27,9 +32,11 @@ public class ComposterBE extends ItemEnergyBlockEntity {
 	int tick;
 	boolean initialized = false;
 	public final ContainerData data;
+	BlockPos pos;
 	
 	public ComposterBE(BlockPos pWorldPosition, BlockState pBlockState) {
 		super(BlockEntityInit.COMPOSTER.get(), pWorldPosition, pBlockState);
+		this.pos = pWorldPosition;
 		this.data = new ContainerData() {
 			public int get(int index) {
 				return ComposterBE.this.tick;
@@ -49,26 +56,28 @@ public class ComposterBE extends ItemEnergyBlockEntity {
 	protected void init() {
 		this.initialized = true;
 		this.tick = 0;
+		
+		pos = new BlockPos(getBlockPos().getX(), getBlockPos().getY(), getBlockPos().getZ());
 	}
 	
-	// Upgrade is output slot
 	@Override
-	public void tickServer() {
+	public void tickServer() {}
+	
+	// Upgrade is output slot
+	public void tickServer(ComposterBE pEntity) {
 		if(!initialized) 
 			init();
 		
 		if (hasPowerToWork(energyStorage, FarmingConfig.FARMERS_NEEDS_ENERGY.get(), FarmingConfig.COMPOSTER_USEPERTICK.get())) {
 			ItemStack stack = getStackInSlot(itemStorage, 0);
-			if (stack.is(ModItemTags.COMPOSTER_ITEMS) && stack.getCount() >= 4) {
-				if (getStackInSlot(upgradeItemStorage, 0).getCount() < 64) {
-					tick++;
-					if (tick >= FarmingConfig.COMPOSTER_TICK.get()) {
-						this.tick = 0;
-						work();
-					}
-				} 
-			} else if(getStackInSlot(itemStorage, 0).isEmpty()) {
-				if(tick > 0) {
+			if (stack.is(ModItemTags.COMPOSTER_ITEMS) && stack.getCount() >= 8  && canCraft()) {
+				tick++;
+				if (tick >= FarmingConfig.COMPOSTER_TICK.get()) {
+					this.tick = 0;
+					craftItem(pEntity);
+				}
+			} else if (getStackInSlot(itemStorage, 0).isEmpty() || stack.getCount() < 8) {
+				if (tick > 0) {
 					this.tick--;
 				}
 			}
@@ -76,12 +85,47 @@ public class ComposterBE extends ItemEnergyBlockEntity {
 	}
 	
 	@SuppressWarnings("unused")
-	private void work() {
-		if (!level.isClientSide()) {
-			ItemStack bonemeal = ModItemHandlerHelp.insertItemStacked(upgradeItemStorage, new ItemStack(ItemInit.COMPOST.get(), 1), 0, 1, false);
-			consumeStack(itemStorage, 0, 4);
-			consumeEnergy(energyStorage, FarmingConfig.COMPOSTER_USEPERTICK.get());
+	private void craftItem(ComposterBE pEntity) {
+		Level level = pEntity.getLevel();
+        SimpleContainer inventory = setInventory();
+
+        Optional<ComposterRecipe> recipe = level.getRecipeManager()
+                .getRecipeFor(RecipeTypesInit.COMPOSTER_TYPE.get(), inventory, level);
+        
+        if(recipe.isPresent() && canCraft()) {
+        	if(!level.isClientSide()) {
+        		ItemStack recipeOutput = new ItemStack(recipe.get().getResultItem().getItem(), recipe.get().getResultItem().getCount());
+        		consumeEnergy(energyStorage, FarmingConfig.COMPOSTER_USEPERTICK.get());
+	            consumeStack(itemStorage, 0, 8);
+	            ItemStack result = ModItemHandlerHelp.insertItemStacked(upgradeItemStorage, recipeOutput, 0, 1, false);
+        	}
+        }
+	}
+	
+	private boolean canCraft() {
+		ItemStack result = getStackInSlot(upgradeItemStorage, 0);
+        
+        if (result.getCount() >= 64) {
+			return false;
+		} else {
+			return true;
 		}
+	}
+	
+	/**
+	 * Method to call to set the inventory for recipes.
+	 * TODO Remove next update
+	 * @return SimpleContainer
+	 */
+	protected SimpleContainer setInventory() {
+		int slots = itemStorage.getSlots();
+		SimpleContainer inventory = new SimpleContainer(slots);
+		
+		for(int i = 0; i < slots; i++) {
+			inventory.setItem(i, itemStorage.getStackInSlot(i));
+		}
+		
+		return inventory;
 	}
 	
 	public int getProgress() {
@@ -168,4 +212,5 @@ public class ComposterBE extends ItemEnergyBlockEntity {
 		}
 		return super.getCapability(cap, side);
 	}
+
 }

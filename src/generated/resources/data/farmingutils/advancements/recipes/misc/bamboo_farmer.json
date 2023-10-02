@@ -30,5 +30,6 @@
     "recipes": [
       "farmingutils:bamboo_farmer"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

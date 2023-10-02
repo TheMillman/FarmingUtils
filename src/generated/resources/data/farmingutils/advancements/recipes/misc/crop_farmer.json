@@ -30,5 +30,6 @@
     "recipes": [
       "farmingutils:crop_farmer"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -77,7 +77,7 @@ public class AdvancedComposterBlock extends PoweredBlock implements EntityBlock 
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
 		return (level1, pos, state1, tile) -> {
 			if (tile instanceof ComposterBE blockEntity) {
-				blockEntity.tickServer();
+				blockEntity.tickServer(blockEntity);
 			}
 		};
 	}

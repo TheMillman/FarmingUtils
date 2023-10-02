@@ -35,5 +35,6 @@
     "recipes": [
       "farmingutils:internal_farmer"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

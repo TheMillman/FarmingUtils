@@ -30,5 +30,6 @@
     "recipes": [
       "farmingutils:composter"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -22,7 +22,7 @@ public class ModRecipeProvider extends RecipeProvider {
 	
 	@Override
 	protected void buildRecipes(Consumer<FinishedRecipe> pWriter) {
-		InternalFarmerRecipeProvider.register(pWriter);
+		FarmingUtilsRecipeProvider.register(pWriter);
 		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BlockInit.CROP_FARMER.get())
         .pattern("iii")
         .pattern("ipi")

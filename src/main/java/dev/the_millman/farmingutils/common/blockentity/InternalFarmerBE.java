@@ -17,7 +17,6 @@ import dev.the_millman.farmingutils.core.tags.ModItemTags;
 import dev.the_millman.farmingutils.core.util.FarmingConfig;
 import dev.the_millman.themillmanlib.common.blockentity.ItemEnergyFluidBlockEntity;
 import dev.the_millman.themillmanlib.core.energy.ModEnergyStorage;
-import dev.the_millman.themillmanlib.core.util.BlockUtils;
 import dev.the_millman.themillmanlib.core.util.LibTags;
 import dev.the_millman.themillmanlib.core.util.ModItemHandlerHelp;
 import net.minecraft.core.BlockPos;
@@ -96,23 +95,24 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 		if (hasPowerToWork(energyStorage, FarmingConfig.INTERNAL_FARMER_USEPERTICK.get())) {
 			this.needRedstone = getUpgrade(LibTags.Items.REDSTONE_UPGRADE);
 			if (canWork()) {
-				if (hasRecipe(pEntity)) {
+				if (hasRecipe(pEntity) && canCraft()) {
 					pEntity.tick++;
 					if (pEntity.tick >= FarmingConfig.INTERNAL_FARMER_TICK.get()) {
 						pEntity.tick = 0;
 						craftItem(pEntity);
 						setChanged();
 					}
+				} else if (!hasRecipe(pEntity)) {
+					if (pEntity.tick > 0) {
+						pEntity.tick--;
+						setChanged();
+					}
 				}
-			} else if (!hasRecipe(pEntity)) {
-				if (pEntity.tick > 0) {
-					pEntity.tick--;
-					setChanged();
-				}
-			}
+			} 
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private void craftItem(InternalFarmerBE pEntity) {
         Level level = pEntity.level;
         SimpleContainer inventory = setInventory();
@@ -120,20 +120,26 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
         Optional<InternalFarmerRecipe> recipe = level.getRecipeManager()
                 .getRecipeFor(RecipeTypesInit.INTERNAL_FARMER_TYPE.get(), inventory, level);
         
-        if(hasRecipe(pEntity)) {
+        if(hasRecipe(pEntity) && canCraft()) {
         	if (!level.isClientSide()) {
 	            ItemStack recipeOutput = new ItemStack(recipe.get().getResultItem().getItem(), recipe.get().getResultItem().getCount());
 	            drain(fluidStorage, recipe.get().getFluidStack().getAmount(), FluidAction.EXECUTE);
 	            consumeEnergy(energyStorage, FarmingConfig.INTERNAL_FARMER_USEPERTICK.get());
 	            consumeStack(itemStorage, 0, 1);
 	            ItemStack result = ModItemHandlerHelp.insertItemStacked(outputStorage, recipeOutput, 0, 1, false);
-	            
-	            if (!result.isEmpty()) {
-					BlockUtils.spawnItemStack(result, level, pEntity.pos.above());
-				}
         	}
         }
     }
+	
+	private boolean canCraft() {
+		ItemStack result = getStackInSlot(outputStorage, 0);
+        
+        if (result.getCount() >= 64) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 	
 	private boolean hasRecipe(InternalFarmerBE blockEntity) {
 		SimpleContainer inventory = setInventory();

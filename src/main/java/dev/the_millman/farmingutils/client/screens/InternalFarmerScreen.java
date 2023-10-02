@@ -46,7 +46,7 @@ public class InternalFarmerScreen extends ItemEnergyFluidScreen<InternalFarmerCo
         int relX = (this.width - this.imageWidth) / 2;
         int relY = (this.height - this.imageHeight) / 2;
         guiGraphics.blit(GUI, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
-        renderer.render(guiGraphics.pose(), relX + 108, relY + 18, menu.getFluidStack());
+        renderer.render(guiGraphics, relX + 108, relY + 18, menu.getFluidStack());
         this.renderEnergyBar(guiGraphics, OVERLAY);
         renderProgress(guiGraphics);
 	}

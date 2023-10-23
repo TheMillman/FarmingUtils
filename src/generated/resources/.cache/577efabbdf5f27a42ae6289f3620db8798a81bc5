@@ -1,6 +1,7 @@
-// 1.20.1	2023-10-02T18:38:42.0878576	FarmingUtils Item Tags
+// 1.20.1	2023-10-23T17:27:48.129511	FarmingUtils Item Tags
 f5ef89caf0c6c0973cab34f2fc02ef6f02ea71c8 data/farmingutils/tags/items/composter_items.json
 ea66a4cfdbe4578f5cd54a9f7f0457a652621696 data/farmingutils/tags/items/crop_block_seeds.json
 bec5216d166242dfca081f0e9b6c530a8eb26f14 data/farmingutils/tags/items/crop_results.json
 9f56c74f2479cac30d1eb9d4710c7ecdbb7f2c54 data/farmingutils/tags/items/crop_seeds.json
 7bb7ef4128f509715c8f1c110f6a307b6569b348 data/forge/tags/items/compost.json
+21e9781e8187cf986f367193c3a5ed271a1f9564 data/themillmanlib/tags/items/speed_upgrade.json

@@ -45,7 +45,7 @@ public class ComposterRecipeBuilder {
 	
 	public void build(Consumer<FinishedRecipe> consumerIn) {
 		ResourceLocation location = ForgeRegistries.ITEMS.getKey(ItemInit.COMPOST.get());
-		this.build(consumerIn, FarmingUtils.MODID + ":composter/" + location.getPath());
+		this.build(consumerIn, location.getPath());
 	}
 
 	public void build(Consumer<FinishedRecipe> consumerIn, String save) {
@@ -53,7 +53,7 @@ public class ComposterRecipeBuilder {
 		if ((new ResourceLocation(save)).equals(resourcelocation)) {
 			throw new IllegalStateException("Composter Recipe " + save + " should remove its 'save' argument");
 		} else {
-			this.build(consumerIn, new ResourceLocation(save));
+			this.build(consumerIn, new ResourceLocation(FarmingUtils.MODID + ":composter/" + save));
 		}
 	}
 	

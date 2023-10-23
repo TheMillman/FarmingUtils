@@ -1,0 +1,12 @@
+{
+  "type": "farmingutils:composter",
+  "ingredients": [
+    {
+      "item": "minecraft:weeping_vines"
+    }
+  ],
+  "output": {
+    "count": 1,
+    "item": "farmingutils:compost"
+  }
+}

@@ -3,13 +3,14 @@ package dev.the_millman.farmingutils.data.providers;
 import java.util.function.Consumer;
 
 import dev.the_millman.farmingutils.core.init.ItemInit;
-import dev.the_millman.farmingutils.core.tags.ModItemTags;
 import dev.the_millman.farmingutils.data.builder.ComposterRecipeBuilder;
 import dev.the_millman.farmingutils.data.builder.InternalFarmerBuilder;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidStack;
 
 public class FarmingUtilsRecipeProvider {
@@ -65,6 +66,52 @@ public class FarmingUtilsRecipeProvider {
 	}
 	
 	public static void compostRecipes(Consumer<FinishedRecipe> consumer) {
-		ComposterRecipeBuilder.composterRecipe(Ingredient.of(ModItemTags.COMPOSTER_ITEMS), ItemInit.COMPOST.get() ,1).build(consumer);
+//		ComposterRecipeBuilder.composterRecipe(Ingredient.of(ModItemTags.COMPOSTER_ITEMS), ItemInit.COMPOST.get() ,1).build(consumer);
+		
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(ItemTags.LEAVES), ItemInit.COMPOST.get(), 1).build(consumer, "leaves");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(ItemTags.SAPLINGS), ItemInit.COMPOST.get(), 1).build(consumer, "saplings");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Tags.Items.CROPS), ItemInit.COMPOST.get(), 1).build(consumer, "crops");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Tags.Items.SEEDS), ItemInit.COMPOST.get(), 1).build(consumer, "seeds");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Tags.Items.MUSHROOMS), ItemInit.COMPOST.get(), 1).build(consumer, "mushrooms");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(ItemTags.FLOWERS), ItemInit.COMPOST.get(), 1).build(consumer, "flowers");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.DRIED_KELP), ItemInit.COMPOST.get(), 1).build(consumer, "dried_kelp");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.KELP), ItemInit.COMPOST.get(), 1).build(consumer, "kelp");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.SEAGRASS), ItemInit.COMPOST.get(), 1).build(consumer, "seagrass");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.GRASS), ItemInit.COMPOST.get(), 1).build(consumer, "grass");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.SWEET_BERRIES), ItemInit.COMPOST.get(), 1).build(consumer, "sweet_berries");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.GLOW_BERRIES), ItemInit.COMPOST.get(), 1).build(consumer, "glow_berries");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.MOSS_CARPET), ItemInit.COMPOST.get(), 1).build(consumer, "moss_carpet");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.SMALL_DRIPLEAF), ItemInit.COMPOST.get(), 1).build(consumer, "small_dripleaf");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.HANGING_ROOTS), ItemInit.COMPOST.get(), 1).build(consumer, "hanging_roots");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.MANGROVE_ROOTS), ItemInit.COMPOST.get(), 1).build(consumer, "mangrove_roots");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.DRIED_KELP_BLOCK), ItemInit.COMPOST.get(), 1).build(consumer, "dried_kelp_block");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.TALL_GRASS), ItemInit.COMPOST.get(), 1).build(consumer, "tall_grass");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.CACTUS), ItemInit.COMPOST.get(), 1).build(consumer, "cactus");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.SUGAR_CANE), ItemInit.COMPOST.get(), 1).build(consumer, "sugar_cane");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.VINE), ItemInit.COMPOST.get(), 1).build(consumer, "vine");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.NETHER_SPROUTS), ItemInit.COMPOST.get(), 1).build(consumer, "nether_sprouts");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.WEEPING_VINES), ItemInit.COMPOST.get(), 1).build(consumer, "weeping_vines");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.TWISTING_VINES), ItemInit.COMPOST.get(), 1).build(consumer, "twisting_vines");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.MELON_SLICE), ItemInit.COMPOST.get(), 1).build(consumer, "melon_slice");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.GLOW_LICHEN), ItemInit.COMPOST.get(), 1).build(consumer, "glow_lichen");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.SEA_PICKLE), ItemInit.COMPOST.get(), 1).build(consumer, "sea_pickle");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.LILY_PAD), ItemInit.COMPOST.get(), 1).build(consumer, "lily_pad");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.CARVED_PUMPKIN), ItemInit.COMPOST.get(), 1).build(consumer, "carved_pumpkin");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.CRIMSON_ROOTS), ItemInit.COMPOST.get(), 1).build(consumer, "crimson_roots");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.WARPED_ROOTS), ItemInit.COMPOST.get(), 1).build(consumer, "warped_roots");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.SHROOMLIGHT), ItemInit.COMPOST.get(), 1).build(consumer, "shroomlight");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.MOSS_BLOCK), ItemInit.COMPOST.get(), 1).build(consumer, "moss_block");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.BIG_DRIPLEAF), ItemInit.COMPOST.get(), 1).build(consumer, "big_dripleaf");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.HAY_BLOCK), ItemInit.COMPOST.get(), 1).build(consumer, "hay_block");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.BROWN_MUSHROOM_BLOCK), ItemInit.COMPOST.get(), 1).build(consumer, "brown_mushroom_block");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.RED_MUSHROOM_BLOCK), ItemInit.COMPOST.get(), 1).build(consumer, "red_mushroom_block");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.NETHER_WART_BLOCK), ItemInit.COMPOST.get(), 1).build(consumer, "nether_wart_block");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.WARPED_WART_BLOCK), ItemInit.COMPOST.get(), 1).build(consumer, "warped_wart_block");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.BREAD), ItemInit.COMPOST.get(), 1).build(consumer, "bread");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.BAKED_POTATO), ItemInit.COMPOST.get(), 1).build(consumer, "baked_potato");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.COOKIE), ItemInit.COMPOST.get(), 1).build(consumer, "cookie");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.CAKE), ItemInit.COMPOST.get(), 1).build(consumer, "cake");
+		ComposterRecipeBuilder.composterRecipe(Ingredient.of(Items.PUMPKIN_PIE), ItemInit.COMPOST.get(), 1).build(consumer, "pumpkin_pie");
+		
 	}
 }

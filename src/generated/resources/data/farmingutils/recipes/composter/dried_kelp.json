@@ -1,0 +1,12 @@
+{
+  "type": "farmingutils:composter",
+  "ingredients": [
+    {
+      "item": "minecraft:dried_kelp"
+    }
+  ],
+  "output": {
+    "count": 1,
+    "item": "farmingutils:compost"
+  }
+}

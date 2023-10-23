@@ -1,0 +1,12 @@
+{
+  "type": "farmingutils:composter",
+  "ingredients": [
+    {
+      "tag": "forge:seeds"
+    }
+  ],
+  "output": {
+    "count": 1,
+    "item": "farmingutils:compost"
+  }
+}

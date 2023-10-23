@@ -2,7 +2,7 @@
   "type": "farmingutils:composter",
   "ingredients": [
     {
-      "tag": "farmingutils:composter_items"
+      "tag": "minecraft:flowers"
     }
   ],
   "output": {

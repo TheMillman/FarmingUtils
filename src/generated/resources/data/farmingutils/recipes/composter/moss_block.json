@@ -1,0 +1,12 @@
+{
+  "type": "farmingutils:composter",
+  "ingredients": [
+    {
+      "item": "minecraft:moss_block"
+    }
+  ],
+  "output": {
+    "count": 1,
+    "item": "farmingutils:compost"
+  }
+}

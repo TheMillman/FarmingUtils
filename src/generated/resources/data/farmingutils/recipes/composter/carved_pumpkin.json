@@ -1,0 +1,12 @@
+{
+  "type": "farmingutils:composter",
+  "ingredients": [
+    {
+      "item": "minecraft:carved_pumpkin"
+    }
+  ],
+  "output": {
+    "count": 1,
+    "item": "farmingutils:compost"
+  }
+}

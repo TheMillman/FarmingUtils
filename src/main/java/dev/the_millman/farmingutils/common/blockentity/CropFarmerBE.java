@@ -5,6 +5,7 @@ import javax.annotation.Nonnull;
 import dev.the_millman.farmingutils.common.blocks.CropFarmerBlock;
 import dev.the_millman.farmingutils.core.init.BlockEntityInit;
 import dev.the_millman.farmingutils.core.tags.ModBlockTags;
+import dev.the_millman.farmingutils.core.tags.ModItemTags;
 import dev.the_millman.farmingutils.core.util.FarmingConfig;
 import dev.the_millman.themillmanlib.common.blockentity.ItemEnergyBlockEntity;
 import dev.the_millman.themillmanlib.core.energy.ModEnergyStorage;
@@ -38,6 +39,7 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 	private final int UP_SLOT_MIN = 0;
 	private final int UP_SLOT_MAX = 2;
 	
+	private int super_tick = FarmingConfig.CROP_FARMER_TICK.get();
 	private int tick;
 	
 	boolean initialized = false;
@@ -55,7 +57,7 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 		this.y = getBlockPos().getY();
 		this.z = getBlockPos().getZ() - 1;
 		tick = 0;
-
+		
 		this.pX = 0;
 		this.pZ = 0;
 		this.range = 3;
@@ -72,14 +74,20 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 
 		if (hasPowerToWork(energyStorage, FarmingConfig.FARMERS_NEEDS_ENERGY.get(), FarmingConfig.CROP_FARMER_USEPERTICK.get())) {
 			tick++;
-			if (tick == FarmingConfig.CROP_FARMER_TICK.get()) {
+			if (tick == super_tick) {
 				tick = 0;
+				super_tick = speedUpgrade(FarmingConfig.CROP_FARMER_TICK.get());
 				this.needRedstone = getUpgrade(LibTags.Items.REDSTONE_UPGRADE);
 				if (canWork()) {
 					upgradeSlot();
 					BlockPos posToBreak = new BlockPos(this.x + this.pX, this.y, this.z + this.pZ);
 					destroyBlock(posToBreak, false);
 					placeBlock(posToBreak);
+					if (getUpgrade(ModItemTags.SPEED_UPGRADE)) {
+						consumeEnergy(energyStorage, FarmingConfig.CROP_FARMER_USEPERTICK.get()*2);
+					} else {
+						consumeEnergy(energyStorage, FarmingConfig.CROP_FARMER_USEPERTICK.get());
+					}
 					setChanged();
 
 					posState();
@@ -103,6 +111,14 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 	private void upgradeSlot() {
 		rangeSlot();
 		this.pickupDrops = !getUpgrade(LibTags.Items.DROP_UPGRADE);
+	}
+	
+	private int speedUpgrade(int tick) {
+		if (getUpgrade(ModItemTags.SPEED_UPGRADE)) {
+			return tick / 2;
+		} else {
+			return tick;
+		}
 	}
 	
 	private void rangeSlot() {
@@ -139,12 +155,10 @@ public class CropFarmerBE extends ItemEnergyBlockEntity {
 				if (this.pickupDrops) {
 					collectDrops(level, itemStorage, pos, 0, 18);
 					level.destroyBlock(pos, dropBlock);
-					consumeEnergy(energyStorage, FarmingConfig.CROP_FARMER_USEPERTICK.get());
 					return true;
 				} else if(!this.pickupDrops) {
 					// collectDrops(pos, dropBlock);
 					level.destroyBlock(pos, true);
-					consumeEnergy(energyStorage, FarmingConfig.CROP_FARMER_USEPERTICK.get());
 					return true;
 				}
 				return false;

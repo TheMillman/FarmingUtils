@@ -72,6 +72,7 @@ public class ComposterBE extends ItemEnergyBlockEntity {
 			ItemStack stack = getStackInSlot(itemStorage, 0);
 			if (stack.is(ModItemTags.COMPOSTER_ITEMS) && stack.getCount() >= 8  && canCraft()) {
 				tick++;
+				consumeEnergy(energyStorage, FarmingConfig.COMPOSTER_USEPERTICK.get());
 				if (tick >= FarmingConfig.COMPOSTER_TICK.get()) {
 					this.tick = 0;
 					craftItem(pEntity);
@@ -95,7 +96,6 @@ public class ComposterBE extends ItemEnergyBlockEntity {
         if(recipe.isPresent() && canCraft()) {
         	if(!level.isClientSide()) {
         		ItemStack recipeOutput = new ItemStack(recipe.get().getResultItem().getItem(), recipe.get().getResultItem().getCount());
-        		consumeEnergy(energyStorage, FarmingConfig.COMPOSTER_USEPERTICK.get());
 	            consumeStack(itemStorage, 0, 8);
 	            ItemStack result = ModItemHandlerHelp.insertItemStacked(upgradeItemStorage, recipeOutput, 0, 1, false);
         	}
@@ -110,22 +110,6 @@ public class ComposterBE extends ItemEnergyBlockEntity {
 		} else {
 			return true;
 		}
-	}
-	
-	/**
-	 * Method to call to set the inventory for recipes.
-	 * TODO Remove next update
-	 * @return SimpleContainer
-	 */
-	protected SimpleContainer setInventory() {
-		int slots = itemStorage.getSlots();
-		SimpleContainer inventory = new SimpleContainer(slots);
-		
-		for(int i = 0; i < slots; i++) {
-			inventory.setItem(i, itemStorage.getStackInSlot(i));
-		}
-		
-		return inventory;
 	}
 	
 	public int getProgress() {

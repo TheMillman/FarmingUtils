@@ -54,6 +54,8 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 	protected final LazyOptional<IItemHandler> outputStorageHandler = LazyOptional.of(() -> outputStorage);
 	
 	private int tick;
+	private int super_tick = FarmingConfig.INTERNAL_FARMER_TICK.get();
+	
 	boolean initialized = false;
 	BlockPos pos;
 	public final ContainerData data;
@@ -95,9 +97,11 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 		if (hasPowerToWork(energyStorage, FarmingConfig.INTERNAL_FARMER_USEPERTICK.get())) {
 			this.needRedstone = getUpgrade(LibTags.Items.REDSTONE_UPGRADE);
 			if (canWork()) {
+				super_tick = speedUpgrade(FarmingConfig.INTERNAL_FARMER_TICK.get());
 				if (hasRecipe(pEntity) && canCraft()) {
 					pEntity.tick++;
-					if (pEntity.tick >= FarmingConfig.INTERNAL_FARMER_TICK.get()) {
+					consumeEnergy(energyStorage, FarmingConfig.INTERNAL_FARMER_USEPERTICK.get());
+					if (pEntity.tick >= super_tick) {
 						pEntity.tick = 0;
 						craftItem(pEntity);
 						setChanged();
@@ -124,7 +128,6 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
         	if (!level.isClientSide()) {
 	            ItemStack recipeOutput = new ItemStack(recipe.get().getResultItem().getItem(), recipe.get().getResultItem().getCount());
 	            drain(fluidStorage, recipe.get().getFluidStack().getAmount(), FluidAction.EXECUTE);
-	            consumeEnergy(energyStorage, FarmingConfig.INTERNAL_FARMER_USEPERTICK.get());
 	            consumeStack(itemStorage, 0, 1);
 	            ItemStack result = ModItemHandlerHelp.insertItemStacked(outputStorage, recipeOutput, 0, 1, false);
         	}
@@ -169,6 +172,14 @@ public class InternalFarmerBE extends ItemEnergyFluidBlockEntity {
 			return true;
 		}
 		return true;
+	}
+    
+    private int speedUpgrade(int tick) {
+		if (getUpgrade(ModItemTags.SPEED_UPGRADE)) {
+			return tick / 2;
+		} else {
+			return tick;
+		}
 	}
 	
 	public float getScaledProgress(InternalFarmerBE pEntity) {

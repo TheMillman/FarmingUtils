@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import dev.the_millman.farmingutils.common.blocks.CocoaFarmerBlock;
 import dev.the_millman.farmingutils.core.init.BlockEntityInit;
+import dev.the_millman.farmingutils.core.tags.ModItemTags;
 import dev.the_millman.farmingutils.core.util.FarmingConfig;
 import dev.the_millman.themillmanlib.common.blockentity.ItemEnergyBlockEntity;
 import dev.the_millman.themillmanlib.core.energy.ModEnergyStorage;
@@ -36,6 +37,7 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 	private final int UP_SLOT_MIN = 0;
 	private final int UP_SLOT_MAX = 2;
 	
+	private int super_tick = FarmingConfig.COCOA_BEANS_FARMER_TICK.get();
 	private int tick;
 	int pY;
 	
@@ -92,14 +94,20 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 
 		if (hasPowerToWork(energyStorage, FarmingConfig.FARMERS_NEEDS_ENERGY.get(), FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get())) {
 			tick++;
-			if (tick == FarmingConfig.COCOA_BEANS_FARMER_TICK.get()) {
+			if (tick == super_tick) {
 				tick = 0;
 				this.needRedstone = getUpgrade(LibTags.Items.REDSTONE_UPGRADE);
+				super_tick = speedUpgrade(FarmingConfig.COCOA_BEANS_FARMER_TICK.get());
 				if (canWork()) {
 					upgradeSlot();
 					BlockPos posToBreak = new BlockPos(this.x + pX, this.y + pY, this.z + pZ);
 					destroyBlock(posToBreak, false);
 					placeBlock(posToBreak);
+					if (getUpgrade(ModItemTags.SPEED_UPGRADE)) {
+						consumeEnergy(energyStorage, FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get()*2);
+					} else {
+						consumeEnergy(energyStorage, FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get());
+					}
 					setChanged();
 
 					stadioState();
@@ -111,6 +119,14 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 	private void upgradeSlot() {
 		rangeUpgrade();
 		this.pickupDrops = !getUpgrade(LibTags.Items.DROP_UPGRADE);
+	}
+	
+	private int speedUpgrade(int tick) {
+		if (getUpgrade(ModItemTags.SPEED_UPGRADE)) {
+			return tick / 2;
+		} else {
+			return tick;
+		}
 	}
 
 	private void stadioState() {
@@ -283,11 +299,9 @@ public class CocoaFarmerBE extends ItemEnergyBlockEntity {
 				if (this.pickupDrops) {
 					collectDrops(level, itemStorage, pos, 0, 9);
 					level.destroyBlock(pos, dropBlock);
-					consumeEnergy(energyStorage, FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get());
 					return true;
 				} else if (!this.pickupDrops) {
 					level.destroyBlock(pos, true);
-					consumeEnergy(energyStorage, FarmingConfig.COCOA_BEANS_FARMER_USEPERTICK.get());
 					return true;
 				}
 			}

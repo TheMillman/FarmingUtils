@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import dev.the_millman.farmingutils.common.blocks.CactusFarmerBlock;
 import dev.the_millman.farmingutils.core.init.BlockEntityInit;
+import dev.the_millman.farmingutils.core.tags.ModItemTags;
 import dev.the_millman.farmingutils.core.util.FarmingConfig;
 import dev.the_millman.themillmanlib.common.blockentity.ItemEnergyBlockEntity;
 import dev.the_millman.themillmanlib.core.energy.ModEnergyStorage;
@@ -31,6 +32,7 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 	private final int UP_SLOT_MIN = 0;
 	private final int UP_SLOT_MAX = 2;
 	
+	private int super_tick = FarmingConfig.CACTUS_FARMER_TICK.get();
 	private int tick;
 
 	boolean initialized = false;
@@ -64,14 +66,20 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 
 		if (hasPowerToWork(energyStorage, FarmingConfig.FARMERS_NEEDS_ENERGY.get(), FarmingConfig.CACTUS_FARMER_USEPERTICK.get())) {
 			tick++;
-			if (tick == FarmingConfig.CACTUS_FARMER_TICK.get()) {
+			if (tick == super_tick) {
 				tick = 0;
 				this.needRedstone = this.getUpgrade(LibTags.Items.REDSTONE_UPGRADE);
+				super_tick = speedUpgrade(FarmingConfig.CACTUS_FARMER_TICK.get());
 				if (canWork()) {
 					upgradeSlot();
 					BlockPos posToBreak = new BlockPos(this.x + this.pX, this.y, this.z + this.pZ);
 					destroyUpperBlock(posToBreak);
 					destroyBlock(posToBreak, false);
+					if (getUpgrade(ModItemTags.SPEED_UPGRADE)) {
+						consumeEnergy(energyStorage, FarmingConfig.CACTUS_FARMER_USEPERTICK.get()*2);
+					} else {
+						consumeEnergy(energyStorage, FarmingConfig.CACTUS_FARMER_USEPERTICK.get());
+					}
 					setChanged();
 
 					posState();
@@ -95,6 +103,14 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 	private void upgradeSlot() {
 		rangeUpgrade();
 		this.pickupDrops = !getUpgrade(LibTags.Items.DROP_UPGRADE);
+	}
+	
+	private int speedUpgrade(int tick) {
+		if (getUpgrade(ModItemTags.SPEED_UPGRADE)) {
+			return tick / 2;
+		} else {
+			return tick;
+		}
 	}
 	
 	private void rangeUpgrade() {
@@ -129,11 +145,9 @@ public class CactusFarmerBE extends ItemEnergyBlockEntity {
 				if (this.pickupDrops) {
 					collectDrops(level, itemStorage, pos, 0, 9);
 					level.destroyBlock(pos, dropBlock);
-					consumeEnergy(energyStorage, FarmingConfig.CACTUS_FARMER_USEPERTICK.get());
 					return true;
 				} else if(!this.pickupDrops) {
 					level.destroyBlock(pos, true);
-					consumeEnergy(energyStorage, FarmingConfig.CACTUS_FARMER_USEPERTICK.get());
 					return true;
 				}
 				return false;

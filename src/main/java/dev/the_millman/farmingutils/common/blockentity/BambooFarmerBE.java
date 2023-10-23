@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import dev.the_millman.farmingutils.common.blocks.BambooFarmerBlock;
 import dev.the_millman.farmingutils.core.init.BlockEntityInit;
+import dev.the_millman.farmingutils.core.tags.ModItemTags;
 import dev.the_millman.farmingutils.core.util.FarmingConfig;
 import dev.the_millman.themillmanlib.common.blockentity.ItemEnergyBlockEntity;
 import dev.the_millman.themillmanlib.core.energy.ModEnergyStorage;
@@ -31,6 +32,7 @@ public class BambooFarmerBE extends ItemEnergyBlockEntity {
 	private final int UP_SLOT_MIN = 0;
 	private final int UP_SLOT_MAX = 2;
 	
+	private int super_tick = FarmingConfig.BAMBOO_FARMER_TICK.get();
 	private int tick;
 	
 	boolean initialized = false;
@@ -61,19 +63,25 @@ public class BambooFarmerBE extends ItemEnergyBlockEntity {
 		if (!initialized) {
 			init();
 		}
-		
-		if(hasPowerToWork(energyStorage, FarmingConfig.FARMERS_NEEDS_ENERGY.get(), FarmingConfig.BAMBOO_FARMER_USEPERTICK.get())) {
+
+		if (hasPowerToWork(energyStorage, FarmingConfig.FARMERS_NEEDS_ENERGY.get(), FarmingConfig.BAMBOO_FARMER_USEPERTICK.get())) {
 			tick++;
-			if(tick == FarmingConfig.BAMBOO_FARMER_TICK.get()) {
+			if (tick == super_tick) {
 				tick = 0;
 				this.needRedstone = getUpgrade(LibTags.Items.REDSTONE_UPGRADE);
+				super_tick = speedUpgrade(FarmingConfig.BAMBOO_FARMER_TICK.get());
 				if (canWork()) {
 					upgradeSlot();
 					BlockPos posToBreak = new BlockPos(this.x + this.pX, this.y, this.z + this.pZ);
 					destroyUpperBlock(posToBreak);
 					destroyBlock(posToBreak, false);
+					if (getUpgrade(ModItemTags.SPEED_UPGRADE)) {
+						consumeEnergy(energyStorage, FarmingConfig.BAMBOO_FARMER_USEPERTICK.get()*2);
+					} else {
+						consumeEnergy(energyStorage, FarmingConfig.BAMBOO_FARMER_USEPERTICK.get());
+					}
 					setChanged();
-					
+
 					posState();
 				}
 			}
@@ -95,6 +103,14 @@ public class BambooFarmerBE extends ItemEnergyBlockEntity {
 	private void upgradeSlot() {
 		rangeUpgrade();
 		this.pickupDrops = !getUpgrade(LibTags.Items.DROP_UPGRADE);
+	}
+	
+	private int speedUpgrade(int tick) {
+		if (getUpgrade(ModItemTags.SPEED_UPGRADE)) {
+			return tick / 2;
+		} else {
+			return tick;
+		}
 	}
 	
 	private void rangeUpgrade() {
@@ -129,11 +145,9 @@ public class BambooFarmerBE extends ItemEnergyBlockEntity {
 				if (this.pickupDrops) {
 					collectDrops(level, itemStorage, pos, 0, 9);
 					level.destroyBlock(pos, dropBlock);
-					consumeEnergy(energyStorage, FarmingConfig.BAMBOO_FARMER_USEPERTICK.get());
 					return true;
 				} else if(!this.pickupDrops) {
 					level.destroyBlock(pos, true);
-					consumeEnergy(energyStorage, FarmingConfig.BAMBOO_FARMER_USEPERTICK.get());
 					return true;
 				}
 				return false;

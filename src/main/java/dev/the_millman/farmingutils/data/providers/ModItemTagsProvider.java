@@ -5,6 +5,7 @@ import java.util.concurrent.CompletableFuture;
 import dev.the_millman.farmingutils.FarmingUtils;
 import dev.the_millman.farmingutils.core.init.ItemInit;
 import dev.the_millman.farmingutils.core.tags.ModItemTags;
+import dev.the_millman.themillmanlib.core.init.LibItemInit;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.data.PackOutput;
@@ -51,6 +52,8 @@ public class ModItemTagsProvider extends ItemTagsProvider {
 			.add(Items.MOSS_BLOCK).add(Items.BIG_DRIPLEAF).add(Items.HAY_BLOCK).add(Items.BROWN_MUSHROOM_BLOCK)
 			.add(Items.RED_MUSHROOM_BLOCK).add(Items.NETHER_WART_BLOCK).add(Items.WARPED_WART_BLOCK)
 			.add(Items.BREAD).add(Items.BAKED_POTATO).add(Items.COOKIE).add(Items.CAKE).add(Items.PUMPKIN_PIE);
+		
+		tag(ModItemTags.SPEED_UPGRADE).add(LibItemInit.SPEED_UPGRADE.get());
 		
 		tag(ModItemTags.COMPOST).add(ItemInit.COMPOST.get());
 	}
